@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Pembelajaran - Dilemators</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS TEMA "DILEMATORS" (SOFT BLUE) --- */
+        body { 
+            margin: 0; font-family: 'Nunito', sans-serif; 
+            background-color: #F4F9F9; 
+            display: flex; justify-content: center; align-items: center; min-height: 100vh; 
+        }
+        
+        #app-container { 
+            width: 100%; max-width: 420px; min-height: 100vh; overflow-x: hidden; position: relative;
+            background-color: #F8FDFF; 
+            background-image: radial-gradient(circle at 50% 100%, #E1F5FE 0%, transparent 50%),
+                              radial-gradient(circle at 0% 0%, #B3E5FC 0%, transparent 40%);
+        }
+
+        @media (min-width: 421px) {
+            #app-container { min-height: 850px; border-radius: 40px; border: 10px solid #1A237E; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin: 20px 0;}
+        }
+
+        .page { display: none; padding: 25px 20px; text-align: center; height: 100%; box-sizing: border-box; }
+        .page.active { display: block; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Typography & Header */
+        h1.logo-title {
+            color: #29B6F6; font-size: 34px; font-weight: 900; margin: 10px 0 25px 0; letter-spacing: 2px;
+            text-shadow: -2px -2px 0 #FFF, 2px -2px 0 #FFF, -2px 2px 0 #FFF, 2px 2px 0 #FFF, 0px 4px 0px #0277BD;
+        }
+        .title-text { color: #01579B; font-size: 20px; font-weight: 900; margin-bottom: 25px; line-height: 1.3; }
+        .subtitle { color: #0288D1; font-weight: 900; margin-bottom: 15px; font-size: 18px; text-align: left; border-bottom: 2px dashed #81D4FA; padding-bottom: 10px; }
+
+        /* Input & Form */
+        .input-group { position: relative; margin-bottom: 15px; }
+        .input-group svg { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; fill: #4FC3F7; }
+        .input-group input, .content-box input, .content-box select, .content-box textarea { 
+            width: 100%; padding: 14px 15px 14px 45px; border-radius: 18px; border: 2px solid #E1F5FE; 
+            background: #FFFFFF; font-family: 'Nunito', sans-serif; font-size: 15px; color: #4A4A4A; font-weight: 700; box-sizing: border-box;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); transition: border 0.3s;
+        }
+        .content-box input, .content-box select, .content-box textarea { padding: 12px 15px; }
+        .input-group input:focus, .content-box input:focus, .content-box select:focus, .content-box textarea:focus { outline: none; border-color: #4FC3F7; }
+
+        /* Tombol - Warna Soft Biru */
+        .top-buttons { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+        button { 
+            background: linear-gradient(180deg, #81D4FA 0%, #29B6F6 100%); color: white; border: 3px solid #E1F5FE; 
+            padding: 12px 22px; border-radius: 30px; font-weight: 900; cursor: pointer; font-size: 15px; font-family: 'Nunito', sans-serif;
+            box-shadow: 0 5px 0 #0288D1, 0 8px 10px rgba(0,0,0,0.1); transition: all 0.1s ease;
+        }
+        button:active:not(:disabled) { transform: translateY(5px); box-shadow: 0 0px 0 #0288D1; }
+        
+        button.btn-danger { background: linear-gradient(180deg, #FFCDD2, #EF9A9A); border-color: #FFEBEE; color: #C62828; box-shadow: 0 5px 0 #E57373; }
+        button.btn-danger:active:not(:disabled) { box-shadow: 0 0px 0 #E57373; }
+        
+        button.btn-warning { background: linear-gradient(180deg, #FFF59D, #FFF176); border-color: #FFFDE7; color: #F57F17; box-shadow: 0 5px 0 #FBC02D; }
+        button.btn-warning:active:not(:disabled) { box-shadow: 0 0px 0 #FBC02D; }
+        
+        button.btn-info { background: linear-gradient(180deg, #B2EBF2, #80DEEA); border-color: #E0F7FA; color: #00838F; box-shadow: 0 5px 0 #00ACC1; }
+        button.btn-info:active:not(:disabled) { box-shadow: 0 0px 0 #00ACC1; }
+
+        /* Style khusus tombol yang didisable (terkunci) */
+        button:disabled, button[disabled] {
+            background: #EEEEEE !important;
+            color: #BDBDBD !important;
+            border-color: #F5F5F5 !important;
+            box-shadow: none !important;
+            cursor: not-allowed !important;
+            transform: translateY(0) !important;
+        }
+
+        /* List Materi Vertikal */
+        .list-materi { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
+        .card-materi { 
+            background: #FFFFFF; border: 2px solid #E1F5FE; border-radius: 20px; padding: 15px;
+            display: flex; align-items: center; text-align: left; gap: 15px; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02); transition: transform 0.2s;
+        }
+        .card-materi:hover { transform: translateY(-3px); border-color: #4FC3F7; background: #F4FBFF; }
+        .card-materi .icon-box { width: 45px; height: 45px; background: #E1F5FE; border-radius: 12px; border: 1px solid #B3E5FC; display: flex; justify-content: center; align-items: center; }
+        .card-materi .icon-box svg { width: 28px; height: 28px; fill: #0288D1; }
+        .card-materi .text-box { flex-grow: 1; font-weight: 800; color: #01579B; font-size: 16px; }
+        .card-materi .check-icon { width: 24px; height: 24px; fill: #4FC3F7; }
+
+        /* Tabel & Konten Box */
+        .content-box { background: #FFFFFF; padding: 20px; border-radius: 20px; text-align: left; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 2px solid #E1F5FE; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 2px solid #E1F5FE; }
+        th, td { padding: 12px 8px; border-bottom: 1px solid #F8F8F8; text-align: center; font-size: 13px; font-weight: 700; color: #01579B;}
+        th { background: #E1F5FE; color: #0277BD; font-weight: 900; text-transform: uppercase; font-size: 11px;}
+        tr:last-child td { border-bottom: none; }
+
+        /* Modal */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: #FFFFFF; padding: 25px 20px; border-radius: 24px; width: 85%; max-width: 360px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 4px solid #4FC3F7; animation: popUp 0.3s ease-out; }
+        @keyframes popUp { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* Progress Bar & Bintang */
+        .progress-container { width: 100%; background-color: #F5F5F5; border-radius: 20px; margin: 10px 0 20px; height: 24px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.03); }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #81D4FA, #0288D1); text-align: center; line-height: 24px; color: white; font-weight: 900; transition: width 1s ease-in-out; font-size: 13px; }
+        .star-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px dashed #E0E0E0; font-size: 14px; font-weight: 700; color: #4A4A4A; }
+        .star-row:last-child { border-bottom: none; }
+        .stars { color: #29B6F6; font-size: 20px; letter-spacing: 2px; }
+
+        /* Ilustrasi Login */
+        .illustration-area { display: flex; justify-content: center; align-items: flex-end; gap: 10px; height: 150px; margin: 20px 0; }
+        .illustration-area img { max-height: 100%; object-fit: contain; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.05)); }
+    </style>
+</head>
+<body>
+
+<div id="app-container">
+
+    <div id="globalModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modalTitle" style="color:#0288D1; font-weight:900;">Pesan</h3>
+            <p id="modalBody" style="font-weight:700; color:#4A4A4A;">Isi Pesan</p>
+            <button class="btn-warning" onclick="closeModal('globalModal')">Tutup</button>
+        </div>
+    </div>
+
+    <div id="absenModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="color:#0288D1; font-weight:900;">Alasan Absen</h3>
+            <p id="namaSiswaAbsen" style="font-weight: 900; color:#E53935;"></p>
+            <div class="content-box" style="box-shadow:none; padding:0; border:none;">
+                <select id="alasanAbsen">
+                    <option value="Sakit">Sakit</option>
+                    <option value="Izin">Izin</option>
+                    <option value="Alfa">Alfa</option>
+                </select>
+            </div>
+            <button class="btn-warning" onclick="closeModal('absenModal')">Batal</button>
+            <button onclick="simpanAlasanAbsen()">Simpan</button>
+        </div>
+    </div>
+
+    <div id="nilaiModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="color:#0288D1; font-weight:900;">Masukkan Nilai</h3>
+            <p id="namaSiswaNilai" style="font-weight: 900; color:#4A4A4A; margin-bottom:5px;"></p>
+            <p style="margin-top:0; font-weight:700; font-size:14px;">Umpan Balik: <span id="labelUmpanBalik" style="color:#0288D1;"></span></p>
+            <div class="content-box" style="box-shadow:none; padding:0; border:none;">
+                <input type="number" id="inputAngkaNilai" placeholder="Nilai (1 - 100)" min="1" max="100">
+                <textarea id="inputKeteranganNilai" placeholder="Catatan Tambahan (Opsional)..." rows="3"></textarea>
+            </div>
+            <button class="btn-warning" onclick="closeModal('nilaiModal')">Batal</button>
+            <button onclick="simpanNilaiSiswa()">Simpan</button>
+        </div>
+    </div>
+
+    <div id="page-home" class="page active">
+        <h1 class="logo-title">DILEMATORS</h1>
+        <div class="title-text">Digital Learning Module<br>Gerak Manipulatif</div>
+        <div class="illustration-area" style="height: 200px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/3588/3588722.png" alt="Anak Perempuan">
+            <img src="https://cdn-icons-png.flaticon.com/512/4688/4688531.png" alt="Robot" style="height: 120%;">
+            <img src="https://cdn-icons-png.flaticon.com/512/3588/3588647.png" alt="Anak Laki-laki">
+        </div>
+        <button onclick="nav('page-login')" style="width: 80%; font-size: 18px; margin-top: 20px;">Mulai Belajar ➔</button>
+    </div>
+
+    <div id="page-login" class="page">
+        <h1 class="logo-title">DILEMATORS</h1>
+        <div class="title-text">LOGIN</div>
+        <div class="input-group">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <input type="text" id="username" placeholder="Nama Pengguna">
+        </div>
+        <div class="input-group">
+            <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+            <input type="password" id="password" placeholder="Kata Sandi">
+        </div>
+        <div class="illustration-area">
+            <img src="https://cdn-icons-png.flaticon.com/512/3588/3588722.png" alt="Anak Perempuan">
+            <img src="https://cdn-icons-png.flaticon.com/512/3588/3588647.png" alt="Anak Laki-laki">
+        </div>
+        <button onclick="prosesLogin()" style="width: 80%; font-size: 18px;">Masuk ➔</button>
+        <p style="margin-top: 20px; font-weight: 700; color: #9E9E9E; font-size: 14px; cursor:pointer;" onclick="nav('page-home')">🇮🇩 ID ▾ <br><br> Kembali ke Awal</p>
+    </div>
+
+    <div id="page-data-siswa" class="page">
+        <h1 class="logo-title">DILEMATORS</h1>
+        <div class="top-buttons">
+            <button class="btn-info" onclick="bukaFormTambahSiswa()">+ Tambah</button>
+            <button onclick="nav('page-materi')">Lanjut ➔</button>
+        </div>
+        <div class="subtitle">Daftar Siswa Kelas</div>
+        <div style="overflow-x:auto;">
+            <table id="tabelSiswa">
+                <thead><tr><th>No</th><th>Nama Siswa</th><th>Opsi</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="page-form-siswa" class="page">
+        <h1 class="logo-title">DILEMATORS</h1>
+        <div class="subtitle" id="formSiswaTitle">Data Siswa</div>
+        <div class="content-box">
+            <input type="hidden" id="inputIdSiswa">
+            <label style="font-weight:800; color:#0288D1; font-size:14px;">Nama Siswa:</label><input type="text" id="inputNama">
+            <label style="font-weight:800; color:#0288D1; font-size:14px;">Kelas:</label><input type="text" id="inputKelas">
+            <label style="font-weight:800; color:#0288D1; font-size:14px;">No Absen:</label><input type="number" id="inputAbsen">
+            <label style="font-weight:800; color:#0288D1; font-size:14px;">Sekolah:</label><input type="text" id="inputSekolah">
+        </div>
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-data-siswa')">Batal</button>
+            <button onclick="simpanSiswa()">Simpan Data</button>
+        </div>
+    </div>
+
+    <div id="page-materi" class="page">
+        <h1 class="logo-title">DILEMATORS</h1>
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-data-siswa')">⬅ Kembali</button>
+            <button class="btn-info" onclick="nav('page-evaluasi')">Evaluasi ➔</button>
+        </div>
+        <div class="title-text">Pilih Unit Gerak<br>Manipulatif</div>
+        <div class="list-materi" id="gridMateriContainer"></div>
+    </div>
+
+    <div id="page-absen" class="page">
+        <h1 class="logo-title">DILEMATORS</h1>
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-materi')">⬅ Kembali</button>
+            <button onclick="nav('page-instruksi')">Lanjut ➔</button>
+        </div>
+        <div class="subtitle">Absensi Kelas</div>
+        <div id="listAbsensi"></div>
+    </div>
+
+    <div id="page-instruksi" class="page">
+        <h1 class="logo-title">DILEMATORS</h1>
+        <div class="subtitle">Instruksi Pembelajaran</div>
+        <div class="content-box">
+            <p id="teksInstruksi" style="font-weight:700; color:#4A4A4A; line-height:1.5;"></p>
+        </div>
+        <button onclick="nav('page-tujuan')">Selanjutnya ➔</button>
+    </div>
+
+    <div id="page-tujuan" class="page">
+        <h1 class="logo-title">DILEMATORS</h1>
+        <div class="subtitle">Tujuan Pembelajaran</div>
+        <div class="content-box">
+            <p id="teksTujuan" style="font-weight:700; color:#4A4A4A; line-height:1.5;"></p>
+        </div>
+        <button onclick="nav('page-video')">Selanjutnya ➔</button>
+    </div>
+
+    <div id="page-video" class="page">
+        <h1 class="logo-title">DILEMATORS</h1>
+        <div class="subtitle" id="judulVideoMateri">Video Materi</div>
+        <div id="containerVideo"></div>
+        <button onclick="mulaiPenilaian()">Penilaian ➔</button>
+    </div>
+
+    <div id="page-penilaian" class="page">
+        <h1 class="logo-title">DILEMATORS</h1>
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-video')">⬅ Kembali</button>
+            <button onclick="selesaiPenilaian()">Selesai ✔</button>
+        </div>
+        <div class="subtitle">Umpan Balik & Nilai</div>
+        <div id="listPenilaian"></div>
+    </div>
+
+    <div id="page-evaluasi" class="page">
+        <h1 class="logo-title">DILEMATORS</h1>
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-materi')">⬅ Kembali</button>
+            <button class="btn-info" onclick="exportExcel()">⬇ Export CSV</button>
+        </div>
+        <div class="subtitle">Evaluasi Siswa</div>
+        <div style="overflow-x:auto;">
+            <table id="tabelEvaluasi">
+                <thead><tr><th>No</th><th>Nama</th><th>Opsi</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="page-rincian-evaluasi" class="page">
+        <h1 class="logo-title">DILEMATORS</h1>
+        <div class="content-box">
+            <div class="subtitle" id="rincianNamaSiswa" style="text-align: center; border:none; margin-bottom:5px;">Nama Siswa</div>
+            <p style="margin-bottom: 5px; font-weight: 800; font-size:14px; text-align:center;">HASIL BELAJAR</p>
+            <div class="progress-container">
+                <div id="rincianProgressBar" class="progress-bar" style="width: 0%;">0%</div>
+            </div>
+            <div id="rincianBintangMateri" style="margin-top: 15px;"></div>
+        </div>
+        <button class="btn-warning" onclick="nav('page-evaluasi')">⬅ Kembali</button>
+    </div>
+
+</div>
+
+<script>
+    let dataSiswa = [];
+    let dataPenilaian = [];
+
+    try {
+        const savedSiswa = localStorage.getItem('dileSiswa');
+        if(savedSiswa) dataSiswa = JSON.parse(savedSiswa);
+    } catch(e) { localStorage.removeItem('dileSiswa'); }
+
+    try {
+        const savedNilai = localStorage.getItem('dilePenilaian');
+        if(savedNilai) dataPenilaian = JSON.parse(savedNilai);
+    } catch(e) { localStorage.removeItem('dilePenilaian'); }
+    
+    const dataMateri = [
+        { id_materi: 'M1', nama_materi: 'Memantul', instruksi: 'Lakukan pantulan bola ke lantai menggunakan satu atau dua tangan secara bergantian.', tujuan: 'Siswa mampu memantulkan bola basket dengan kontrol yang baik.', video: [{judul: 'Teknik Dasar Memantul'}, {judul: 'Memantul Sambil Berjalan'}, {judul: 'Memantul Melewati Rintangan'}] },
+        { id_materi: 'M2', nama_materi: 'Menangkap', instruksi: 'Fokuskan pandangan pada bola, tangkap menggunakan kedua tangan secara sigap.', tujuan: 'Siswa mampu menangkap bola yang dilempar dengan berbagai arah yang tepat.', video: [{judul: 'Menangkap Bola Datar'}, {judul: 'Menangkap Bola Lambung'}, {judul: 'Menangkap Bola Menyusur Tanah'}] },
+        { id_materi: 'M3', nama_materi: 'Menggiring', instruksi: 'Giring bola dengan kaki bagian dalam atau luar secara perlahan tanpa lepas kendali.', tujuan: 'Siswa dapat menggiring bola melewati rintangan dengan lincah.', video: [{judul: 'Menggiring Kaki Dalam'}, {judul: 'Menggiring Kaki Luar'}, {judul: 'Menggiring Zig-Zag'}] },
+        { id_materi: 'M4', nama_materi: 'Menendang', instruksi: 'Gunakan punggung kaki untuk tendangan jarak jauh atau kaki bagian dalam untuk jarak dekat.', tujuan: 'Siswa mampu menendang bola ke arah sasaran secara akurat.', video: [{judul: 'Tendangan Jarak Dekat'}, {judul: 'Tendangan Jarak Jauh'}, {judul: 'Menendang ke Arah Gawang'}] },
+        { id_materi: 'M5', nama_materi: 'Memukul', instruksi: 'Pegang tongkat pemukul dengan kuat, pusatkan pandangan, dan ayunkan sejajar pinggang.', tujuan: 'Siswa mampu memukul objek (bola) yang dilambungkan dengan tepat sasaran.', video: [{judul: 'Cara Memegang Tongkat'}, {judul: 'Memukul Bola Diam'}, {judul: 'Memukul Bola Lambung'}] },
+        { id_materi: 'M6', nama_materi: 'Melempar', instruksi: 'Ayunkan lengan dari belakang ke depan, lepaskan objek pada titik tertinggi untuk jarak jauh.', tujuan: 'Siswa mampu melempar bola kasti dengan lemparan melambung dan lurus.', video: [{judul: 'Lemparan Melambung'}, {judul: 'Lemparan Lurus Setinggi Dada'}, {judul: 'Lemparan Menyusur Tanah'}] }
+    ];
+
+    let currentMateriId = null;
+    let tempAbsen = {}; 
+    let tempSiswaAktifId = null; 
+    let tempUmpanBalikAktif = null;
+
+    function nav(targetId) {
+        document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+        document.getElementById(targetId).classList.add('active');
+        if(targetId === 'page-data-siswa') renderTabelSiswa();
+        if(targetId === 'page-materi') renderGridMateri();
+        if(targetId === 'page-evaluasi') renderTabelEvaluasi();
+    }
+
+    function showModal(title, message) {
+        document.getElementById('modalTitle').innerText = title;
+        document.getElementById('modalBody').innerText = message;
+        document.getElementById('globalModal').style.display = 'flex';
+    }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    function prosesLogin() {
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+        if(user === 'admin' && pass === 'admin') {
+            document.getElementById('username').value = ''; document.getElementById('password').value = '';
+            nav('page-data-siswa');
+        } else { showModal("Login Gagal!", "Username atau password salah."); }
+    }
+
+    function renderTabelSiswa() {
+        const tbody = document.querySelector('#tabelSiswa tbody'); tbody.innerHTML = '';
+        if(dataSiswa.length === 0) { tbody.innerHTML = '<tr><td colspan="3">Belum ada data</td></tr>'; return; }
+        dataSiswa.forEach((siswa, index) => {
+            tbody.innerHTML += `<tr>
+                <td>${index + 1}</td>
+                <td style="text-align:left;">${siswa.nama_siswa}</td>
+                <td>
+                    <button class="btn-info" style="padding: 6px 10px; font-size:11px; margin-bottom:4px;" onclick="bukaUbahSiswa('${siswa.id_siswa}')">Ubah</button>
+                    <button class="btn-danger" style="padding: 6px 10px; font-size:11px;" onclick="hapusSiswa('${siswa.id_siswa}')">Hapus</button>
+                </td>
+            </tr>`;
+        });
+    }
+
+    function bukaFormTambahSiswa() {
+        document.getElementById('formSiswaTitle').innerText = "Tambahkan Siswa";
+        document.getElementById('inputIdSiswa').value = '';
+        document.getElementById('inputNama').value = '';
+        document.getElementById('inputKelas').value = '';
+        document.getElementById('inputAbsen').value = '';
+        document.getElementById('inputSekolah').value = sessionStorage.getItem('tempSekolahDile') || '';
+        nav('page-form-siswa');
+    }
+
+    function bukaUbahSiswa(id) {
+        const siswa = dataSiswa.find(s => s.id_siswa === id);
+        if(siswa) {
+            document.getElementById('formSiswaTitle').innerText = "Ubah Data Siswa";
+            document.getElementById('inputIdSiswa').value = siswa.id_siswa;
+            document.getElementById('inputNama').value = siswa.nama_siswa;
+            document.getElementById('inputKelas').value = siswa.kelas;
+            document.getElementById('inputAbsen').value = siswa.absen;
+            document.getElementById('inputSekolah').value = siswa.sekolah;
+            nav('page-form-siswa');
+        }
+    }
+
+    function simpanSiswa() {
+        const id = document.getElementById('inputIdSiswa').value;
+        const nama = document.getElementById('inputNama').value;
+        const kelas = document.getElementById('inputKelas').value;
+        const absen = document.getElementById('inputAbsen').value;
+        const sekolah = document.getElementById('inputSekolah').value;
+
+        if(!nama || !kelas || !absen || !sekolah) { showModal("Peringatan", "Semua data wajib diisi!"); return; }
+
+        if(id) {
+            const index = dataSiswa.findIndex(s => s.id_siswa === id);
+            if(index !== -1) dataSiswa[index] = { id_siswa: id, nama_siswa: nama, kelas: kelas, absen: absen, sekolah: sekolah };
+        } else {
+            dataSiswa.push({ id_siswa: "S" + Date.now(), nama_siswa: nama, kelas: kelas, absen: absen, sekolah: sekolah });
+            sessionStorage.setItem('tempSekolahDile', sekolah);
+        }
+        localStorage.setItem('dileSiswa', JSON.stringify(dataSiswa));
+        nav('page-data-siswa');
+    }
+
+    function hapusSiswa(id) {
+        if(confirm("Hapus siswa ini?")) {
+            dataSiswa = dataSiswa.filter(s => s.id_siswa !== id);
+            dataPenilaian = dataPenilaian.filter(p => p.id_siswa !== id);
+            localStorage.setItem('dileSiswa', JSON.stringify(dataSiswa));
+            localStorage.setItem('dilePenilaian', JSON.stringify(dataPenilaian));
+            renderTabelSiswa();
+        }
+    }
+
+    function renderGridMateri() {
+        const container = document.getElementById('gridMateriContainer'); container.innerHTML = '';
+        dataMateri.forEach(m => { 
+            container.innerHTML += `
+            <div class="card-materi" onclick="pilihMateri('${m.id_materi}')">
+                <div class="icon-box"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72l5 2.73 5-2.73v3.72z"/></svg></div>
+                <div class="text-box">${m.nama_materi}</div>
+                <svg class="check-icon" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
+            </div>`; 
+        });
+    }
+
+    function pilihMateri(id) {
+        currentMateriId = id; tempAbsen = {}; 
+        const materi = dataMateri.find(m => m.id_materi === id);
+        document.getElementById('teksInstruksi').innerText = materi.instruksi;
+        document.getElementById('teksTujuan').innerText = materi.tujuan;
+        document.getElementById('judulVideoMateri').innerText = "Video " + materi.nama_materi;
+        let htmlVideo = '';
+        materi.video.forEach((v, i) => {
+            htmlVideo += `<div class="content-box"><p style="font-weight:900; color:#0288D1; margin-top:0;">🎥 Video ${i+1}: ${v.judul}</p><div style="height:140px; background:#E1F5FE; color:#29B6F6; font-weight:800; display:flex; align-items:center; justify-content:center; border-radius:15px; border:2px dashed #81D4FA;">[Player Video]</div></div>`;
+        });
+        document.getElementById('containerVideo').innerHTML = htmlVideo;
+        renderAbsensi(); nav('page-absen');
+    }
+
+    function renderAbsensi() {
+        const container = document.getElementById('listAbsensi'); container.innerHTML = '';
+        dataSiswa.forEach(siswa => {
+            const status = tempAbsen[siswa.id_siswa] || 'Belum diabsen';
+            const isDiabsen = tempAbsen[siswa.id_siswa] ? 'disabled' : '';
+            
+            container.innerHTML += `<div class="content-box">
+                <p style="font-weight:900; margin-top:0; color:#0288D1; font-size:16px;">${siswa.nama_siswa} <span style="font-size:13px; color:#9E9E9E;">(${status})</span></p>
+                <div class="top-buttons" style="margin-bottom:0; justify-content:flex-start;">
+                    <button class="btn-info" ${isDiabsen} onclick="tempAbsen['${siswa.id_siswa}'] = 'Hadir'; renderAbsensi();" style="padding: 8px 15px; font-size:12px;">Hadir</button>
+                    <button class="btn-danger" ${isDiabsen} onclick="tempSiswaAktifId='${siswa.id_siswa}'; document.getElementById('namaSiswaAbsen').innerText='${siswa.nama_siswa}'; document.getElementById('absenModal').style.display='flex';" style="padding: 8px 15px; font-size:12px;">Tidak Hadir</button>
+                </div>
+            </div>`;
+        });
+    }
+
+    function simpanAlasanAbsen() { 
+        tempAbsen[tempSiswaAktifId] = document.getElementById('alasanAbsen').value; 
+        closeModal('absenModal'); 
+        renderAbsensi(); 
+    }
+
+    function mulaiPenilaian() { renderPenilaian(); nav('page-penilaian'); }
+
+    // ====== FUNGSI RENDER PENILAIAN YANG SUDAH DITAMBAHKAN LOGIKA OTOMATIS ======
+    function renderPenilaian() {
+        const container = document.getElementById('listPenilaian'); container.innerHTML = '';
+        dataSiswa.forEach(siswa => {
+            const statusAbsen = tempAbsen[siswa.id_siswa] || 'Hadir';
+            const isTidakHadir = ['Sakit', 'Izin', 'Alfa'].includes(statusAbsen);
+            
+            // LOGIKA OTOMATIS: Jika absen, nilai langsung 0 dan simpan keterangan
+            if (isTidakHadir) {
+                const cekNilai = dataPenilaian.find(p => p.id_siswa === siswa.id_siswa && p.id_materi === currentMateriId);
+                // Jika data belum disave di localStorage, save sekarang
+                if (!cekNilai) {
+                    dataPenilaian.push({
+                        id_penilaian: "P" + Date.now() + Math.floor(Math.random()*1000), 
+                        tanggal: new Date().toISOString().split('T')[0],
+                        id_siswa: siswa.id_siswa, 
+                        id_materi: currentMateriId,
+                        kehadiran: statusAbsen,
+                        nilai: 0, 
+                        umpan_balik: "Otomatis : Siswa tidak hadir karena " + statusAbsen
+                    });
+                    localStorage.setItem('dilePenilaian', JSON.stringify(dataPenilaian));
+                }
+            }
+
+            // Ambil ulang data penilaian terbaru dari memori
+            const hasScore = dataPenilaian.find(p => p.id_siswa === siswa.id_siswa && p.id_materi === currentMateriId);
+
+            if (isTidakHadir) {
+                // Tampilan untuk siswa yang absen
+                const statusNilai = `<br><span style="color:#E53935; font-size:13px;">✔ Nilai Otomatis: 0</span>`;
+                container.innerHTML += `<div class="content-box">
+                    <p style="font-weight:900; margin-top:0; color:#0288D1; font-size:15px;">${siswa.nama_siswa} <span style="font-size:12px; color:#E53935;">(${statusAbsen})</span> ${statusNilai}</p>
+                    <div class="top-buttons" style="margin-bottom:0; gap:5px;">
+                        <button class="btn-danger" disabled style="padding: 6px 10px; font-size:11px;">Perbaikan</button>
+                        <button class="btn-warning" disabled style="padding: 6px 10px; font-size:11px;">Cukup</button>
+                        <button class="btn-info" disabled style="padding: 6px 10px; font-size:11px;">Bagus</button>
+                    </div>
+                    <p style="font-size:11px; color:#757575; margin-top:10px; margin-bottom:0; font-style:italic;">🔒 Terkunci: Umpan balik & nilai 0 diisi otomatis karena status ${statusAbsen}.</p>
+                </div>`;
+            } else {
+                // Tampilan normal untuk siswa hadir
+                const statusNilai = hasScore ? `<br><span style="color:#4CAF50; font-size:13px;">✔ Dinilai: ${hasScore.nilai}</span>` : '';
+                const isDinilai = hasScore ? 'disabled' : '';
+
+                container.innerHTML += `<div class="content-box">
+                    <p style="font-weight:900; margin-top:0; color:#0288D1; font-size:15px;">${siswa.nama_siswa} <span style="font-size:12px; color:#9E9E9E;">(${statusAbsen})</span> ${statusNilai}</p>
+                    <div class="top-buttons" style="margin-bottom:0; gap:5px;">
+                        <button class="btn-danger" ${isDinilai} onclick="bukaModalNilai('${siswa.id_siswa}', '${siswa.nama_siswa}', 'Perbaikan')" style="padding: 6px 10px; font-size:11px;">Perbaikan</button>
+                        <button class="btn-warning" ${isDinilai} onclick="bukaModalNilai('${siswa.id_siswa}', '${siswa.nama_siswa}', 'Cukup')" style="padding: 6px 10px; font-size:11px;">Cukup</button>
+                        <button class="btn-info" ${isDinilai} onclick="bukaModalNilai('${siswa.id_siswa}', '${siswa.nama_siswa}', 'Bagus')" style="padding: 6px 10px; font-size:11px;">Bagus</button>
+                    </div>
+                </div>`;
+            }
+        });
+    }
+
+    function bukaModalNilai(id, nama, umpan) {
+        tempSiswaAktifId = id; tempUmpanBalikAktif = umpan;
+        document.getElementById('namaSiswaNilai').innerText = nama;
+        document.getElementById('labelUmpanBalik').innerText = umpan;
+        document.getElementById('inputAngkaNilai').value = '';
+        document.getElementById('inputKeteranganNilai').value = '';
+        document.getElementById('nilaiModal').style.display = 'flex';
+    }
+
+    function simpanNilaiSiswa() {
+        const nilai = document.getElementById('inputAngkaNilai').value;
+        const ket = document.getElementById('inputKeteranganNilai').value;
+        if(!nilai) { showModal("Peringatan", "Masukkan nilai!"); return; }
+
+        dataPenilaian = dataPenilaian.filter(p => !(p.id_siswa === tempSiswaAktifId && p.id_materi === currentMateriId));
+        dataPenilaian.push({
+            id_penilaian: "P" + Date.now(), tanggal: new Date().toISOString().split('T')[0],
+            id_siswa: tempSiswaAktifId, id_materi: currentMateriId,
+            kehadiran: tempAbsen[tempSiswaAktifId] || 'Hadir',
+            nilai: parseInt(nilai), umpan_balik: tempUmpanBalikAktif + " : " + (ket ? ket : "Tanpa catatan")
+        });
+        localStorage.setItem('dilePenilaian', JSON.stringify(dataPenilaian));
+        closeModal('nilaiModal'); 
+        renderPenilaian(); 
+    }
+
+    function selesaiPenilaian() { showModal("Sukses", "Data pembelajaran tersimpan."); nav('page-materi'); }
+
+    function renderTabelEvaluasi() {
+        const tbody = document.querySelector('#tabelEvaluasi tbody'); tbody.innerHTML = '';
+        if(dataSiswa.length === 0) { tbody.innerHTML = '<tr><td colspan="3">Belum ada data</td></tr>'; return; }
+        dataSiswa.forEach((siswa, index) => {
+            tbody.innerHTML += `<tr>
+                <td>${index + 1}</td>
+                <td style="text-align:left;">${siswa.nama_siswa}</td>
+                <td><button class="btn-info" style="padding: 6px 12px; font-size:11px;" onclick="bukaRincianEvaluasi('${siswa.id_siswa}')">Rincian</button></td>
+            </tr>`;
+        });
+    }
+
+    function bukaRincianEvaluasi(id_siswa) {
+        const siswa = dataSiswa.find(s => s.id_siswa === id_siswa);
+        document.getElementById('rincianNamaSiswa').innerText = siswa.nama_siswa;
+
+        let totalNilai = 0, materiDinilaiCount = 0, htmlBintang = '';
+
+        dataMateri.forEach(materi => {
+            const nilaiMateri = dataPenilaian.find(p => p.id_siswa === id_siswa && p.id_materi === materi.id_materi);
+            let score = 0;
+            if(nilaiMateri) { score = nilaiMateri.nilai; totalNilai += score; materiDinilaiCount++; }
+
+            const starCount = Math.round(score / 20);
+            const starsUI = '★'.repeat(starCount) + '☆'.repeat(5 - starCount);
+
+            htmlBintang += `<div class="star-row">
+                    <span style="width: 50%; text-align:left;">${materi.nama_materi}</span>
+                    <span class="stars" style="width: 50%; text-align:right;">${starsUI}</span>
+                </div>`;
+        });
+
+        const rataRata = materiDinilaiCount > 0 ? Math.round(totalNilai / materiDinilaiCount) : 0;
+        const progressBar = document.getElementById('rincianProgressBar');
+        progressBar.style.width = rataRata + '%'; progressBar.innerText = rataRata + '%';
+
+        document.getElementById('rincianBintangMateri').innerHTML = htmlBintang;
+        nav('page-rincian-evaluasi');
+    }
+
+    function exportExcel() {
+        if(dataPenilaian.length === 0) { showModal("Gagal", "Belum ada data nilai."); return; }
+        let csvContent = "data:text/csv;charset=utf-8,No,Nama Siswa,Kelas,No Absen,Sekolah,Materi,Tanggal,Kehadiran,Nilai (1-100),Umpan Balik & Keterangan\n";
+        dataPenilaian.forEach((p, index) => {
+            const siswa = dataSiswa.find(s => s.id_siswa === p.id_siswa) || {};
+            const materi = dataMateri.find(m => m.id_materi === p.id_materi) || {};
+            const row = [index + 1, `"${siswa.nama_siswa||'-'}"`, `"${siswa.kelas||'-'}"`, `"${siswa.absen||'-'}"`, `"${siswa.sekolah||'-'}"`, `"${materi.nama_materi||'-'}"`, p.tanggal, p.kehadiran, p.nilai, `"${p.umpan_balik||'-'}"`].join(",");
+            csvContent += row + "\n";
+        });
+        const link = document.createElement("a"); link.setAttribute("href", encodeURI(csvContent));
+        link.setAttribute("download", "Evaluasi_PJOK_Dilemators.csv"); document.body.appendChild(link);
+        link.click(); document.body.removeChild(link);
+    }
+</script>
+</body>
+</html>
