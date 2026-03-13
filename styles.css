@@ -77,10 +77,10 @@ button:disabled, button[disabled] {
     background: #FFFFFF; border: 2px solid #E1F5FE; border-radius: 20px; padding: 5px;
     display: flex; align-items: center; text-align: left; gap: 5px; cursor: pointer;
     box-shadow: 0 4px 10px rgba(0,0,0,0.02); transition: transform 0.2s;
-    width: 100px; flex-direction: column; position: relative; aspect-ratio: 1/1; box-sizing: border-box;
+    width: 150px; flex-direction: column; position: relative; aspect-ratio: 1/1; box-sizing: border-box;
 }
 .card-materi:hover { transform: translateY(-3px); border-color: #4FC3F7; background: #F4FBFF; }
-.card-materi .icon-box { width: 80%; height: 80%; background: #E1F5FE; border-radius: 12px; border: 1px solid #B3E5FC; display: flex; justify-content: center; align-items: center; }
+.card-materi .icon-box { width: 75%; height: 75%; background: #E1F5FE; border-radius: 12px; border: 1px solid #B3E5FC; display: flex; justify-content: center; align-items: center; }
 .card-materi .icon-box img { width: 100%; height: 100%; fill: #0288D1; }
 .card-materi .text-box { flex-grow: 1; font-weight: 800; color: #01579B; font-size: 16px; z-index: 3;}
 .card-materi .check-icon { width: 24px; height: 24px; fill: #4FC3F7; display: none;}
