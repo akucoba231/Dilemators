@@ -72,12 +72,12 @@ button:disabled, button[disabled] {
 }
 
 /* List Materi Vertikal */
-.list-materi { display: flex; flex-direction: row; gap: 12px; margin-top: 15px; flex-wrap: wrap; }
+.list-materi { display: flex; flex-direction: row; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
 .card-materi { 
     background: #FFFFFF; border: 2px solid #E1F5FE; border-radius: 20px; padding: 15px;
     display: flex; align-items: center; text-align: left; gap: 15px; cursor: pointer;
     box-shadow: 0 4px 10px rgba(0,0,0,0.02); transition: transform 0.2s;
-    width: 120px; flex-direction: column; position: relative; aspect-ratio: 1/1;
+    width: 105px; flex-direction: column; position: relative; aspect-ratio: 1/1;
 }
 .card-materi:hover { transform: translateY(-3px); border-color: #4FC3F7; background: #F4FBFF; }
 .card-materi .icon-box { width: 100px; height: 100px; background: #E1F5FE; border-radius: 12px; border: 1px solid #B3E5FC; display: flex; justify-content: center; align-items: center; }
