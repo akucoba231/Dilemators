@@ -72,7 +72,7 @@ button:disabled, button[disabled] {
 }
 
 /* List Materi Vertikal */
-.list-materi { display: flex; flex-direction: row; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+.list-materi { display: flex; flex-direction: row; gap: 10px; margin-top: 15px; flex-wrap: wrap; justify-content: center; align-items: center;}
 .card-materi { 
     background: #FFFFFF; border: 2px solid #E1F5FE; border-radius: 20px; padding: 5px;
     display: flex; align-items: center; text-align: left; gap: 5px; cursor: pointer;
