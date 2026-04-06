@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Pembelajaran - Dilemators</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+</head>
+<body>
+
+<div id="app-container">
+
+    <div id="globalModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modalTitle" style="color:#0288D1; font-weight:900;">Pesan</h3>
+            <p id="modalBody" style="font-weight:700; color:#4A4A4A;">Isi Pesan</p>
+            <button class="btn-warning" onclick="closeModal('globalModal')">Tutup</button>
+        </div>
+    </div>
+
+    <div id="absenModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="color:#0288D1; font-weight:900;">Alasan Absen</h3>
+            <p id="namaSiswaAbsen" style="font-weight: 900; color:#E53935;"></p>
+            <div class="content-box" style="box-shadow:none; padding:0; border:none;">
+                <select id="alasanAbsen">
+                    <option value="Sakit">Sakit</option>
+                    <option value="Izin">Izin</option>
+                    <option value="Alfa">Alfa</option>
+                </select>
+            </div>
+            <button class="btn-warning" onclick="closeModal('absenModal')">Batal</button>
+            <button onclick="simpanAlasanAbsen()">Simpan</button>
+        </div>
+    </div>
+
+    <div id="nilaiModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="color:#0288D1; font-weight:900;">Masukkan Nilai</h3>
+            <p id="namaSiswaNilai" style="font-weight: 900; color:#4A4A4A; margin-bottom:5px;"></p>
+            <p style="margin-top:0; font-weight:700; font-size:14px;">Umpan Balik: <span id="labelUmpanBalik" style="color:#0288D1;"></span></p>
+            <div class="content-box" style="box-shadow:none; padding:0; border:none;">
+                <input type="number" id="inputAngkaNilai" placeholder="Nilai (1 - 100)" min="1" max="100">
+                <textarea id="inputKeteranganNilai" placeholder="Catatan Tambahan (Opsional)..." rows="3"></textarea>
+            </div>
+            <button class="btn-warning" onclick="closeModal('nilaiModal')">Batal</button>
+            <button onclick="simpanNilaiSiswa()">Simpan</button>
+        </div>
+    </div>
+
+    <div id="riwayatModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px; width: 95%; padding: 20px 10px;">
+            <h3 id="riwayatJudul" style="color:#0288D1; font-weight:900; margin-top:0;">Riwayat Materi</h3>
+            <div style="overflow-x:auto; max-height: 250px; border-radius: 10px; border: 1px solid #E1F5FE;">
+                <table style="font-size: 12px; width: 100%; border-collapse: collapse;">
+                    <thead><tr><th style="padding: 8px 4px; background: #E1F5FE;">Tgl & Jam</th><th style="padding: 8px 4px; background: #E1F5FE;">Absen</th><th style="padding: 8px 4px; background: #E1F5FE;">Nilai</th><th style="padding: 8px 4px; background: #E1F5FE;">Catatan</th></tr></thead>
+                    <tbody id="riwayatBody"></tbody>
+                </table>
+            </div>
+            <button class="btn-warning" style="margin-top: 15px; width:100%;" onclick="closeModal('riwayatModal')">Tutup</button>
+        </div>
+    </div>
+
+    <div id="page-home" class="page active">
+        <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
+        <div class="title-text">Digital Learning Module<br>for Manipulatif Motor Skills</div>
+        <div class="spacer"></div>
+        <div class="illustration-area">
+            <img src="assets/home.png" alt="aktor-homescreen">
+        </div>
+        <button onclick="nav('page-login')" style="width: 80%; font-size: 18px; margin-top: 20px;">Mulai Belajar ➔</button>
+    </div>
+
+    <div id="page-login" class="page">
+        <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
+        <div class="title-text">LOGIN</div>
+        <div class="input-group">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <input type="text" id="username" placeholder="Nama Pengguna">
+        </div>
+        <div class="input-group">
+            <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+            <input type="password" id="password" placeholder="Kata Sandi">
+        </div>
+        <div class="illustration-area">
+            <img class="login-icon" src="assets/login.png" alt="aktor-login" />
+        </div>
+        <button onclick="prosesLogin()" style="width: 80%; font-size: 18px;">Masuk ➔</button>
+        <p class="kembali" onclick="nav('page-home')">Kembali ke Awal</p>
+    </div>
+
+    <div id="page-data-siswa" class="page">
+        <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
+        <div class="top-buttons">
+            <button class="btn-info" onclick="bukaFormTambahSiswa()">+ Tambah</button>
+            <button onclick="nav('page-materi')">Lanjut ➔</button>
+        </div>
+        <div class="subtitle">Daftar Siswa Kelas</div>
+        <div style="overflow-x:auto;">
+            <table id="tabelSiswa">
+                <thead><tr><th>No</th><th>Nama Siswa</th><th>Opsi</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="page-form-siswa" class="page">
+        <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
+        <div class="subtitle" id="formSiswaTitle">Data Siswa</div>
+        <div class="content-box">
+            <input type="hidden" id="inputIdSiswa">
+            <label style="font-weight:800; color:#0288D1; font-size:14px;">Nama Siswa:</label><input type="text" id="inputNama">
+            <label style="font-weight:800; color:#0288D1; font-size:14px;">Kelas:</label><input type="text" id="inputKelas">
+            <label style="font-weight:800; color:#0288D1; font-size:14px;">No Absen:</label><input type="number" id="inputAbsen">
+            <label style="font-weight:800; color:#0288D1; font-size:14px;">Sekolah:</label><input type="text" id="inputSekolah">
+        </div>
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-data-siswa')">Batal</button>
+            <button onclick="simpanSiswa()">Simpan Data</button>
+        </div>
+    </div>
+
+    <div id="page-materi" class="page">
+        <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-data-siswa')">⬅ Kembali</button>
+            <button class="btn-info" onclick="nav('page-evaluasi')">Evaluasi ➔</button>
+        </div>
+        <div class="title-text">Pilih Unit Gerak<br>Manipulatif</div>
+        <div class="list-materi" id="gridMateriContainer"></div>
+    </div>
+
+    <div id="page-absen" class="page">
+        <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-materi')">⬅ Kembali</button>
+            <button onclick="nav('page-instruksi')">Lanjut ➔</button>
+        </div>
+        <div class="subtitle">Absensi Kelas</div>
+        <div id="listAbsensi"></div>
+    </div>
+
+    <div id="page-instruksi" class="page">
+        <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
+        <div class="subtitle">Instruksi Pembelajaran</div>
+        <div class="content-box content-box-new">
+            <p id="teksInstruksi" style="font-weight:700; color:#4A4A4A; line-height:1.5;"></p>
+        </div>
+        <button onclick="nav('page-tujuan')">Selanjutnya ➔</button>
+    </div>
+
+    <div id="page-tujuan" class="page">
+        <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
+        <div class="subtitle">Tujuan Pembelajaran</div>
+        <div class="content-box content-box-new">
+            <p id="teksTujuan" style="font-weight:700; color:#4A4A4A; line-height:1.5;"></p>
+        </div>
+        <button onclick="nav('page-video')">Selanjutnya ➔</button>
+    </div>
+
+    <div id="page-video" class="page">
+        <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
+        <div class="subtitle" id="judulVideoMateri">Video Materi</div>
+        <div id="containerVideo"></div>
+        <button onclick="mulaiPenilaian()">Penilaian ➔</button>
+    </div>
+
+    <div id="page-penilaian" class="page">
+        <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-video')">⬅ Kembali</button>
+            <button id="btn-selesai-nilai" onclick="selesaiPenilaian()">Selesai ✔</button>
+        </div>
+        <div class="subtitle">Umpan Balik & Nilai</div>
+        <div id="listPenilaian"></div>
+    </div>
+
+    <div id="page-evaluasi" class="page">
+        <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-materi')">⬅ Kembali</button>
+            <button class="btn-info" onclick="exportExcel()">⬇ Export CSV</button>
+        </div>
+        <div class="subtitle">Evaluasi Siswa</div>
+        <div style="overflow-x:auto;">
+            <table id="tabelEvaluasi">
+                <thead><tr><th>No</th><th>Nama</th><th>Avg</th><th>Opsi</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="page-rincian-evaluasi" class="page">
+        <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
+        <div class="content-box">
+            <div class="subtitle" id="rincianNamaSiswa" style="text-align: center; border:none; margin-bottom:5px;">Nama Siswa</div>
+            <p style="margin-bottom: 5px; font-weight: 800; font-size:14px; text-align:center;">RATA-RATA KESELURUHAN</p>
+            <div class="progress-container">
+                <div id="rincianProgressBar" class="progress-bar" style="width: 0%;">0%</div>
+            </div>
+            <p style="font-size: 12px; color: #9E9E9E; text-align: center; margin-top: 15px; font-weight: bold;">(Klik materi di bawah untuk melihat riwayat)</p>
+            <div id="rincianBintangMateri" style="margin-top: 5px;"></div>
+        </div>
+        <button class="btn-warning" onclick="nav('page-evaluasi')">⬅ Kembali</button>
+    </div>
+
+</div>
+
+<script src="scripts.js"></script>
+</body>
+</html>
