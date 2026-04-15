@@ -11,20 +11,21 @@ try {
     if(savedNilai) dataPenilaian = JSON.parse(savedNilai);
 } catch(e) { localStorage.removeItem('dilePenilaian'); }
 
-const dataMateri = [
-    { id_materi: 'M1', nama_materi: 'Memantul', instruksi: 'Lakukan pantulan bola ke lantai menggunakan satu atau dua tangan secara bergantian.', tujuan: 'Siswa mampu memantulkan bola basket dengan kontrol yang baik.', video: [{judul: 'Teknik Dasar Memantul'}, {judul: 'Memantul Sambil Berjalan'}, {judul: 'Memantul Melewati Rintangan'}] },
-    { id_materi: 'M2', nama_materi: 'Menangkap', instruksi: 'Fokuskan pandangan pada bola, tangkap menggunakan kedua tangan secara sigap.', tujuan: 'Siswa mampu menangkap bola yang dilempar dengan berbagai arah yang tepat.', video: [{judul: 'Menangkap Bola Datar'}, {judul: 'Menangkap Bola Lambung'}, {judul: 'Menangkap Bola Menyusur Tanah'}] },
-    { id_materi: 'M3', nama_materi: 'Menggiring', instruksi: 'Giring bola dengan kaki bagian dalam atau luar secara perlahan tanpa lepas kendali.', tujuan: 'Siswa dapat menggiring bola melewati rintangan dengan lincah.', video: [{judul: 'Menggiring Kaki Dalam'}, {judul: 'Menggiring Kaki Luar'}, {judul: 'Menggiring Zig-Zag'}] },
-    { id_materi: 'M4', nama_materi: 'Menendang', instruksi: 'Gunakan punggung kaki untuk tendangan jarak jauh atau kaki bagian dalam untuk jarak dekat.', tujuan: 'Siswa mampu menendang bola ke arah sasaran secara akurat.', video: [{judul: 'Tendangan Jarak Dekat'}, {judul: 'Tendangan Jarak Jauh'}, {judul: 'Menendang ke Arah Gawang'}] },
-    { id_materi: 'M5', nama_materi: 'Memukul', instruksi: 'Pegang tongkat pemukul dengan kuat, pusatkan pandangan, dan ayunkan sejajar pinggang.', tujuan: 'Siswa mampu memukul objek (bola) yang dilambungkan dengan tepat sasaran.', video: [{judul: 'Cara Memegang Tongkat'}, {judul: 'Memukul Bola Diam'}, {judul: 'Memukul Bola Lambung'}] },
-    { id_materi: 'M6', nama_materi: 'Melempar', instruksi: 'Ayunkan lengan dari belakang ke depan, lepaskan objek pada titik tertinggi untuk jarak jauh.', tujuan: 'Siswa mampu melempar bola kasti dengan lemparan melambung dan lurus.', video: [{judul: 'Lemparan Melambung'}, {judul: 'Lemparan Lurus Setinggi Dada'}, {judul: 'Lemparan Menyusur Tanah'}] }
-];
+// const dataMateri = [
+//     { id_materi: 'M1', nama_materi: 'Memantul', instruksi: 'Lakukan pantulan bola ke lantai menggunakan satu atau dua tangan secara bergantian.', tujuan: 'Siswa mampu memantulkan bola basket dengan kontrol yang baik.', video: [{judul: 'Teknik Dasar Memantul'}, {judul: 'Memantul Sambil Berjalan'}, {judul: 'Memantul Melewati Rintangan'}] },
+//     { id_materi: 'M2', nama_materi: 'Menangkap', instruksi: 'Fokuskan pandangan pada bola, tangkap menggunakan kedua tangan secara sigap.', tujuan: 'Siswa mampu menangkap bola yang dilempar dengan berbagai arah yang tepat.', video: [{judul: 'Menangkap Bola Datar'}, {judul: 'Menangkap Bola Lambung'}, {judul: 'Menangkap Bola Menyusur Tanah'}] },
+//     { id_materi: 'M3', nama_materi: 'Menggiring', instruksi: 'Giring bola dengan kaki bagian dalam atau luar secara perlahan tanpa lepas kendali.', tujuan: 'Siswa dapat menggiring bola melewati rintangan dengan lincah.', video: [{judul: 'Menggiring Kaki Dalam'}, {judul: 'Menggiring Kaki Luar'}, {judul: 'Menggiring Zig-Zag'}] },
+//     { id_materi: 'M4', nama_materi: 'Menendang', instruksi: 'Gunakan punggung kaki untuk tendangan jarak jauh atau kaki bagian dalam untuk jarak dekat.', tujuan: 'Siswa mampu menendang bola ke arah sasaran secara akurat.', video: [{judul: 'Tendangan Jarak Dekat'}, {judul: 'Tendangan Jarak Jauh'}, {judul: 'Menendang ke Arah Gawang'}] },
+//     { id_materi: 'M5', nama_materi: 'Memukul', instruksi: 'Pegang tongkat pemukul dengan kuat, pusatkan pandangan, dan ayunkan sejajar pinggang.', tujuan: 'Siswa mampu memukul objek (bola) yang dilambungkan dengan tepat sasaran.', video: [{judul: 'Cara Memegang Tongkat'}, {judul: 'Memukul Bola Diam'}, {judul: 'Memukul Bola Lambung'}] },
+//     { id_materi: 'M6', nama_materi: 'Melempar', instruksi: 'Ayunkan lengan dari belakang ke depan, lepaskan objek pada titik tertinggi untuk jarak jauh.', tujuan: 'Siswa mampu melempar bola kasti dengan lemparan melambung dan lurus.', video: [{judul: 'Lemparan Melambung'}, {judul: 'Lemparan Lurus Setinggi Dada'}, {judul: 'Lemparan Menyusur Tanah'}] }
+// ];
 
 let currentMateriId = null;
 let tempAbsen = {}; 
 let tempDinilaiSesiIni = {}; // Kunci sesi agar tidak dobel klik
 let tempSiswaAktifId = null; 
 let tempUmpanBalikAktif = null;
+let tmpPermainan = null;
 
 // Fungsi untuk mendapatkan Waktu Spesifik
 function getWaktuSekarang() {
@@ -140,6 +141,8 @@ function renderGridMateri() {
     });
 }
 
+// origin
+/*
 function pilihMateri(id) {
     currentMateriId = id; 
     tempAbsen = {}; 
@@ -152,6 +155,60 @@ function pilihMateri(id) {
     let htmlVideo = '';
     materi.video.forEach((v, i) => {
         htmlVideo += `<div class="content-box"><p style="font-weight:900; color:#0288D1; margin-top:0;">🎥 Video ${i+1}: ${v.judul}</p><div style="height:140px; background:#E1F5FE; color:#29B6F6; font-weight:800; display:flex; align-items:center; justify-content:center; border-radius:15px; border:2px dashed #81D4FA;">[Player Video]</div></div>`;
+    });
+    document.getElementById('containerVideo').innerHTML = htmlVideo;
+    renderAbsensi(); nav('page-absen');
+}
+*/
+
+function pilihMateri(id) {
+    currentMateriId = id; 
+    tempAbsen = {}; 
+    tempDinilaiSesiIni = {}; 
+    
+    const materi = dataMateri.find(m => m.id_materi === id);
+    // buat halaman baru untuk render sub materi (opsi permainan)
+    let subMateri = document.getElementById('opsiPermainan');
+    subMateri.innerHTML = "";
+
+    materi.permainan.forEach((sub,index) => {
+        subMateri.innerHTML += `
+        <button class="btn-opsi" type="button" onclick="pilihSubMateri('${id}', ${index})">${sub.nama_permainan}</button>
+        `;  
+    })
+
+    nav('page-permainan');
+
+}
+
+function pilihSubMateri(id, index){
+    const materi = dataMateri.find(m => m.id_materi === id);
+
+    tmpPermainan = materi.permainan[index].nama_permainan;
+
+    let instruksiJoin = materi.permainan[index].instruksi.join(' ');
+    if(instruksiJoin.length <= 0){
+        instruksiJoin = "Ikuti aba-aba dan arahan dari Guru."
+    }
+    document.getElementById('teksInstruksi').innerText = instruksiJoin;
+
+    let tmpTujuan = materi.permainan[index].tujuan;
+    if(tmpTujuan.length <= 0){
+        tmpTujuan = `Tujuan pembelajaran dari permainan adalah melakukan latihan gerak manipulatif "${materi.nama_materi}."`;
+    }
+    document.getElementById('teksTujuan').innerText = tmpTujuan;
+    document.getElementById('judulVideoMateri').innerText = "Video " + tmpPermainan;
+    // untuk langkah permainan
+    let tmpLangkah = '';
+    materi.permainan[index].langkah.forEach((desk,index) => {
+        tmpLangkah += `<p class="item-langkah">${index+1}. ${desk}</p>`;
+    }) //array
+
+    document.getElementById('langkahMateri').innerHTML = tmpLangkah;
+
+    let htmlVideo = '';
+    materi.permainan[index].video.forEach((v, i) => {
+        htmlVideo += `<div class="content-box"><p style="font-weight:900; color:#C62828; margin-top:0;">🎥 Video ${i+1}: ${v.judul}</p><div style="height:140px; background:#FDECEA; color:#C62828; font-weight:800; display:flex; align-items:center; justify-content:center; border-radius:15px; border:2px dashed #F8D7DA;">[Player Video]</div></div>`;
     });
     document.getElementById('containerVideo').innerHTML = htmlVideo;
     renderAbsensi(); nav('page-absen');
