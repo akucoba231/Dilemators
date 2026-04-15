@@ -207,9 +207,34 @@ function pilihSubMateri(id, index){
     document.getElementById('langkahMateri').innerHTML = tmpLangkah;
 
     let htmlVideo = '';
+    
+    if(materi.permainan[index].video.length >=1){
     materi.permainan[index].video.forEach((v, i) => {
-        htmlVideo += `<div class="content-box"><p style="font-weight:900; color:#C62828; margin-top:0;">🎥 Video ${i+1}: ${v.judul}</p><div style="height:140px; background:#FDECEA; color:#C62828; font-weight:800; display:flex; align-items:center; justify-content:center; border-radius:15px; border:2px dashed #F8D7DA;">[Player Video]</div></div>`;
+        htmlVideo += `
+        <div class="content-box">
+            <p style="font-weight:900; color:#C62828; margin-top:0;">🎥 Video ${i+1}: ${v}</p>
+            <div style="height:140px; background:#FDECEA; color:#C62828; font-weight:800; display:flex; align-items:center; justify-content:center; border-radius:15px; border:2px dashed #F8D7DA;">
+                <video style="width:100%; aspect-ratio: 4/3;" controls>
+                    <source src="video/${v}" type="video/mp4" />
+                    Your browser doesn't support this feature.
+                </video>
+            </div>
+        </div>`;
     });
+    }
+    else {
+        htmlVideo += `
+        <div class="content-box">
+            <p style="font-weight:900; color:#C62828; margin-top:0;">🎥 Animasi masih dalam proses produksi.</p>
+            <div style="height:140px; background:#FDECEA; color:#C62828; font-weight:800; display:flex; align-items:center; justify-content:center; border-radius:15px; border:2px dashed #F8D7DA;">
+                <video style="width:100%; aspect-ratio: 4/3;" controls>
+                    <source src="video/maaf.mp4" type="video/mp4" />
+                    Your browser doesn't support this feature.
+                </video>
+            </div>
+        </div>`;
+    }
+    
     document.getElementById('containerVideo').innerHTML = htmlVideo;
     renderAbsensi(); nav('page-absen');
 }
