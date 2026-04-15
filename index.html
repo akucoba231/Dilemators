@@ -131,6 +131,19 @@
         <div class="list-materi" id="gridMateriContainer"></div>
     </div>
 
+    <div id="page-permainan" class="page">
+        <img src="assets/logo_new.png" alt="logo-Dilomotors" class="logo-image" />
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-materi')">⬅ Kembali</button>
+            <!-- <button onclick="nav('page-instruksi')">Lanjut ➔</button> -->
+        </div>
+        <div class="subtitle">Pilihan Permainan</div>
+        <div class="content-box content-box-new list-permainan" id="opsiPermainan">
+            <!-- di sini akan dirender opsi permainan -->
+        </div>
+        <!-- <button onclick="nav('page-tujuan')">Selanjutnya ➔</button> -->
+    </div>
+
     <div id="page-absen" class="page">
         <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
         <div class="top-buttons">
@@ -163,6 +176,7 @@
         <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
         <div class="subtitle" id="judulVideoMateri">Video Materi</div>
         <div id="containerVideo"></div>
+        <div class="list-langkah" id="langkahMateri"></div>
         <button onclick="mulaiPenilaian()">Penilaian ➔</button>
     </div>
 
@@ -207,6 +221,7 @@
 
 </div>
 
+<script src="dataPermainan.js"></script>
 <script src="scripts.js"></script>
 </body>
 </html>
