@@ -15,7 +15,7 @@ let dataMateri = [
           "Anak terakhir berteriak \"YES!\" lalu semua anggota berlari di tempat."
         ],
         "video": [
-          {"judul":"memantul_satu_480p.mp4"}
+          "memantul_satu_480p.mp4"
         ]
       },
       {
