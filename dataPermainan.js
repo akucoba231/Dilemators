@@ -14,7 +14,9 @@ let dataMateri = [
           "Bola dioper ke belakang melalui atas kepala hingga ke anak terakhir.",
           "Anak terakhir berteriak \"YES!\" lalu semua anggota berlari di tempat."
         ],
-        "video": []
+        "video": [
+          {"judul":"memantul_satu_480p.mp4"}
+        ]
       },
       {
         "nama_permainan": "Bola Pantul Zig-Zag",
