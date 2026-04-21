@@ -112,7 +112,7 @@ let dataMateri = [
           "Dilakukan bergantian.",
           "Guru memimpin refleksi."
         ],
-        "video": []
+        "video": ["menggiring_satu_480p.mp4"]
       },
       {
         "nama_permainan": "Menggiring Zig-Zag",
