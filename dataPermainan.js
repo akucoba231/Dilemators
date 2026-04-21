@@ -159,7 +159,7 @@ let dataMateri = [
           "Penerima mengontrol dan mengembalikan bola.",
           "Siswa saling membantu."
         ],
-        "video": []
+        "video": ["menendang_satu_720p.mp4"]
       },
       {
         "nama_permainan": "Menendang Segitiga Bermuda",
