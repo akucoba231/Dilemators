@@ -253,7 +253,7 @@ let dataMateri = [
           "Dilakukan dalam posisi statis.",
           "Setelah selesai membantu mengambil bola."
         ],
-        "video": []
+        "video": ["melempar_satu_480p.mp4"]
       },
       {
         "nama_permainan": "Melempar Bola Lambung",
