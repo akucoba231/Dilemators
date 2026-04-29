@@ -77,7 +77,7 @@ let dataMateri = [
           "Siswa yang mahir memberi contoh.",
           "Latihan diulang dan diakhiri evaluasi."
         ],
-        "video": []
+        "video": ["melempar_dua_720p.mp4"]
       },
       {
         "nama_permainan": "Turnamen Lempar Tangkap",
@@ -92,7 +92,7 @@ let dataMateri = [
           "Poin diberikan jika bola jatuh di area lawan.",
           "Pemenang ditentukan dari skor terbanyak."
         ],
-        "video": []
+        "video": ["melempar_tiga_480p.mp4"]
       }
     ]
   },
