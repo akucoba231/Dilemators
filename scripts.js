@@ -212,7 +212,7 @@ function pilihSubMateri(id, index){
     materi.permainan[index].video.forEach((v, i) => {
         htmlVideo += `
         <div class="content-box">
-            <p style="font-weight:900; color:#C62828; margin-top:0;">🎥 Video ${i+1}: ${v}</p>
+            <p style="font-weight:900; color:#C62828; margin-top:0;">🎥 Video Animasi</p>
             <div style="height:auto; background:#FDECEA; color:#C62828; font-weight:800; display:flex; align-items:center; justify-content:center; border-radius:15px; border:2px dashed #F8D7DA;">
                 <video style="width:100%; aspect-ratio: 4/3;" controls>
                     <source src="video/${v}" type="video/mp4" />
