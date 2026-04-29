@@ -140,7 +140,7 @@ let dataMateri = [
           "Memberi bola ke teman dan bertukar peran.",
           "Guru memimpin refleksi."
         ],
-        "video": []
+        "video": ["menggiring_tiga_720p.mp4"]
       }
     ]
   },
