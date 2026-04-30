@@ -173,7 +173,7 @@ let dataMateri = [
           "Siswa berpindah kelompok.",
           "Yang gagal membantu merapikan target."
         ],
-        "video": []
+        "video": ["menendang_dua_720p.mp4"]
       },
       {
         "nama_permainan": "Turnamen Lempar Tendang",
@@ -220,7 +220,7 @@ let dataMateri = [
           "Berjalan maju sambil mengulang.",
           "Setelah selesai kembali ke barisan."
         ],
-        "video": []
+        "video": ["memukul_dua_480p.mp4"]
       },
       {
         "nama_permainan": "Memukul Bola Melambung",
