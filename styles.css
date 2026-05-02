@@ -19,7 +19,7 @@ body {
     #app-container { min-height: 850px; border-radius: 40px; border: 10px solid #1A237E; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin: 20px 0;}
 }
 
-.page { display: none; padding: 25px 20px; text-align: center; height: 100%; box-sizing: border-box; }
+.page { display: none; padding: 25px 20px 40px 20px; text-align: center; height: 100%; box-sizing: border-box; }
 .page.active { display: block; animation: fadeIn 0.4s ease-out; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -43,7 +43,7 @@ h1.logo-title {
 .input-group input:focus, .content-box input:focus, .content-box select:focus, .content-box textarea:focus { outline: none; border-color: #4FC3F7; }
 
 /* Tombol - Warna Soft Biru */
-.top-buttons { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.top-buttons { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
 button { 
     background: linear-gradient(180deg, #81D4FA 0%, #29B6F6 100%); color: white; border: 3px solid #E1F5FE; 
     padding: 12px 22px; border-radius: 30px; font-weight: 900; cursor: pointer; font-size: 15px; font-family: 'Nunito', sans-serif;
