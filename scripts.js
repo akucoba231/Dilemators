@@ -38,6 +38,12 @@ function getWaktuSekarang() {
 function nav(targetId) {
     document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
     document.getElementById(targetId).classList.add('active');
+    // --- BAGIAN INI YANG DIUBAH ---
+        // Gunakan setTimeout agar DOM selesai dirender sebelum melakukan scroll
+        setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 500); 
+        // ------------------------------
     if(targetId === 'page-data-siswa') renderTabelSiswa();
     if(targetId === 'page-materi') renderGridMateri();
     if(targetId === 'page-evaluasi') renderTabelEvaluasi();
