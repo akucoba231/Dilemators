@@ -129,6 +129,10 @@
         </div>
         <div class="title-text">Pilih Unit Gerak<br>Manipulatif</div>
         <div class="list-materi" id="gridMateriContainer"></div>
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-data-siswa')">⬅ Kembali</button>
+            <button class="btn-info" onclick="nav('page-evaluasi')">Evaluasi ➔</button>
+        </div>
     </div>
 
     <div id="page-permainan" class="page">
@@ -141,6 +145,10 @@
         <div class="content-box content-box-new list-permainan" id="opsiPermainan">
             <!-- di sini akan dirender opsi permainan -->
         </div>
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-materi')">⬅ Kembali</button>
+            <button onclick="nav('page-instruksi')" style="visibility: hidden;">Lanjut ➔</button>
+        </div>
         <!-- <button onclick="nav('page-tujuan')">Selanjutnya ➔</button> -->
     </div>
 
@@ -152,6 +160,10 @@
         </div>
         <div class="subtitle">Absensi Kelas</div>
         <div id="listAbsensi"></div>
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-materi')">⬅ Kembali</button>
+            <button onclick="nav('page-instruksi')">Lanjut ➔</button>
+        </div>
     </div>
 
     <div id="page-instruksi" class="page">
@@ -160,7 +172,11 @@
         <div class="content-box content-box-new">
             <p id="teksInstruksi" style="font-weight:700; color:#4A4A4A; line-height:1.5;"></p>
         </div>
-        <button onclick="nav('page-tujuan')">Selanjutnya ➔</button>
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-absen')">⬅ Kembali</button>
+            <button onclick="nav('page-tujuan')">Lanjut ➔</button>
+        </div>
+        <!--<button onclick="nav('page-tujuan')">Selanjutnya ➔</button>-->
     </div>
 
     <div id="page-tujuan" class="page">
@@ -169,7 +185,11 @@
         <div class="content-box content-box-new">
             <p id="teksTujuan" style="font-weight:700; color:#4A4A4A; line-height:1.5;"></p>
         </div>
-        <button onclick="nav('page-video')">Selanjutnya ➔</button>
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-instruksi')">⬅ Kembali</button>
+            <button onclick="nav('page-video')">Lanjut ➔</button>
+        </div>
+        <!--<button onclick="nav('page-video')">Selanjutnya ➔</button>-->
     </div>
 
     <div id="page-video" class="page">
@@ -177,7 +197,11 @@
         <div class="subtitle" id="judulVideoMateri">Video Materi</div>
         <div id="containerVideo"></div>
         <div class="list-langkah" id="langkahMateri"></div>
-        <button onclick="mulaiPenilaian()">Penilaian ➔</button>
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-tujuan')">⬅ Kembali</button>
+            <button onclick="mulaiPenilaian()">Penilaian ➔</button>
+        </div>
+        <!--<button onclick="mulaiPenilaian()">Penilaian ➔</button>-->
     </div>
 
     <div id="page-penilaian" class="page">
@@ -188,6 +212,10 @@
         </div>
         <div class="subtitle">Umpan Balik & Nilai</div>
         <div id="listPenilaian"></div>
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-video')">⬅ Kembali</button>
+            <button id="btn-selesai-nilai" onclick="selesaiPenilaian()">Selesai ✔</button>
+        </div>
     </div>
 
     <div id="page-evaluasi" class="page">
@@ -202,6 +230,10 @@
                 <thead><tr><th>No</th><th>Nama</th><th>Avg</th><th>Opsi</th></tr></thead>
                 <tbody></tbody>
             </table>
+        </div>
+        <div class="top-buttons">
+            <button class="btn-warning" onclick="nav('page-materi')">⬅ Kembali</button>
+            <button class="btn-info" onclick="exportExcel()">⬇ Export CSV</button>
         </div>
     </div>
 
