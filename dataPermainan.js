@@ -126,7 +126,7 @@ let dataMateri = [
           "Memberi bola ke teman dan kembali ke barisan.",
           "Guru memimpin refleksi."
         ],
-        "video": []
+        "video": ["menggiring_dua.mp4"]
       },
       {
         "nama_permainan": "Menggiring Melewati Lawan",
@@ -140,7 +140,7 @@ let dataMateri = [
           "Memberi bola ke teman dan bertukar peran.",
           "Guru memimpin refleksi."
         ],
-        "video": ["menggiring_tiga_720p.mp4"]
+        "video": ["menggiring_tiga.mp4"]
       }
     ]
   },
