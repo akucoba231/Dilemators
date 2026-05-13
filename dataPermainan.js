@@ -29,7 +29,7 @@ let dataMateri = [
           "Setelah selesai, siswa bertukar posisi dengan yang jongkok.",
           "Dilanjutkan secara bergantian."
         ],
-        "video": []
+        "video": ["memantul_dua.mp4"]
       },
       {
         "nama_permainan": "Turnamen Bola Pantul",
