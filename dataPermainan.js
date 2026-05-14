@@ -282,7 +282,7 @@ let dataMateri = [
           "Kompetisi antar kelompok dilakukan.",
           "Kelompok dengan poin terbanyak menang."
         ],
-        "video": []
+        "video": ["melempar_tiga.mp4"]
       }
     ]
   }
