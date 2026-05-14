@@ -88,11 +88,13 @@ let dataMateri = [
           "Siswa berlatih lempar tangkap dan kerja sama tim.",
           "Siswa melempar bola lambung dalam kelompok.",
           "Jika gagal menangkap, melakukan loncat.",
+          "Selanjutnya dilakukan turnamen lempar-tangkap.",
           "Turnamen dilakukan dengan net tali.",
+          "Guru akan memimpin turnamen.",
           "Poin diberikan jika bola jatuh di area lawan.",
           "Pemenang ditentukan dari skor terbanyak."
         ],
-        "video": ["melempar_tiga_480p.mp4"]
+        "video": ["menangkap_tiga.mp4"]
       }
     ]
   },
