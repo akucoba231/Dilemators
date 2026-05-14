@@ -268,7 +268,7 @@ let dataMateri = [
           "Dilakukan dari posisi statis.",
           "Siswa kembali ke barisan."
         ],
-        "video": []
+        "video": ["melempar_dua.mp4"]
       },
       {
         "nama_permainan": "Lempar Poin",
