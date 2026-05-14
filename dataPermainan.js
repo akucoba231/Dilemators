@@ -235,7 +235,7 @@ let dataMateri = [
           "Pemukul memukul bola.",
           "Siswa berganti peran."
         ],
-        "video": []
+        "video": ["memukul_tiga.mp4"]
       }
     ]
   },
