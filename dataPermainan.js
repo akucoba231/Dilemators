@@ -190,7 +190,7 @@ let dataMateri = [
           "Poin diberikan jika penendang selamat.",
           "Pemenang ditentukan dari poin."
         ],
-        "video": []
+        "video": ["menendang_tiga.mp4"]
       }
     ]
   },
