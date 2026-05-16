@@ -43,7 +43,7 @@ let dataMateri = [
           "Siswa memantulkan bola sambil berlari dan mengoper.",
           "Setiap gol dari bola pantul bernilai 1 poin."
         ],
-        "video": []
+        "video": ["memantul_tiga.mp4"]
       }
     ]
   },
