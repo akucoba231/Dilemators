@@ -430,7 +430,9 @@ function bukaRincianEvaluasi(id_siswa) {
             </div>`;
     });
 
-    const rataRataKeseluruhan = materiDinilaiCount > 0 ? Math.round(totalNilai / materiDinilaiCount) : 0;
+    const riwayatSiswa = dataPenilaian.filter(p => p.id_siswa === siswa.id_siswa);
+    const rataRataKeseluruhan = riwayatSiswa.length > 0 ? Math.round(riwayatSiswa.reduce((sum, p) => sum + (Number(p.nilai) || 0), 0) / riwayatSiswa.length) : 0;
+    //const rataRataKeseluruhan = materiDinilaiCount > 0 ? Math.round(totalNilai / materiDinilaiCount) : 0;
     const progressBar = document.getElementById('rincianProgressBar');
     progressBar.style.width = rataRataKeseluruhan + '%'; 
     progressBar.innerText = rataRataKeseluruhan + '%';
