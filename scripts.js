@@ -54,6 +54,20 @@ function showModal(title, message) {
     document.getElementById('modalBody').innerText = message;
     document.getElementById('globalModal').style.display = 'flex';
 }
+
+function showModalConfirm(title, message, fungsi) {
+    document.getElementById('modalTitleConfirm').innerText = title;
+    document.getElementById('modalBodyConfirm').innerText = message;
+    let btnConfirm = document.getElementById('btnConfirm');
+    btnConfirm.onclick = "";
+    btnConfirm.onclick = () => {
+        fungsi()
+        closeModal('globalConfirm');
+    }
+    document.getElementById('globalConfirm').style.display = 'flex';
+
+}
+
 function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
 function prosesLogin() {
@@ -482,4 +496,8 @@ function exportExcel() {
     const link = document.createElement("a"); link.setAttribute("href", encodeURI(csvContent));
     link.setAttribute("download", "Riwayat_Evaluasi_PJOK_Dilemators.csv"); document.body.appendChild(link);
     link.click(); document.body.removeChild(link);
+}
+
+function lanjutInstruksi(){
+    nav('page-instruksi');
 }
