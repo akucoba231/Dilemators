@@ -19,6 +19,17 @@
         </div>
     </div>
 
+    <div id="globalConfirm" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modalTitleConfirm" style="color:#0288D1; font-weight:900;">Pesan</h3>
+            <p id="modalBodyConfirm" style="font-weight:700; color:#4A4A4A;">Isi Pesan</p>
+            <div style="display: flex; width: 95%; margin: 2% auto; justify-content: center; align-items: center;">
+                <button class="btn-warning" onclick="closeModal('globalConfirm')">Batalkan</button>
+                <button class="btn-info" id="btnConfirm" onclick="">Lanjutkan</button>
+            </div>
+        </div>
+    </div>
+
     <div id="absenModal" class="modal-overlay">
         <div class="modal-content">
             <h3 style="color:#0288D1; font-weight:900;">Alasan Absen</h3>
@@ -92,16 +103,20 @@
 
     <div id="page-data-siswa" class="page">
         <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
-        <div class="top-buttons">
-            <button class="btn-info" onclick="bukaFormTambahSiswa()">+ Tambah</button>
-            <button onclick="nav('page-materi')">Lanjut ➔</button>
-        </div>
+        <!-- <div class="top-buttons" style="display: none;">
+            <button disabled class="btn-info" onclick="bukaFormTambahSiswa()">+ Tambah</button>
+            <button disabled onclick="nav('page-materi')">Lanjut ➔</button>
+        </div> -->
         <div class="subtitle">Daftar Siswa Kelas</div>
-        <div style="overflow-x:auto;">
+        <div style="overflow-x:auto; margin-bottom: 7%;">
             <table id="tabelSiswa">
                 <thead><tr><th>No</th><th>Nama Siswa</th><th>Opsi</th></tr></thead>
                 <tbody></tbody>
             </table>
+        </div>
+        <div class="top-buttons">
+            <button class="btn-info" onclick="bukaFormTambahSiswa()">+ Tambah</button>
+            <button onclick="nav('page-materi')">Lanjut ➔</button>
         </div>
     </div>
 
@@ -123,12 +138,12 @@
 
     <div id="page-materi" class="page">
         <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
-        <div class="top-buttons">
+        <!-- <div class="top-buttons" style="display: none;">
             <button class="btn-warning" onclick="nav('page-data-siswa')">⬅ Kembali</button>
             <button class="btn-info" onclick="nav('page-evaluasi')">Evaluasi ➔</button>
-        </div>
+        </div> -->
         <div class="title-text">Pilih Unit Gerak<br>Manipulatif</div>
-        <div class="list-materi" id="gridMateriContainer"></div>
+        <div class="list-materi" id="gridMateriContainer" style="margin-bottom: 7%;"></div>
         <div class="top-buttons">
             <button class="btn-warning" onclick="nav('page-data-siswa')">⬅ Kembali</button>
             <button class="btn-info" onclick="nav('page-evaluasi')">Evaluasi ➔</button>
@@ -137,12 +152,12 @@
 
     <div id="page-permainan" class="page">
         <img src="assets/logo_new.png" alt="logo-Dilomotors" class="logo-image" />
-        <div class="top-buttons">
+        <!-- <div class="top-buttons" style="display: none;">
             <button class="btn-warning" onclick="nav('page-materi')">⬅ Kembali</button>
             <button onclick="nav('page-instruksi')" style="visibility: hidden;">Lanjut ➔</button>
-        </div>
+        </div> -->
         <div class="subtitle">Pilihan Permainan</div>
-        <div class="content-box content-box-new list-permainan" id="opsiPermainan">
+        <div class="content-box content-box-new list-permainan" id="opsiPermainan" style="margin-bottom: 7%;">
             <!-- di sini akan dirender opsi permainan -->
         </div>
         <div class="top-buttons">
@@ -154,12 +169,12 @@
 
     <div id="page-absen" class="page">
         <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
-        <div class="top-buttons">
+        <!-- <div class="top-buttons" style="display: none;">
             <button class="btn-warning" onclick="nav('page-materi')">⬅ Kembali</button>
             <button onclick="nav('page-instruksi')">Lanjut ➔</button>
-        </div>
+        </div> -->
         <div class="subtitle">Absensi Kelas</div>
-        <div id="listAbsensi"></div>
+        <div id="listAbsensi" style="margin-bottom: 7%;"></div>
         <div class="top-buttons">
             <button class="btn-warning" onclick="nav('page-materi')">⬅ Kembali</button>
             <button onclick="nav('page-instruksi')">Lanjut ➔</button>
@@ -169,7 +184,7 @@
     <div id="page-instruksi" class="page">
         <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
         <div class="subtitle">Instruksi Pembelajaran</div>
-        <div class="content-box content-box-new">
+        <div class="content-box content-box-new" style="margin-bottom: 7%;">
             <p id="teksInstruksi" style="font-weight:700; color:#4A4A4A; line-height:1.5;"></p>
         </div>
         <div class="top-buttons">
@@ -182,7 +197,7 @@
     <div id="page-tujuan" class="page">
         <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
         <div class="subtitle">Tujuan Pembelajaran</div>
-        <div class="content-box content-box-new">
+        <div class="content-box content-box-new" style="margin-bottom: 7%;">
             <p id="teksTujuan" style="font-weight:700; color:#4A4A4A; line-height:1.5;"></p>
         </div>
         <div class="top-buttons">
@@ -196,7 +211,7 @@
         <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
         <div class="subtitle" id="judulVideoMateri">Video Materi</div>
         <div id="containerVideo"></div>
-        <div class="list-langkah" id="langkahMateri"></div>
+        <div class="list-langkah" id="langkahMateri" style="margin-bottom: 7%;"></div>
         <div class="top-buttons">
             <button class="btn-warning" onclick="nav('page-tujuan')">⬅ Kembali</button>
             <button onclick="mulaiPenilaian()">Penilaian ➔</button>
@@ -206,15 +221,15 @@
 
     <div id="page-penilaian" class="page">
         <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
-        <div class="top-buttons">
+        <!-- <div class="top-buttons">
             <button class="btn-warning" onclick="nav('page-video')">⬅ Kembali</button>
             <button id="btn-selesai-nilai" onclick="selesaiPenilaian()">Selesai ✔</button>
-        </div>
+        </div> -->
         <div class="subtitle">Umpan Balik & Nilai</div>
-        <div id="listPenilaian"></div>
+        <div id="listPenilaian" style="margin-bottom: 7%;"></div>
         <div class="top-buttons">
             <button class="btn-warning" onclick="nav('page-video')">⬅ Kembali</button>
-            <button id="btn-selesai-nilai" onclick="selesaiPenilaian()">Selesai ✔</button>
+            <button id="btn-selesai-nilai" onclick="showModalConfirm('Pastikan semua siswa telah dinilai','Apakah ingin melanjutkan ?',selesaiPenilaian)">Selesai ✔</button>
         </div>
     </div>
 
@@ -239,7 +254,7 @@
 
     <div id="page-rincian-evaluasi" class="page">
         <img src="assets/logo_new.png" alt="logo-dilemators" class="logo-image" />
-        <div class="content-box">
+        <div class="content-box" style="margin-bottom: 7%;">
             <div class="subtitle" id="rincianNamaSiswa" style="text-align: center; border:none; margin-bottom:5px;">Nama Siswa</div>
             <p style="margin-bottom: 5px; font-weight: 800; font-size:14px; text-align:center;">RATA-RATA KESELURUHAN</p>
             <div class="progress-container">
