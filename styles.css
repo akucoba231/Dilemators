@@ -163,3 +163,8 @@ tr:last-child td { border-bottom: none; }
 .owner p span {
      font-size: 1em;   
 }
+
+
+.title-text:first-of-type {
+    margin-bottom: 10px;
+}
