@@ -380,9 +380,10 @@ function pilihMateri(id) {
     const materi = dataMateri.find(m => m.id_materi === id);
     let subMateri = document.getElementById('opsiPermainan');
     subMateri.innerHTML = "";
+    let level = ["Mudah","Sedang","Sulit"];
     if(materi && materi.permainan) {
         materi.permainan.forEach((sub,index) => {
-            subMateri.innerHTML += `<button class="btn-opsi" type="button" onclick="pilihSubMateri('${id}', ${index})">${sub.nama_permainan}</button>`;  
+            subMateri.innerHTML += `<button class="btn-opsi" type="button" onclick="pilihSubMateri('${id}', ${index})">${sub.nama_permainan} (${level[index]})</button>`;  
         });
         nav('page-permainan');
     }
