@@ -3,375 +3,945 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modul Pembelajaran - Dilemators</title>
-    <script src="prevent-back.js"></script>
+    <title>Modul Pembelajaran</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Engagement&family=Righteous&family=Tangerine:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    
     <link rel="stylesheet" href="styles.css" type="text/css" />
 </head>
 <body>
+
+<!-- APP SWITCHER OVERLAY -->
+<!-- <div style="position: fixed; top: 10px; right: 10px; background: rgba(255,255,255,0.9); padding: 10px; border-radius: 10px; border: 2px solid #ccc; z-index: 9999; display: flex; flex-direction: column; gap: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <p style="margin:0 0 5px 0; font-size:10px; font-weight:bold; color:#000; text-align:center;">Ganti Aplikasi:</p>
+    <button class="btn-info" style="padding: 5px 10px; font-size: 11px;" onclick="window.location.href='?app=dilemators'">Dilemators</button>
+    <button class="btn-warning" style="padding: 5px 10px; font-size: 11px; background: linear-gradient(180deg, #FFB74D, #F57C00); color:white; border-color:#FFB74D;" onclick="window.location.href='?app=dilomotors'">Dilomotors</button>
+    <button class="btn-primary" style="padding: 5px 10px; font-size: 11px; background: linear-gradient(180deg, #81C784, #4CAF50); border-color:#81C784;" onclick="window.location.href='?app=dinomotors'">Dinomotors</button>
+</div> -->
 
 <div id="app-container">
 
     <div id="globalModal" class="modal-overlay">
         <div class="modal-content">
-            <h3 id="modalTitle" style="color:#0288D1; font-weight:900;">Pesan</h3>
-            <div id="modalBody" style="font-weight:700; color:#4A4A4A; font-size:14px; margin-bottom:15px; line-height:1.5;">Isi Pesan</div>
-            <button class="btn-warning" onclick="closeModal('globalModal')">Tutup</button>
+            <h3 id="modalTitle" class="text-primary">Pesan</h3>
+            <div id="modalBody" style="font-weight:700; color:#000; font-size:14px; margin-bottom:15px; line-height:1.5;">Isi Pesan</div>
+            <button class="btn-warning" onclick="closeModal('globalModal')" data-i18n="global_tutup">Tutup</button>
         </div>
     </div>
     
     <div id="confirmModal" class="modal-overlay">
         <div class="modal-content">
-            <h3 style="color:#E53935; font-weight:900;">Konfirmasi</h3>
-            <p id="confirmBody" style="font-weight:700; color:#4A4A4A;">Apakah Anda yakin?</p>
+            <h3 class="text-danger" data-i18n="konfirmasi">Konfirmasi</h3>
+            <p id="confirmBody" style="font-weight:700; color:#000;">Apakah Anda yakin?</p>
             <div class="top-buttons" style="margin-top: 20px;">
-                <button class="btn-warning" onclick="closeModal('confirmModal')">Batal</button>
+                <button class="btn-warning" onclick="closeModal('confirmModal')" data-i18n="konfirmasi_batal">Batal</button>
                 <button class="btn-danger" id="confirmActionBtn">Ya, Kembali</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registrasi Modal -->
+    <div id="registrasiModal" class="modal-overlay" style="z-index: 999;">
+        <div class="modal-content" style="max-width: 400px; max-height: 80vh; overflow-y: auto;">
+            <h3 class="text-primary" style="margin-top:0;">Registrasi Guru</h3>
+            <div class="content-box" style="box-shadow:none; padding:0; border:none; text-align: left; background: transparent;">
+                <label style="font-size:12px; font-weight:bold; color:var(--primary);">Nama Lengkap</label>
+                <input type="text" id="regNama" placeholder="Nama Lengkap" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
+                
+                <label style="font-size:12px; font-weight:bold; color:var(--primary);">NIP (Opsional)</label>
+                <input type="text" id="regNIP" placeholder="NIP (Opsional)" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
+                
+                <label style="font-size:12px; font-weight:bold; color:var(--primary);">Asal Sekolah</label>
+                <input type="text" id="regSekolah" placeholder="Asal Sekolah" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
+                
+                <label style="font-size:12px; font-weight:bold; color:var(--primary);">Email</label>
+                <input type="email" id="regEmail" placeholder="Email" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
+                
+                <label style="font-size:12px; font-weight:bold; color:var(--primary);">Username</label>
+                <input type="text" id="regUsername" placeholder="Username" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
+                
+                <label style="font-size:12px; font-weight:bold; color:var(--primary);">Kata Sandi</label>
+                <input type="password" id="regPassword" placeholder="Kata Sandi" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
+                
+                <label style="font-size:12px; font-weight:bold; color:var(--primary);">Pertanyaan Keamanan</label>
+                <input type="text" id="regPertanyaan" placeholder="Misal: Siapa nama hewan peliharaan Anda?" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
+                
+                <label style="font-size:12px; font-weight:bold; color:var(--primary);">Jawaban Keamanan</label>
+                <input type="text" id="regJawaban" placeholder="Jawaban Keamanan" style="width: 100%; margin-bottom: 15px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button class="btn-warning" style="flex:1; padding:10px;" onclick="closeModal('registrasiModal')">Batal</button>
+                <button class="btn-primary" style="flex:1; padding:10px;" onclick="simpanRegistrasi()">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reset Sandi Modal -->
+    <div id="resetSandiModal" class="modal-overlay" style="z-index: 999;">
+        <div class="modal-content" style="max-width: 400px;">
+            <h3 class="text-primary" style="margin-top:0;" data-i18n="reset_judul">Atur Ulang Sandi</h3>
+            <div class="content-box" style="box-shadow:none; padding:0; border:none; text-align: left; background: transparent;">
+                
+                <!-- Tahap 1: Pertanyaan Keamanan -->
+                <div id="tahap1Reset">
+                    <label style="font-size:12px; font-weight:bold; color:var(--primary);" data-i18n="reset_pertanyaan">Jawab pertanyaan keamanan berikut :</label>
+                    <p id="labelPertanyaanKeamanan" style="font-weight:900; font-size: 14px; margin-top: 5px; margin-bottom: 15px; color: #444; background: var(--bg-light); padding: 8px; border-radius: 5px; text-align: center;"></p>
+                    
+                    <label style="font-size:12px; font-weight:bold; color:var(--primary);" data-i18n="reset_jawaban">Jawaban Anda :</label>
+                    <input type="text" id="resetJawaban" placeholder="Jawaban" style="width: 100%; margin-bottom: 10px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
+                    
+                    <button id="btnPeriksaJawaban" class="btn-info" style="width: 100%; padding: 10px; margin-bottom: 10px;" onclick="periksaJawabanKeamanan()" data-i18n="reset_periksa">Periksa</button>
+                </div>
+
+                <!-- Tahap 2: Password Baru (Sembunyi by default) -->
+                <div id="wadahPasswordBaru" style="display: none;">
+                    <label style="font-size:12px; font-weight:bold; color:var(--primary);" data-i18n="reset_password">Masukkan kata sandi baru</label>
+                    <input type="password" id="resetPassword1" placeholder="Sandi Baru" style="width: 100%; margin-bottom: 10px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;" oninput="periksaKecocokanSandi()">
+                    
+                    <label style="font-size:12px; font-weight:bold; color:var(--primary);" data-i18n="reset_ulangi">Masukkan ulang kata sandi baru</label>
+                    <div style="position: relative;">
+                        <input type="password" id="resetPassword2" placeholder="Ulangi Sandi Baru" style="width: 100%; margin-bottom: 15px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;" oninput="periksaKecocokanSandi()">
+                        <span id="statusCocokSandi" style="position: absolute; right: 10px; top: 10px; font-size: 16px;"></span>
+                    </div>
+                </div>
+                
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button class="btn-warning" style="flex:1; padding:10px;" onclick="closeModal('resetSandiModal')" data-i18n="reset_batal">Batal</button>
+                <button id="btnSimpanReset" class="btn-primary" style="flex:1; padding:10px;" onclick="prosesResetSandi()" disabled data-i18n="reset_simpan">Simpan</button>
             </div>
         </div>
     </div>
 
     <div id="panduanSiswaModal" class="modal-overlay">
         <div class="modal-content" style="max-width: 450px; width: 95%;">
-            <h3 style="color:#0288D1; font-weight:900;">Panduan Tambah Data & Import</h3>
-            <p style="font-weight:700; color:#4A4A4A; font-size:13px; text-align:left;">Gunakan tombol <b>+ Tambah</b> untuk mengisi form data siswa. Untuk import massal, pastikan file Excel (.xlsx) Anda memiliki <b>baris pertama (header)</b> seperti format berikut. <span style="color:#E53935;">Kolom Nama dan Kelas WAJIB ada.</span></p>
-            <div style="overflow-x:auto; border-radius: 10px; border: 1px solid #E1F5FE; margin-bottom:15px;">
+            <h3 class="text-primary" data-i18n="panduan_siswa_judul">Panduan Tambah Data Siswa dan Import Data</h3>
+            <p style="font-weight:700; color:#000; font-size:13px; text-align:left;" data-i18n="panduan_siswa_deskripsi">Gunakan tombol <b>+ Tambah</b> lalu isi <b>Form Tambahkan Siswa</b> sesuai label. Untuk melakukan import massal, pastikan file Excel (.xlsx) Anda memiliki <b>baris pertama (header)</b> seperti format berikut. <span class="text-danger">Kolom Nama dan Kelas WAJIB ada.</span></p>
+            <div class="table-responsive">
                 <table style="font-size: 11px; width: 100%; border-collapse: collapse;">
                     <thead>
                         <tr>
-                            <th style="padding: 6px; background:#E1F5FE; color:#0288D1;">No Abs</th>
-                            <th style="padding: 6px; background:#E1F5FE; color:#0288D1;">Nama Siswa</th>
-                            <th style="padding: 6px; background:#E1F5FE; color:#0288D1;">NISN</th>
-                            <th style="padding: 6px; background:#E1F5FE; color:#0288D1;">JK</th>
-                            <th style="padding: 6px; background:#E1F5FE; color:#0288D1;">Kelas</th>
-                            <th style="padding: 6px; background:#E1F5FE; color:#0288D1;">Sekolah</th>
+                            <th class="bg-light text-primary" data-i18n="panduan_siswa_th_absen">No Abs</th>
+                            <th class="bg-light text-primary" data-i18n="panduan_siswa_th_nama">Nama Siswa</th>
+                            <th class="bg-light text-primary" data-i18n="panduan_siswa_th_nisn">NISN</th>
+                            <th class="bg-light text-primary" data-i18n="panduan_siswa_th_jk">JK</th>
+                            <th class="bg-light text-primary" data-i18n="panduan_siswa_th_kelas">Kelas</th>
+                            <th class="bg-light text-primary" data-i18n="panduan_siswa_th_sekolah">Sekolah</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="padding: 6px; border-bottom:1px solid #E1F5FE;">1</td>
-                            <td style="padding: 6px; border-bottom:1px solid #E1F5FE;">Andi</td>
-                            <td style="padding: 6px; border-bottom:1px solid #E1F5FE;">00123</td>
-                            <td style="padding: 6px; border-bottom:1px solid #E1F5FE;">L</td>
-                            <td style="padding: 6px; border-bottom:1px solid #E1F5FE;">7A</td>
-                            <td style="padding: 6px; border-bottom:1px solid #E1F5FE;">SDN 1 Contoh</td>
+                            <td>1</td><td>Andi</td><td>00123</td><td>L</td><td>7A</td><td>SDN 1 Contoh</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <button class="btn-info" style="width:100%; margin-bottom:10px; background: linear-gradient(180deg, #81D4FA, #29B6F6); border-color:#E1F5FE; color:white; box-shadow: 0 5px 0 #0288D1;" onclick="downloadTemplateSiswa()">⬇ Download Template Dummy</button>
-            <button class="btn-warning" style="width:100%;" onclick="closeModal('panduanSiswaModal')">Tutup Panduan</button>
+            <button class="btn-info" style="width:100%; margin-bottom:10px; padding:12px; font-weight:bold; font-size:14px; border-radius:10px;" onclick="downloadTemplateSiswa()" data-i18n="panduan_siswa_btn_template">⬇ Download Template Dummy</button>
+            <button class="btn-primary" style="width:100%; padding: 12px; font-weight:bold; font-size:14px; border-radius:10px; margin-bottom: 10px;" onclick="document.getElementById('fileImportExcel').click(); closeModal('panduanSiswaModal')" data-i18n="panduan_siswa_btn_import">📥 Pilih File & Import</button>
+
+            <button class="btn-warning" style="width:100%; margin-top: 3%; padding: 12px; font-weight:bold; font-size:14px; border-radius:10px;" onclick="closeModal('panduanSiswaModal')" data-i18n="panduan_siswa_btn_tutup">Batal / Tutup</button>
         </div>
     </div>
 
     <div id="absenModal" class="modal-overlay">
         <div class="modal-content">
-            <h3 style="color:#0288D1; font-weight:900;">Alasan Absen</h3>
-            <p id="namaSiswaAbsen" style="font-weight: 900; color:#E53935;"></p>
+            <h3 class="text-primary" data-i18n="absen_modal_judul">Alasan Absen</h3>
+            <p id="namaSiswaAbsen" class="text-danger" style="font-weight: 900;"></p>
             <div class="content-box" style="box-shadow:none; padding:0; border:none;">
                 <select id="alasanAbsen">
-                    <option value="Sakit">Sakit</option>
-                    <option value="Izin">Izin</option>
-                    <option value="Alfa">Alfa</option>
+                    <option value="Sakit" data-i18n="absen_opt_sakit">Sakit</option>
+                    <option value="Izin" data-i18n="absen_opt_izin">Izin</option>
+                    <option value="Alfa" data-i18n="absen_opt_alfa">Alfa</option>
                 </select>
             </div>
-            <button class="btn-warning" onclick="closeModal('absenModal')">Batal</button>
-            <button onclick="simpanAlasanAbsen()">Simpan</button>
+            <button class="btn-warning" onclick="closeModal('absenModal')" data-i18n="absen_btn_batal">Batal</button>
+            <button class="btn-primary" onclick="simpanAlasanAbsen()" data-i18n="absen_btn_simpan">Simpan</button>
         </div>
     </div>
 
     <div id="nilaiModal" class="modal-overlay">
         <div class="modal-content">
-            <h3 style="color:#0288D1; font-weight:900;">Masukkan Nilai</h3>
-            <p id="namaSiswaNilai" style="font-weight: 900; color:#4A4A4A; margin-bottom:5px;"></p>
-            <p style="margin-top:0; font-weight:700; font-size:14px;">Umpan Balik: <span id="labelUmpanBalik" style="color:#0288D1;"></span></p>
+            <h3 class="text-primary" data-i18n="nilai_modal_judul">Masukkan Nilai</h3>
+            <p id="namaSiswaNilai" style="font-weight: 900; color:#000; margin-bottom:5px;"></p>
+            <p style="margin-top:0; font-weight:700; font-size:14px;"><span data-i18n="nilai_modal_feedback">Umpan Balik:</span> <span id="labelUmpanBalik" class="text-primary"></span></p>
             <div class="content-box" style="box-shadow:none; padding:0; border:none;">
-                <input type="number" id="inputAngkaNilai" placeholder="Nilai (1 - 100)" min="1" max="100">
-                <textarea id="inputKeteranganNilai" placeholder="Catatan Tambahan (Opsional)..." rows="3"></textarea>
+                <input type="number" id="inputAngkaNilai" placeholder="Nilai (1 - 100)" data-i18n-placeholder="nilai_modal_ph_angka" min="1" max="100">
+                <textarea id="inputKeteranganNilai" placeholder="Catatan Tambahan (Opsional)..." data-i18n-placeholder="nilai_modal_ph_catatan" rows="3"></textarea>
             </div>
-            <button class="btn-warning" onclick="closeModal('nilaiModal')">Batal</button>
-            <button onclick="simpanNilaiSiswa()">Simpan</button>
+            <button class="btn-warning" onclick="closeModal('nilaiModal')" data-i18n="nilai_modal_batal">Batal</button>
+            <button class="btn-primary" onclick="simpanNilaiSiswa()" data-i18n="nilai_modal_simpan">Simpan</button>
         </div>
     </div>
 
     <div id="riwayatModal" class="modal-overlay">
         <div class="modal-content" style="max-width: 400px; width: 95%; padding: 20px 10px;">
-            <h3 id="riwayatJudul" style="color:#0288D1; font-weight:900; margin-top:0;">Riwayat Materi</h3>
-            <div style="overflow-x:auto; max-height: 250px; border-radius: 10px; border: 1px solid #E1F5FE;">
+            <h3 id="riwayatJudul" class="text-primary" style="margin-top:0;" data-i18n="riwayatModalJudul">Riwayat Materi</h3>
+            <div class="table-responsive" style="max-height: 250px;">
                 <table style="font-size: 12px; width: 100%; border-collapse: collapse;">
-                    <thead><tr><th style="padding: 8px 4px; background: #E1F5FE; color: #0288D1;">Tgl & Jam</th><th style="padding: 8px 4px; background: #E1F5FE; color: #0288D1;">Absen</th><th style="padding: 8px 4px; background: #E1F5FE; color: #0288D1;">Nilai</th><th style="padding: 8px 4px; background: #E1F5FE; color: #0288D1;">Catatan</th><th style="padding: 8px 4px; background: #E1F5FE; color: #0288D1;">Opsi</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th class="bg-light text-primary" data-i18n="riwayatThTanggal">Tanggal</th>
+                            <th class="bg-light text-primary" data-i18n="riwayatThUjianKe">Ujian Ke-</th>
+                            <th class="bg-light text-primary" data-i18n="riwayatThNilai">Nilai</th>
+                            <th class="bg-light text-primary" data-i18n="riwayatThCatatan">Catatan</th>
+                            <th class="bg-light text-primary" data-i18n="riwayatThOpsi">Opsi</th>
+                        </tr>
+                    </thead>
                     <tbody id="riwayatBody"></tbody>
                 </table>
             </div>
-            <button class="btn-warning" style="margin-top: 15px; width:100%;" onclick="closeModal('riwayatModal')">Tutup</button>
+            <button class="btn-warning" style="margin-top: 15px; width:100%;" onclick="closeModal('riwayatModal')" data-i18n="btnTutup">Tutup</button>
         </div>
     </div>
 
-    <div id="page-home" class="page active">
-        <img src="assets/logo_new.png" alt="logo-Dilemators" class="logo-image" />
-        <div class="title-text">Digital Learning Module<br>Gerak Manipulatif</div>
+    <div id="page-home" class="page active"> <!-- Aktifkan lagi page ini -->
+        
+
+        <div style="position: absolute; top: 15px; left: 15px; z-index: 10;">
+            <button class="lang-switch-btn" style="padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 20px; display: flex; align-items: center; gap: 4px; background: white; border: 2px solid var(--primary); color: #333; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onclick="toggleBahasa()"><span class="lang-switch-id bahasa-aktif" style="padding: 2px 8px; border-radius: 12px;">ID</span><span class="lang-switch-en bahasa-off" style="padding: 2px 8px; border-radius: 12px;">EN</span></button>
+        </div>
+        <img id="logoHome" alt="logo" class="logo-image" />
+        <div class="title-text" id="judul-aplikasi">Digital Learning Module<br><span id="taglineHome"></span></div>
         <div class="title-text owner">
-            <p>by <span>Tania Dewi Lestari, S. Pd</span></p>
+            <p><span data-i18n="home_by">oleh</span> <span id="ownerNameHome"></span></p>
         </div>
         <div class="spacer"></div>
-        <div class="illustration-area" style="height: auto;">
-            <img src="assets/home.png" alt="aktor-homescreen" />
+        <div class="illustration-area" style="height: 300px;">
+            <img id="imgHome" alt="aktor-homescreen" />
         </div>
-        <button onclick="nav('page-login')" style="width: 80%; font-size: 18px; margin-top: 20px;">Mulai Belajar ➔</button>
+        <button class="btn-primary" onclick="nav('page-login')" style="width: 80%; font-size: 18px; margin-top: 20px;" data-i18n="home_btn_enter">Masuk ➔</button>
     </div>
 
     <div id="page-login" class="page">
-        <img src="assets/logo_new.png" alt="logo-Dilemators" class="logo-image" />
-        <div class="top-buttons" style="margin-bottom: 10px;">
-            <button class="btn-info" onclick="tampilkanPanduan('login')">ℹ️ Panduan</button>
+        <div style="position: absolute; top: 15px; left: 15px; z-index: 10;">
+            <button class="lang-switch-btn" style="padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 20px; display: flex; align-items: center; gap: 4px; background: white; border: 2px solid var(--primary); color: #333; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onclick="toggleBahasa()"><span class="lang-switch-id bahasa-aktif" style="padding: 2px 8px; border-radius: 12px;">ID</span><span class="lang-switch-en bahasa-off" style="padding: 2px 8px; border-radius: 12px;">EN</span></button>
         </div>
-        <div class="title-text">PROFIL GURU</div>
+        <img id="logoLogin" alt="logo" class="logo-image" />
+
+        <div class="top-buttons" style="margin-bottom: 10px; display: flex; justify-content: center; align-items: center; width: 100%;">
+            <button data-i18n="login_guide" class="btn-info" onclick="tampilkanPanduan('login')">ℹ️ Panduan</button>
+        </div>
+        <div class="title-text" data-i18n="login_title">LOGIN GURU</div>
         
         <div class="input-group">
             <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-            <input type="text" id="inputNamaGuru" placeholder="Nama Guru">
+            <input type="text" id="inputUsernameLogin" placeholder="Username" data-i18n-placeholder="login_placeholder_user">
         </div>
         <div class="input-group">
-            <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-            <input type="text" id="inputNIP" placeholder="NIP (Kosongkan jika tidak ada)">
-        </div>
-        <div class="input-group">
-            <svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg>
-            <input type="text" id="inputSekolahGuru" placeholder="Asal Sekolah">
+            <svg viewBox="0 0 24 24"><path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6-5c1.66 0 3 1.34 3 3v2H9V6c0-1.66 1.34-3 3-3z"/></svg>
+            <input type="password" id="inputPasswordLogin" placeholder="Kata Sandi" data-i18n-placeholder="login_placeholder_pass">
         </div>
         
-        <div class="illustration-area" style="height: auto;">
-            <img class="login-icon" src="assets/home.png" alt="aktor-login" />
+        <div style="text-align: right; margin-bottom: 20px; width: 80%; margin-left: auto; margin-right: auto;">
+            <a href="javascript:void(0)" onclick="bukaResetSandi()" style="color: #000; text-decoration: underline; font-size: 13px; font-weight: bold;" data-i18n="login_lupa">Lupa kata sandi?</a>
         </div>
         
-        <button onclick="simpanDataGuru()" style="width: 80%; font-size: 18px;">Lanjut ➔</button>
-        <p style="margin-top: 20px; font-weight: 700; color: #fff; font-size: 14px; cursor:pointer;" onclick="nav('page-home')">⬅ Kembali ke Awal</p>
+        <!-- <div class="illustration-area" style="height: 100px;">
+            <img id="imgLogin" class="login-icon" alt="aktor-login" />
+        </div> -->
+
+        <div style="display: flex; gap: 10px; width: 80%; margin: 0 auto;">
+            <button class="btn-warning" onclick="bukaRegistrasi()" style="flex: 1; font-size: 16px;" data-i18n="login_btn_regis">Registrasi</button>
+            <button class="btn-primary" onclick="prosesLogin()" style="flex: 1; font-size: 16px;" data-i18n="login_btn_enter">Masuk ➔</button>
+        </div>
+        
+        <p class="back-link" onclick="nav('page-home')" data-i18n="login_kembali">⬅ Kembali ke Awal</p>
     </div>
 
-    <div id="page-data-siswa" class="page">
-        <img src="assets/logo_new.png" alt="logo-Dilemators" class="logo-image" />
+    <!-- Tampilan 4: Dasbor Utama -->
+    <div id="page-dashboard" class="page">
+        <img id="logoDashboard" alt="logo" class="logo-image" />
+        <!-- Breadcrumb Guru akan dirender di sini secara dinamis (sesudah logo-image) -->
+        <div class="title-text" data-i18n="dashboard_judul">Dasbor Utama</div>
+
+        <div class="dashboard-grid">
+            <div class="menu-card" onclick="nav('page-tujuan')">
+                <div class="menu-icon">🎯</div>
+                <div class="menu-text" data-i18n="dashboard_tujuan">Tujuan Pembelajaran</div>
+            </div>
+            <div class="menu-card" onclick="nav('page-materi')">
+                <div class="menu-icon">📚</div>
+                <div class="menu-text"  data-i18n="dashboard_materi">Materi Pembelajaran</div>
+            </div>
+            <div class="menu-card" onclick="bukaLembarKerja()">
+                <div class="menu-icon">📝</div>
+                <div class="menu-text" data-i18n="dashboard_lembar">Lembar Kerja Guru</div>
+            </div>
+            <div class="menu-card" onclick="bukaManajemenAbsensi()">
+                <div class="menu-icon">📋</div>
+                <div class="menu-text" data-i18n="dashboard_absen">Manajemen Absensi</div>
+            </div>
+            <div class="menu-card" onclick="bukaManajemenAsesmen()">
+                <div class="menu-icon">📈</div>
+                <div class="menu-text"  data-i18n="dashboard_asesmen">Manajemen Asesmen</div>
+            </div>
+            <div class="menu-card" onclick="nav('page-evaluasi')">
+                <div class="menu-icon">📊</div>
+                <div class="menu-text"  data-i18n="dashboard_hasil">Hasil dan Laporan</div>
+            </div>
+            <div class="menu-card" onclick="nav('page-pengaturan')">
+                <div class="menu-icon">⚙️</div>
+                <div class="menu-text"  data-i18n="dashboard_pengaturan">Pengaturan</div>
+            </div>
+            <div class="menu-card" onclick="nav('page-panduan')">
+                <div class="menu-icon">📖</div>
+                <div class="menu-text"  data-i18n="dashboard_panduan">Panduan</div>
+            </div>
+        </div>
+
+        <button class="btn-primary" style="width: 100%; font-size: 16px; padding: 15px; margin-top: 10px;" onclick="mulaiSesiHariIni()"  data-i18n="dashboard_sesi">Mulai Sesi Hari Ini ➔</button>
+    </div>
+
+
+    <!-- Tampilan 5: Tujuan Pembelajaran -->
+    <div id="page-tujuan" class="page">
+        <img id="logoTujuan" alt="logo" class="logo-image" />
         
-        <div class="top-buttons">
-            <button class="btn-warning" onclick="konfirmasiKembali('page-login', 'Yakin ingin kembali ke Profil Guru? Data sesi ini bisa hilang.')">⬅ Kembali</button>
-            <button class="btn-info" onclick="tampilkanPanduan('siswa')">ℹ️ Panduan</button>
-            <button onclick="nav('page-materi')">Lanjut ➔</button>
+        <div class="title-text" data-i18n="tujuan_judul">Tujuan Pembelajaran</div>
+
+        <div class="content-box" style="text-align: left; margin-bottom: 15px;">
+            <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--primary); display: flex; align-items: center;"><span style="font-size: 20px; margin-right: 8px;">🎯</span><span  data-i18n="tujuan_capaian">Capaian Pembelajaran</span></h4>
+            <ul style="padding-left: 20px; margin: 0; font-size: 13px;">
+                <li style="margin-bottom: 8px;"  data-i18n="tujuan_capaian_satu"><b>Terampil Bergerak:</b> menghaluskan keterampilan gerak fundamental dan menerapkannya dalam situasi gerak yang baru; menyesuaikan strategi gerak untuk mendapatkan capaian keterampilan gerak; dan memperagakan berbagai konsep gerak yang dapat diterapkan dalam rangkaian gerak.</li>
+                <li   data-i18n="tujuan_capaian_dua"><b>Belajar melalui Gerak:</b> menerapkan strategi gerak sederhana dan memecahkan masalah gerak; menerapkan peraturan untuk menumbuhkan fair play di dalam berbagai aktivitas jasmani; dan berpartisipasi secara positif dalam kelompok atau tim di dalam berbagai aktivitas jasmani.</li>
+            </ul>
         </div>
+
+        <div class="content-box" style="text-align: left; margin-bottom: 15px;">
+            <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--primary); display: flex; align-items: center;"><span style="font-size: 20px; margin-right: 8px;">📌</span><span data-i18n="tujuan_tujuan">Tujuan Pembelajaran</span></h4>
+            <p style="margin: 0 0 5px 0; font-size: 13px; line-height: 1.4;" data-i18n="tujuan_tujuan_awalan">Murid mampu:</p>
+            <ol style="padding-left: 20px; margin: 0; font-size: 13px; line-height: 1.4;">
+                <li data-i18n="tujuan_tujuan_satu">menghaluskan keterampilan gerak fundamental;</li>
+                <li data-i18n="tujuan_tujuan_dua">menerapkan gerak fundamental dalam situasi gerak yang baru;</li>
+                <li data-i18n="tujuan_tujuan_tiga">menyesuaikan strategi gerak untuk mendapatkan capaian gerak;</li>
+                <li data-i18n="tujuan_tujuan_empat">memperagakan berbagai konsep gerak yang dapat diterapkan dalam rangkaian gerak;</li>
+                <li data-i18n="tujuan_tujuan_lima">menerapkan strategi gerak sederhana dan memecahkan masalah gerak;</li>
+                <li data-i18n="tujuan_tujuan_enam">menerapkan peraturan untuk menumbuhkan fair play;</li>
+                <li data-i18n="tujuan_tujuan_tujuh">berpartisipasi secara positif dalam kelompok atau tim.</li>
+            </ol>
+        </div>
+
+        <div class="content-box" style="text-align: left; margin-bottom: 15px;">
+            <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--primary); display: flex; align-items: center;"><span style="font-size: 20px; margin-right: 8px;">🛤️</span><span data-i18n="tujuan_alur">Alur Tujuan Pembelajaran</span></h4>
+            <ul style="padding-left: 20px; margin: 0; font-size: 13px;">
+                <li style="margin-bottom: 8px;" data-i18n="tujuan_alur_satu">Setiap unit materi pembelajaran mengikuti pola 3 tahap, pada tahap 1 dan 2 bermanfaat untuk menghaluskan gerak, lalu dilanjutkan dengan penerapan dalam situasi gerak baru pada tahap 3.</li>
+                <li data-i18n="tujuan_alur_dua">Menerapkan peraturan, fair play, dan berperan positif dalam kelompok, termasuk tutor sebaya.</li>
+            </ul>
+        </div>
+
+        <div class="content-box" style="text-align: left; margin-bottom: 15px;">
+            <h4 style="margin-top: 0; margin-bottom: 10px; color: var(--primary); display: flex; align-items: center;"><span style="font-size: 20px; margin-right: 8px;">🏆</span><span data-i18n="tujuan_kriteria">Kriteria Ketercapaian</span></h4>
+            <p style="margin: 0; font-size: 13px; color: #000;" data-i18n="tujuan_kriteria_item">Tuntas satu unit pembelajaran bila nilai tes akhir unit <b>75 atau lebih</b></p>
+        </div>
+
+        <button class="btn-warning" style="width: 100%; margin-top: 3%; padding: 12px; font-size: 14px; border-radius: 10px;" onclick="nav('page-dashboard')" data-i18n="tujuan_kembali">⬅ Kembali ke Dasbor</button>
+    </div>
+
+    <div id="page-pilih-kelas" class="page">
+        <img id="logoPilihKelas" alt="logo" class="logo-image" />
+        <div class="title-text" data-i18n="pilih_kelas_judul">Pilih Kelas</div>
         
-        <div class="subtitle">Daftar Siswa Kelas</div>
-
-        <div style="display:flex; justify-content:flex-end; gap:8px; margin-bottom: 10px;">
-            <button class="btn-info" style="padding: 8px 15px; font-size:12px;" onclick="bukaFormTambahSiswa()">+ Tambah</button>
-            <button class="btn-info" style="padding: 8px 15px; font-size:12px; background: linear-gradient(180deg, #81D4FA, #29B6F6); border-color:#E1F5FE; color:white; box-shadow: 0 5px 0 #0288D1;" onclick="document.getElementById('fileImportExcel').click()">📥 Import</button>
-            <input type="file" id="fileImportExcel" accept=".xlsx, .xls" style="display: none;" onchange="prosesImportExcel(event)">
+        <div class="content-box" style="padding: 15px; margin-bottom: 15px;">
+            <p style="font-size: 13px; color: #666; margin-top: 0; text-align: center;" data-i18n="pilih_kelas_awal">Silakan pilih kelas terlebih dahulu untuk melihat dan mengelola data absensi.</p>
+            <div id="pilihKelasAbsensiGlobal" style="display: flex; flex-direction: column; gap: 8px;">
+                <!-- Tombol kelas akan di-generate di sini -->
+            </div>
         </div>
 
-        <div class="content-box" style="padding: 10px 15px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;">
-            <label style="font-weight: 800; color: #0288D1; font-size: 14px;">Filter Kelas:</label>
-            <select id="filterKelasTabel" style="width: auto; flex-grow: 1; margin-left: 10px; padding: 8px; border-radius: 10px; border: 2px solid #E1F5FE; font-weight: bold; color: #4A4A4A;" onchange="terapkanFilterKelas()">
-                <option value="">Semua Kelas</option>
-            </select>
+        <button class="btn-warning" style="width: 100%; margin-top: 3%; padding: 12px; font-size: 14px; border-radius: 10px;" onclick="nav('page-dashboard')" data-i18n="pilih_kelas_kembali">⬅ Kembali ke Dasbor</button>
+    </div>
+
+    <div id="page-manajemen-absensi" class="page">
+        <img id="logoAbsensi" alt="logo" class="logo-image" />
+        <div class="title-text" data-i18n="absensi_judul">Manajemen Absensi</div>
+
+        <!-- Tabs -->
+        <div class="tabs-container" style="display: flex; gap: 5px; margin-bottom: 15px; overflow-x: auto; justify-content: space-between;">
+            <button class="tab-btn active" id="btnTabAbsen1" onclick="bukaTabAbsensi(1)" style="flex:1; padding:10px 5px; font-weight:bold; border-radius:10px; font-size:12px; border:none; background:var(--primary); color:#fff;" data-i18n="absensi_tab_satu">Sesi Hari Ini</button>
+            <button class="tab-btn" id="btnTabAbsen2" onclick="bukaTabAbsensi(2)" style="flex:1; padding:10px 5px; font-weight:bold; border-radius:10px; font-size:12px; border:none; background:var(--bg-light); color:var(--primary);" data-i18n="absensi_tab_dua">Riwayat</button>
+            <button class="tab-btn" id="btnTabAbsen3" onclick="bukaTabAbsensi(3)" style="flex:1; padding:10px 5px; font-weight:bold; border-radius:10px; font-size:12px; border:none; background:var(--bg-light); color:var(--primary);" data-i18n="absensi_tab_tiga">Daftar Siswa</button>
         </div>
 
-        <div style="overflow-x:auto; width:100%;">
-            <table id="tabelSiswa" class="display nowrap" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>No Abs</th>
-                        <th>Nama Siswa</th>
-                        <th>NISN</th>
-                        <th>JK</th>
-                        <th>Kelas</th>
-                        <th>Sekolah</th>
-                        <th>Opsi</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+        <!-- Tab 1: Sesi Hari Ini -->
+        <div id="tabAbsensi1">
+            <div id="listAbsensiContainer">
+                <p style="text-align: center; font-size: 13px;" data-i18n="absensi_tab_satu_awalan">Silakan pilih kelas terlebih dahulu.</p>
+            </div>
+            <button class="btn-primary" style="width: 100%; margin-top: 15px; padding: 12px; font-size: 14px; border-radius: 10px;" onclick="simpanSesiAbsensi()" data-i18n="absensi_tab_satu_simpan">Simpan Kehadiran ✔</button>
+            <button class="btn-info" style="width: 100%; margin-top: 10px; padding: 12px; font-size: 14px; border-radius: 10px;" onclick="nav('page-materi')" data-i18n="absensi_tab_satu_materi">Buka Materi Pembelajaran 📖</button>
         </div>
+
+        <!-- Tab 2: Riwayat -->
+        <div id="tabAbsensi2" style="display: none;">
+            <div style="overflow-x:auto; width:100%;">
+                <table id="tabelRiwayatAbsensi" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>No</th><th data-i18n="absensi_tab_dua_nama">Nama Siswa</th><th data-i18n="absensi_tab_dua_sesi">Sesi Hari Ini</th><th data-i18n="absensi_tab_dua_total">Total Kehadiran</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab 3: Daftar Siswa -->
+        <div id="tabAbsensi3" style="display: none;">
+            <div style="display:flex; justify-content:flex-end; gap:8px; margin-bottom: 10px;">
+                <button class="btn-info" style="padding: 8px 15px; font-size:12px;" onclick="bukaFormTambahSiswa()" data-i18n="absensi_tab_tiga_tambah">+ Tambah</button>
+                <button class="btn-primary" style="padding: 8px 15px; font-size:12px;" onclick="document.getElementById('panduanSiswaModal').style.display='flex'">📥 Import</button>
+                <input type="file" id="fileImportExcel" accept=".xlsx, .xls" style="display: none;" onchange="prosesImportExcel(event)">
+            </div>
+            <div style="overflow-x:auto; width:100%;">
+                <table id="tabelSiswa" class="display nowrap" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>No</th><th data-i18n="absensi_tab_tiga_nama">Nama Siswa</th><th>NISN</th><th data-i18n="absensi_tab_tiga_gender">JK</th><th data-i18n="absensi_tab_tiga_kelas">Kelas</th><th data-i18n="absensi_tab_tiga_sekolah">Sekolah</th><th data-i18n="absensi_tab_tiga_opsi">Opsi</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <button class="btn-warning" style="width: 100%; margin-top: 15px; padding: 12px; font-size: 14px;" onclick="keluarManajemenAbsensi()" data-i18n="absensi_kembali">⬅ Kembali ke Pilih Kelas</button>
+    </div>
+
+    <div id="page-lembar-kerja" class="page">
+        <img id="logoLembarKerja" alt="logo" class="logo-image" />
+        
+        <div class="title-text" data-i18n="lembar_judul">Lembar Kerja Guru</div>
+        
+        <div id="gridLembarKerja" class="list-materi">
+            <!-- Cards will be dynamically inserted here by JS -->
+        </div>
+
+        <button class="btn-primary" style="width: 100%; margin-top: 15px; padding: 15px; font-size: 14px; font-weight: bold; border-radius: 10px;" onclick="unduhSemuaLembarKerja()" data-i18n="lembar_unduh_semua">📥 Unduh semua unit (13 halaman) [.zip]</button>
+        <button class="btn-warning" style="width: 100%; margin-top: 3%; padding: 12px; font-size: 14px; border-radius: 10px;" onclick="nav('page-dashboard')" data-i18n="lembar_kembali">⬅ Kembali ke Dasbor</button>
     </div>
 
     <div id="page-form-siswa" class="page">
-        <img src="assets/logo_new.png" alt="logo-Dilemators" class="logo-image" />
-        <div class="subtitle" id="formSiswaTitle">Data Siswa</div>
+        <img id="logoFormSiswa" alt="logo" class="logo-image" />
+        <div class="title-text" id="formSiswaTitle" data-i18n="form_siswa_judul">Data Siswa</div>
         <div class="content-box">
             <input type="hidden" id="inputIdSiswa">
-            <label style="font-weight:800; color:#0288D1; font-size:14px;">No Absen:</label>
+            <label class="text-primary" style="font-weight:800; font-size:14px;" data-i18n="form_siswa_absen">No Absen:</label>
             <input type="number" id="inputAbsen" style="margin-bottom:10px;">
-            <label style="font-weight:800; color:#0288D1; font-size:14px;">Nama Siswa:</label>
+            <label class="text-primary" style="font-weight:800; font-size:14px;" data-i18n="form_siswa_nama">Nama Siswa:</label>
             <input type="text" id="inputNama" style="margin-bottom:10px;">
-            <label style="font-weight:800; color:#0288D1; font-size:14px;">NISN:</label>
+            <label class="text-primary" style="font-weight:800; font-size:14px;" data-i18n="form_siswa_nisn">NISN:</label>
             <input type="number" id="inputNISN" style="margin-bottom:10px;">
-            <label style="font-weight:800; color:#0288D1; font-size:14px;">Jenis Kelamin:</label>
+            <label class="text-primary" style="font-weight:800; font-size:14px;" data-i18n="form_siswa_jk">Jenis Kelamin:</label>
             <div class="radio-group">
-                <label><input type="radio" name="inputJK" value="L"> Laki-laki</label>
-                <label><input type="radio" name="inputJK" value="P"> Perempuan</label>
+                <label><input type="radio" name="inputJK" value="L"> <span data-i18n="form_siswa_jk_l">Laki-laki</span></label>
+                <label><input type="radio" name="inputJK" value="P"> <span data-i18n="form_siswa_jk_p">Perempuan</span></label>
             </div>
-            <label style="font-weight:800; color:#0288D1; font-size:14px;">Kelas:</label>
+            <label class="text-primary" style="font-weight:800; font-size:14px;" data-i18n="form_siswa_kelas">Kelas:</label>
             <input type="text" id="inputKelas" style="margin-bottom:10px;">
-            <label style="font-weight:800; color:#0288D1; font-size:14px;">Sekolah:</label>
+            <label class="text-primary" style="font-weight:800; font-size:14px;" data-i18n="form_siswa_sekolah">Sekolah:</label>
             <input type="text" id="inputSekolah" style="margin-bottom:10px;">
         </div>
         <div class="top-buttons">
-            <button class="btn-warning" onclick="nav('page-data-siswa')">Batal</button>
-            <button onclick="simpanSiswa()">Simpan Data</button>
+            <button class="btn-warning" onclick="nav('page-manajemen-absensi'); bukaTabAbsensi(3);" data-i18n="form_siswa_batal">Batal</button>
+            <button class="btn-primary" onclick="simpanSiswa()" data-i18n="form_siswa_simpan">Simpan Data</button>
         </div>
     </div>
 
     <div id="page-materi" class="page">
-        <img src="assets/logo_new.png" alt="logo-Dilemators" class="logo-image" />
-        <div class="title-text">Pilih Unit Gerak<br>Manipulatif</div>
+        <img id="logoMateri" alt="logo" class="logo-image" />
+        <div class="title-text"><span data-i18n="materi_judul">Materi Pembelajaran</span><br><span id="taglineMateri" style="font-size: 14px; font-weight: bold; color: #444; -webkit-text-stroke: 0px; text-shadow: none;"></span></div>
         <div class="list-materi" id="gridMateriContainer"></div>
-        <div class="top-buttons" style="margin-top:20px;">
-            <button class="btn-warning" onclick="nav('page-data-siswa')">⬅ Kembali</button>
-            <button class="btn-info" onclick="tampilkanPanduan('materi')">ℹ️ Panduan</button>
-            <button class="btn-info" style="background: linear-gradient(180deg, #81D4FA, #29B6F6); border-color:#E1F5FE; color:white; box-shadow: 0 5px 0 #0288D1;" onclick="nav('page-evaluasi')">Evaluasi ➔</button>
-        </div>
+        <button class="btn-info" style="width: 100%; margin-top: 15px; padding: 12px; font-size: 14px; border-radius: 10px;" onclick="bukaManajemenAsesmen()" data-i18n="materi_btn_asesmen">Buka Halaman Asesmen 📝</button>
+        <button class="btn-warning" style="width: 100%; margin-top: 3%; padding: 12px; font-size: 14px; border-radius: 10px;" onclick="nav('page-dashboard')" data-i18n="materi_btn_kembali">⬅ Kembali ke Dasbor</button>
     </div>
 
-    <div id="page-permainan" class="page">
-        <img src="assets/logo_new.png" alt="logo-Dilemators" class="logo-image" />
-        <div class="subtitle">Pilihan Permainan</div>
-        <div class="content-box content-box-new list-permainan" id="opsiPermainan"></div>
-        <div class="top-buttons" style="margin-top: 20px;">
-            <button class="btn-warning" onclick="nav('page-materi')">⬅ Kembali</button>
-        </div>
-    </div>
-
-    <div id="page-absen" class="page">
-        <img src="assets/logo_new.png" alt="logo-Dilemators" class="logo-image" />
-        <div class="subtitle">Absensi Sesi Ini</div>
-        <div class="content-box" style="padding: 10px 15px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;">
-            <label style="font-weight: 800; color: #0288D1; font-size: 14px;">Pilih Kelas:</label>
-            <select id="pilihKelasAbsensi" style="width: auto; flex-grow: 1; margin-left: 10px; padding: 8px; border-radius: 10px; border: 2px solid #E1F5FE; font-weight: bold; color: #4A4A4A;" onchange="setKelasAktif()">
-                <option value="">-- Pilih Kelas --</option>
-            </select>
-        </div>
-        <div id="listAbsensi"></div>
-        <div class="top-buttons" style="margin-top:20px;">
-            <button class="btn-warning" onclick="konfirmasiKembali('page-materi', 'Yakin ingin kembali? Sesi kelas akan di-reset.')">⬅ Kembali</button>
-            <button class="btn-info" onclick="tampilkanPanduan('absen')">ℹ️ Panduan</button>
-            <button onclick="nav('page-instruksi')">Lanjut ➔</button>
-        </div>
-    </div>
-
-    <div id="page-instruksi" class="page">
-        <img src="assets/logo_new.png" alt="logo-Dilemators" class="logo-image" />
-        <div class="subtitle">Instruksi Pembelajaran</div>
-        <div class="content-box">
-            <p id="teksInstruksi" style="font-weight:700; color:#4A4A4A; line-height:1.5;"></p>
-        </div>
-        <div class="top-buttons">
-            <button class="btn-warning" onclick="konfirmasiKembali('page-materi', 'Kembali ke Materi? Anda mungkin harus mengulang pilihan permainan.')">⬅ Kembali</button>
-            <button onclick="nav('page-tujuan')">Selanjutnya ➔</button>
-        </div>
-    </div>
-
-    <div id="page-tujuan" class="page">
-        <img src="assets/logo_new.png" alt="logo-Dilemators" class="logo-image" />
-        <div class="subtitle">Tujuan Pembelajaran</div>
-        <div class="content-box">
-            <p id="teksTujuan" style="font-weight:700; color:#4A4A4A; line-height:1.5;"></p>
-        </div>
-        <div class="top-buttons">
-            <button class="btn-warning" onclick="nav('page-instruksi')">⬅ Kembali</button>
-            <button onclick="nav('page-video')">Selanjutnya ➔</button>
-        </div>
-    </div>
-
-    <div id="page-video" class="page">
-        <img src="assets/logo_new.png" alt="logo-Dilemators" class="logo-image" />
-        <div class="subtitle" id="judulVideoMateri">Video Materi</div>
-        <div id="containerVideo"></div>
-        <div class="list-langkah" id="langkahMateri"></div>
-        <div class="top-buttons">
-            <button class="btn-warning" onclick="nav('page-tujuan')">⬅ Kembali</button>
-            <button onclick="mulaiPenilaian()">Penilaian ➔</button>
-        </div>
-    </div>
-
-    <div id="page-penilaian" class="page">
-        <img src="assets/logo_new.png" alt="logo-Dilemators" class="logo-image" />
+    <!-- Tampilan 7: Detail Unit (Materi Pembelajaran) -->
+    <div id="page-detail-materi" class="page">
+        <img id="logoDetailMateri" alt="logo" class="logo-image" />
+        <div class="title-text" id="judulDetailMateri">Judul Materi</div>
         
-        <div class="subtitle">Input Nilai Sesi Ini</div>
-        <div id="listPenilaian"></div>
-
-        <div class="top-buttons" style="margin-top:20px;">
-            <button class="btn-warning" onclick="nav('page-video')">⬅ Kembali</button>
-            <button class="btn-info" onclick="tampilkanPanduan('penilaian')">ℹ️ Panduan</button>
-            <button id="btn-selesai-nilai" onclick="selesaiPenilaian()">Selesai ✔</button>
+        <!-- Tabs -->
+        <div class="tabs-container" style="display: flex; gap: 5px; margin-bottom: 15px; overflow-x: auto; justify-content: space-between;">
+            <button class="tab-btn active" id="btnTab1" onclick="bukaTabTahap(0)" style="flex:1; padding:10px 5px; font-weight:bold; border-radius:10px; font-size:12px; border:none; background:var(--primary); color:#fff;" data-i18n="detail_tab_1">Tahap 1<br><span style="font-size:9px; font-weight:normal;">(Mudah)</span></button>
+            <button class="tab-btn" id="btnTab2" onclick="bukaTabTahap(1)" style="flex:1; padding:10px 5px; font-weight:bold; border-radius:10px; font-size:12px; border:none; background:var(--bg-light); color:var(--primary);" data-i18n="detail_tab_2">Tahap 2<br><span style="font-size:9px; font-weight:normal;">(Sedang)</span></button>
+            <button class="tab-btn" id="btnTab3" onclick="bukaTabTahap(2)" style="flex:1; padding:10px 5px; font-weight:bold; border-radius:10px; font-size:12px; border:none; background:var(--bg-light); color:var(--primary);" data-i18n="detail_tab_3">Tahap 3<br><span style="font-size:9px; font-weight:normal;">(Sulit)</span></button>
+            <button class="tab-btn" id="btnTabTes" onclick="bukaTabTahap('tes')" style="flex:1; padding:10px 5px; font-weight:bold; border-radius:10px; font-size:12px; border:none; background:var(--bg-light); color:var(--primary);" data-i18n="detail_tab_tes">Tes Akhir<br><span style="font-size:9px; font-weight:normal;">(Ujian)</span></button>
         </div>
+
+        <!-- Content Tahap -->
+        <div id="kontenTahap">
+            <h4 class="text-primary" id="namaPermainanTahap" style="margin-top: 0; margin-bottom: 15px;">Nama Permainan</h4>
+            <div id="videoContainerTahap" style="margin-bottom: 15px;"></div>
+            
+            <div class="content-box" style="text-align: left; margin-bottom: 15px;">
+                <h5 class="text-primary" style="margin-top: 0; margin-bottom: 10px; display:flex; align-items:center;" data-i18n="detail_header_langkah">📝 Langkah-langkah</h5>
+                <div id="langkahContainerTahap" style="font-size: 13px; line-height: 1.5; color:#333;"></div>
+            </div>
+            
+            <div class="content-box" id="kriteriaContainerBox" style="text-align: left; margin-bottom: 15px; display:none;">
+                <h5 class="text-primary" style="margin-top: 0; margin-bottom: 10px; display:flex; align-items:center;" data-i18n="detail_header_kriteria">🎯 Kriteria Lolos</h5>
+                <ul id="kriteriaContainerTahap" style="font-size: 13px; line-height: 1.5; padding-left: 20px; margin: 0; color:#333;"></ul>
+            </div>
+        </div>
+
+        <!-- Content Tes Akhir -->
+        <div id="kontenTesAkhir" style="display: none; text-align: left;">
+            <div class="content-box" style="margin-bottom: 15px;">
+                <h4 class="text-primary" style="margin-top: 0; display:flex; align-items:center;" data-i18n="detail_tes_judul">📑 Tes Akhir Unit</h4>
+                <p style="font-size: 13px; line-height: 1.5; color:#333; margin-bottom: 0;" data-i18n="detail_tes_deskripsi">
+                    Bagian ini berisikan kriteria penilaian untuk tes akhir unit. Silakan unduh dokumen panduan lembar kerja untuk pedoman pengujian dan instrumen kelulusan siswa.
+                </p>
+            </div>
+        </div>
+
+        <button onclick="unduhLembarTes()" class="btn-info" style="width: 100%; margin-top: 10px; font-size: 14px; font-weight: bold; padding: 12px; border-radius: 10px;" data-i18n="detail_btn_unduh">📥 Unduh Lembar Tes Akhir</button>
+        <a id="filterLembarTes" href="" download="" style="display: none;"></a>
+
+        <button class="btn-warning" style="width: 100%; margin-top: 3%; padding: 12px; font-size: 14px;" onclick="nav('page-materi')" data-i18n="detail_btn_kembali">⬅ Kembali ke Materi Pembelajaran</button>
+    </div>
+
+    <div id="page-asesmen" class="page">
+        <img id="logoAsesmen" alt="logo" class="logo-image" />
+        <div class="title-text" data-i18n="asesmen_judul">Manajemen Asesmen</div>
+        
+        <div class="tabs-container" style="display: flex; gap: 5px; margin-bottom: 15px;">
+            <button class="tab-btn active" id="btnTabAsesmen1" onclick="bukaTabAsesmen(1)" style="flex:1; padding:10px 5px; font-weight:bold; border-radius:10px; font-size:12px; border:none; background:var(--primary); color:#fff;" data-i18n="asesmen_tab_1">Naik Tahap</button>
+            <button class="tab-btn" id="btnTabAsesmen2" onclick="bukaTabAsesmen(2)" style="flex:1; padding:10px 5px; font-weight:bold; border-radius:10px; font-size:12px; border:none; background:var(--bg-light); color:var(--primary);" data-i18n="asesmen_tab_2">Tes Akhir</button>
+            <button class="tab-btn" id="btnTabAsesmen3" onclick="bukaTabAsesmen(3)" style="flex:1; padding:10px 5px; font-weight:bold; border-radius:10px; font-size:12px; border:none; background:var(--bg-light); color:var(--primary);" data-i18n="asesmen_tab_3">Riwayat</button>
+        </div>
+
+        <div id="tabAsesmen1">
+            <h4 style="text-align: center; color: #fff; border-radius: 15px; padding: 15px; background: var(--btn-gradient); font-size: 1.5em;" data-i18n="asesmen_header_naik">Naik Tahap</h4>
+
+            <div class="content-box" style="padding: 15px; margin-bottom: 15px;">
+                <div style="margin-bottom: 10px;">
+                    <label style="font-size: 13px; font-weight: bold; color: var(--primary);" data-i18n="asesmen_label_kelas">Pilih Kelas:</label>
+                    <select id="filterKelasAsesmen" style="width: 100%; padding: 8px; border-radius: 8px; margin-top: 5px; border: 2px solid var(--bg-light);" onchange="cekFilterAsesmen()">
+                        <option value="" data-i18n="asesmen_opt_pilih">Mohon pilih</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size: 13px; font-weight: bold; color: var(--primary);" data-i18n="asesmen_label_unit">Pilih Unit Gerak:</label>
+                    <select id="filterMateriAsesmen" style="width: 100%; padding: 8px; border-radius: 8px; margin-top: 5px; border: 2px solid var(--bg-light);" onchange="cekFilterAsesmen()">
+                        <option value="" data-i18n="asesmen_opt_pilih">Mohon pilih</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="asesmenPeringatan" style="text-align: center; font-size: 13px; margin-top: 20px; color: #666;" data-i18n="asesmen_peringatan">
+                Mohon pilih kelas dan unit gerak terlebih dahulu
+            </div>
+
+            <div id="asesmenTabelContainer" style="display: none;">
+                <div style="overflow-x:auto; width:100%;">
+                    <table class="display nowrap" style="width:100%; text-align: left; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: var(--primary); color: #fff;">
+                                <th style="padding: 10px; border-radius: 10px 0 0 0;" data-i18n="asesmen_th_nama">Nama</th>
+                                <th style="padding: 10px; text-align: center;">T1</th>
+                                <th style="padding: 10px; text-align: center;">T2</th>
+                                <th style="padding: 10px; border-radius: 0 10px 0 0; text-align: center;">T3</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bodyTabelNaikTahap"></tbody>
+                    </table>
+                </div>
+                <button class="btn-primary" style="width: 100%; margin-top: 15px; padding: 12px; font-size: 14px; border-radius: 10px;" onclick="konfirmasiSimpanNaikTahap()" data-i18n="asesmen_btn_simpan">Simpan Penilaian</button>
+            </div>
+        </div>
+
+        <div id="tabAsesmen2" style="display: none;">
+            <h4 style="text-align: center; color: #fff; border-radius: 15px; padding: 15px; background: var(--btn-gradient); font-size: 1.5em;" data-i18n="asesmen_header_tes">Tes Akhir</h4>
+
+            <div class="content-box" style="padding: 15px; margin-bottom: 15px;">
+                <div style="margin-bottom: 10px;">
+                    <label style="font-size: 13px; font-weight: bold; color: var(--primary);" data-i18n="asesmen_label_kelas">Pilih Kelas:</label>
+                    <select id="filterKelasTesAkhir" style="width: 100%; padding: 8px; border-radius: 8px; margin-top: 5px; border: 2px solid var(--bg-light);" onchange="cekFilterTesAkhir()">
+                        <option value="" data-i18n="asesmen_opt_pilih">Mohon pilih</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size: 13px; font-weight: bold; color: var(--primary);" data-i18n="asesmen_label_unit">Pilih Unit Gerak:</label>
+                    <select id="filterMateriTesAkhir" style="width: 100%; padding: 8px; border-radius: 8px; margin-top: 5px; border: 2px solid var(--bg-light);" onchange="cekFilterTesAkhir()">
+                        <option value="" data-i18n="asesmen_opt_pilih">Mohon pilih</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="tesAkhirPeringatan" style="text-align: center; font-size: 13px; margin-top: 20px; color: #666;" data-i18n="asesmen_peringatan">
+                Mohon pilih kelas dan unit gerak terlebih dahulu
+            </div>
+
+            <div id="tesAkhirCardContainer" style="display: none; flex-direction: column; gap: 10px;">
+            </div>
+        </div>
+
+        <div id="tabAsesmen3" style="display: none;">
+            <div class="content-box" style="padding: 15px; margin-bottom: 15px;">
+                <label style="font-size: 13px; font-weight: bold; color: var(--primary);" data-i18n="asesmen_label_filter_kelas">Filter Kelas:</label>
+                <select id="filterKelasRiwayatAsesmen" style="width: 100%; padding: 8px; border-radius: 8px; margin-top: 5px; border: 2px solid var(--bg-light);" onchange="renderTabelRiwayatAsesmen()">
+                    <option value="semua" data-i18n="asesmen_opt_semua">Semua Kelas</option>
+                </select>
+            </div>
+            
+            <div class="table-responsive content-box" style="overflow-x: auto;">
+                <table id="tabelRiwayatDT" style="width: 100%; min-width: 800px; border-collapse: collapse; font-size: 12px; text-align: left;">
+                    <thead>
+                        <tr style="background-color: var(--primary); color: #fff;">
+                            <th style="padding: 10px; border: 1px solid #ddd;" data-i18n="asesmen_th_no">No</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;" data-i18n="asesmen_th_tanggal">Tanggal</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;" data-i18n="asesmen_th_nama">Nama</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;" data-i18n="asesmen_th_kelas">Kelas</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;" data-i18n="asesmen_th_unit">Unit</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;" data-i18n="asesmen_th_jenis">Jenis</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;" data-i18n="asesmen_th_hasil">Hasil</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;" data-i18n="asesmen_th_keterangan">Keterangan</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;" data-i18n="asesmen_th_evaluasi">Evaluasi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelRiwayatAsesmen">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <button class="btn-warning" style="width: 100%; margin-top: 20px; padding: 12px; font-size: 14px; border-radius: 10px;" onclick="nav('page-dashboard')" data-i18n="asesmen_btn_kembali">🔙 Kembali ke Dasbor</button>
     </div>
 
     <div id="page-evaluasi" class="page">
-        <img src="assets/logo_new.png" alt="logo-Dilemators" class="logo-image" />
-        <div class="top-buttons">
-            <button class="btn-warning" onclick="nav('page-materi')">⬅ Kembali</button>
-            <button class="btn-info" onclick="tampilkanPanduan('evaluasi')">ℹ️ Panduan</button>
-        </div>
+        <img id="logoEvaluasi" alt="logo" class="logo-image" />
         
-        <div class="subtitle">Evaluasi Siswa</div>
+        <div class="title-text" data-i18n="evaluasi_judul">Hasil dan Laporan</div>
 
         <div style="display:flex; justify-content:flex-end; margin-bottom: 10px;">
-            <button class="btn-info" style="padding: 8px 15px; font-size:12px; background: linear-gradient(180deg, #81D4FA, #29B6F6); border-color:#E1F5FE; color:white; box-shadow: 0 5px 0 #0288D1;" onclick="exportExcel()">⬇ Export Excel</button>
+            <button class="btn-primary" style="padding: 8px 15px; font-size:12px;" onclick="exportExcel()" data-i18n="evaluasi_btn_export">⬇ Export Excel</button>
         </div>
 
         <div class="content-box" style="padding: 10px 15px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;">
-            <label style="font-weight: 800; color: #0288D1; font-size: 14px;">Filter Kelas:</label>
-            <select id="filterKelasEvaluasi" style="width: auto; flex-grow: 1; margin-left: 10px; padding: 8px; border-radius: 10px; border: 2px solid #E1F5FE; font-weight: bold; color: #4A4A4A;" onchange="terapkanFilterEvaluasi()">
-                <option value="">Semua Kelas</option>
+            <label class="text-primary" style="font-weight: 800; font-size: 14px;" data-i18n="evaluasi_filter_label">Filter Kelas:</label>
+            <select id="filterKelasEvaluasi" style="width: auto; flex-grow: 1; margin-left: 10px; padding: 8px; border-radius: 10px; border: 2px solid var(--bg-light); font-weight: bold; color: #000;" onchange="terapkanFilterEvaluasi()">
+                <option value="" data-i18n="evaluasi_opt_semua">Semua Kelas</option>
             </select>
         </div>
 
         <div style="overflow-x:auto; width:100%;">
             <table id="tabelEvaluasi" class="display nowrap" style="width:100%">
                 <thead>
-                    <tr>
-                        <th>No Abs</th>
-                        <th>Nama</th>
-                        <th>NISN</th>
-                        <th>Kelas</th>
-                        <th style="background:#B3E5FC;">Avg</th>
-                        <th>Memantul</th>
-                        <th>Menangkap</th>
-                        <th>Menggiring</th>
-                        <th>Menendang</th>
-                        <th>Memukul</th>
-                        <th>Melempar</th>
-                        <th>Opsi</th>
+                    <tr id="tabelEvaluasiHeader">
+                        <!-- Dynamic Header -->
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
         </div>
+        
+        <!-- Keterangan & Grafik -->
+        <div class="content-box" style="margin-top:20px; padding: 15px; border-radius:10px; border:2px solid var(--bg-light);">
+            <div style="font-weight:bold; font-size:16px; margin-bottom:10px; border-bottom:1px solid #ccc; padding-bottom:5px; color:var(--primary-color);" data-i18n="evaluasi_stat_judul">Keterangan & Statistik</div>
+            <div style="display:flex; gap:10px; margin-bottom:15px; font-size:12px; flex-wrap:wrap;">
+                <div style="display:flex; align-items:center;"><span style="display:inline-block; width:15px; height:15px; background-color:#d4edda; border:1px solid #c3e6cb; margin-right:5px; border-radius:3px;"></span> <span data-i18n="evaluasi_legend_bagus">Bagus (TUNTAS)</span></div>
+                <div style="display:flex; align-items:center;"><span style="display:inline-block; width:15px; height:15px; background-color:#fff3cd; border:1px solid #ffeeba; margin-right:5px; border-radius:3px;"></span> <span data-i18n="evaluasi_legend_cukup">Cukup</span></div>
+                <div style="display:flex; align-items:center;"><span style="display:inline-block; width:15px; height:15px; background-color:#f8d7da; border:1px solid #f5c6cb; margin-right:5px; border-radius:3px;"></span> <span data-i18n="evaluasi_legend_perbaikan">Perbaikan (Remedial)</span></div>
+            </div>
+            <div id="evaluasiGrafikContainer" style="display:flex; flex-direction:column; gap:15px;">
+                <!-- Dinamis diisi dari JS -->
+            </div>
+        </div>
+
+        <button class="btn-warning" style="width: 100%; margin-top: 20px; padding: 12px; font-size: 14px; border-radius: 10px;" onclick="nav('page-dashboard')" data-i18n="evaluasi_btn_kembali">🔙 Kembali ke Dasbor</button>
+    </div>
+
+        <div id="page-pengaturan" class="page">
+        <img id="logoPengaturan" alt="logo" class="logo-image" />
+        <div class="title-text" data-i18n="pengaturan_judul">Pengaturan</div>
+
+        <div class="content-box">
+            <!-- 1. Ubah Profil Guru -->
+            <button class="btn-info" style="width:100%; text-align:left; padding:12px; font-weight:bold; font-size:14px; margin-bottom:10px; border-radius:10px;" onclick="bukaModalUbahProfil()" data-i18n="pengaturan_btn_profil">👨‍🎓 Ubah Profil Guru</button>
+            
+            <!-- 2. Bahasa -->
+            <button id="btnToggleBahasa" class="btn-info" style="width:100%; text-align:left; padding:12px; font-weight:bold; font-size:14px; margin-bottom:10px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;" onclick="toggleBahasa()">
+                <span data-i18n="pengaturan_label_bahasa">🌐 Bahasa / Language</span>
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <span id="labelBahasaID" class="bahasa-aktif">ID</span>
+                    <span id="labelBahasaEN" class="bahasa-off">EN</span>
+                </div>
+            </button>
+
+            <!-- 3. Cadangkan & Pulihkan Data (Membuka Modal Baru) -->
+            <button class="btn-info" style="width:100%; text-align:left; padding:12px; font-weight:bold; font-size:14px; margin-bottom:10px; border-radius:10px;" onclick="bukaModalBackup()" data-i18n="pengaturan_btn_backup">☁️ Cadangkan & Pulihkan Data</button>
+            
+            <!-- 4. Logout -->
+            <button class="btn-danger" style="width:100%; padding:12px; font-weight:bold; font-size:14px; border-radius:10px;" onclick="konfirmasiLogout()" data-i18n="pengaturan_btn_logout">🚪 Logout / Keluar</button>
+        </div>
+
+        <button class="btn-warning" style="width: 100%; margin-top: 15px; padding: 12px; font-size: 14px;" onclick="nav('page-dashboard')" data-i18n="pengaturan_btn_kembali">⬅ Kembali ke Dasbor</button>
+    </div>
+
+        <!-- Modal Cadangkan & Pulihkan Data -->
+    <div id="modalBackup" class="modal-overlay" style="z-index: 999;">
+        <div class="modal-content" style="max-width: 480px; max-height: 85vh; overflow-y: auto;">
+            <h3 class="text-primary" style="margin-top: 0; margin-bottom: 15px;" data-i18n="backup_modal_judul">☁️ Cadangkan & Pulihkan Data</h3>
+            
+            <!-- CARD 1: CADANGKAN -->
+            <div class="content-box" style="text-align: left; padding: 15px; margin-bottom: 15px; border-left: 5px solid var(--primary);">
+                <h4 style="margin: 0 0 10px 0; color: var(--primary);" data-i18n="backup_card_cadang_judul">📤 Cadangkan Data</h4>
+                <p style="font-size: 11px; color: #666; margin: 0 0 10px 0;" data-i18n="backup_card_cadang_desk">Data diunggah ke Cloud dan file PDF pemulihan otomatis terunduh.</p>
+                
+                <label style="font-size: 12px; font-weight: bold; color: var(--primary);" data-i18n="backup_label_kode">Masukan nama kode</label>
+                <input type="text" id="backupKodeCadang" readonly style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; background: #f0f0f0; font-weight: bold; font-family: 'Nunito', sans-serif; margin-bottom: 8px;">
+                
+                <label style="font-size: 12px; font-weight: bold; color: var(--primary);" data-i18n="backup_label_sandi">Masukan kata sandi</label>
+                <input type="text" id="backupSandiCadang" value="pjok#1234" readonly style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; background: #f0f0f0; font-weight: bold; font-family: 'Nunito', sans-serif; margin-bottom: 12px;">
+                
+                <button class="btn-primary" style="width: 100%; padding: 10px; font-weight: bold; font-size: 13px;" onclick="prosesBackupMQTT()" data-i18n="backup_btn_cadang">☁️ Cadangkan</button>
+            </div>
+            
+            <!-- CARD 2: PULIHKAN -->
+            <div class="content-box" style="text-align: left; padding: 15px; margin-bottom: 15px; border-left: 5px solid #FF9800;">
+                <h4 style="margin: 0 0 10px 0; color: #E65100;" data-i18n="backup_card_pulih_judul">📥 Pulihkan Data</h4>
+                <p style="font-size: 11px; color: #666; margin: 0 0 10px 0;" data-i18n="backup_card_pulih_desk">Masukkan nama kode dari file PDF kredensial Anda.</p>
+                
+                <label style="font-size: 12px; font-weight: bold; color: var(--primary);" data-i18n="backup_label_kode">Masukan nama kode</label>
+                <input type="text" id="backupKodePulih" placeholder="Contoh: B_k7X2a" data-i18n-placeholder="backup_ph_kode" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; font-family: 'Nunito', sans-serif; margin-bottom: 8px;">
+                
+                <label style="font-size: 12px; font-weight: bold; color: var(--primary);" data-i18n="backup_label_sandi">Masukan kata sandi</label>
+                <input type="text" id="backupSandiPulih" value="pjok#1234" readonly style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc; background: #f0f0f0; font-weight: bold; font-family: 'Nunito', sans-serif; margin-bottom: 12px;">
+                
+                <button class="btn-warning" style="color: #fff; width: 100%; padding: 10px; font-weight: bold; font-size: 13px; background: #FF9800;" onclick="prosesRestoreMQTT()" data-i18n="backup_btn_pulih">📥 Pulihkan</button>
+            </div>
+            
+            <p id="statusMQTT" style="margin: 10px 0; font-size: 12px; text-align: center; font-weight: bold; color: var(--primary); display: none;"></p>
+            
+            <!-- DEBUG CONSOLE CONTAINER -->
+            <div id="debugMQTT" style="display: none; margin: 10px 0; font-size: 11px; color: #333; background: #f8f9fa; border: 1px dashed #0288D1; padding: 10px; border-radius: 6px; max-height: 120px; overflow-y: auto; text-align: left; font-family: monospace; line-height: 1.4;"></div>
+            
+            <button class="btn-warning" style="width: 100%; padding: 10px; font-size: 14px;" onclick="closeModal('modalBackup')" data-i18n="backup_btn_tutup">Tutup</button>
+        </div>
+    </div>
+
+    <!-- Modal Ubah Profil Guru (Duplikat dari form registrasi) -->
+    <div id="modalUbahProfil" class="modal-overlay">
+        <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
+            <h3 class="text-primary" data-i18n="ubah_profil_judul">Ubah Profil Guru</h3>
+            <div class="content-box" style="text-align: left; padding:15px; margin-bottom:15px;">
+                <label class="text-primary" style="font-weight:800; font-size:13px;" data-i18n="ubah_profil_nama">Nama Guru:</label>
+                <input type="text" id="editNamaGuru" style="margin-bottom:10px; width:100%; padding:8px;">
+                
+                <label class="text-primary" style="font-weight:800; font-size:13px;" data-i18n="ubah_profil_nip">NIP/NIPPPK:</label>
+                <input type="number" id="editNIP" style="margin-bottom:10px; width:100%; padding:8px;">
+                
+                <label class="text-primary" style="font-weight:800; font-size:13px;" data-i18n="ubah_profil_sekolah">Asal Sekolah:</label>
+                <input type="text" id="editSekolah" style="margin-bottom:10px; width:100%; padding:8px;">
+
+                <label class="text-primary" style="font-weight:800; font-size:13px;" data-i18n="ubah_profil_email">Email:</label>
+                <input type="text" id="editEmail" style="margin-bottom:10px; width:100%; padding:8px;">
+                
+                <label class="text-primary" style="font-weight:800; font-size:13px;" data-i18n="ubah_profil_username">Username Login:</label>
+                <input type="text" id="editUsername" style="margin-bottom:10px; width:100%; padding:8px;">
+                
+                <label class="text-primary" style="font-weight:800; font-size:13px;" data-i18n="ubah_profil_pass">Kata Sandi (Isi untuk mengubah):</label>
+                <input type="password" id="editPassword" placeholder="Kosongkan jika tidak diubah" data-i18n-placeholder="ubah_profil_ph_pass" style="margin-bottom:10px; width:100%; padding:8px;">
+
+                <label class="text-primary" style="font-weight:800; font-size:13px;" data-i18n="ubah_profil_pertanyaan">Pertanyaan Keamanan:</label>
+                <input type="text" id="editPertanyaan" style="margin-bottom:10px; width:100%; padding:8px;">
+
+                <label class="text-primary" style="font-weight:800; font-size:13px;" data-i18n="ubah_profil_jawaban">Jawaban:</label>
+                <input type="text" id="editJawaban" style="margin-bottom:10px; width:100%; padding:8px;">
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button class="btn-warning" style="flex:1; padding:10px;" onclick="closeModal('modalUbahProfil')" data-i18n="ubah_profil_btn_tutup">Tutup</button>
+                <button class="btn-primary" style="flex:1; padding:10px;" onclick="simpanProfilGuru()" data-i18n="ubah_profil_btn_simpan">Ubah</button>
+            </div>
+        </div>
     </div>
 
     <div id="page-rincian-evaluasi" class="page">
-        <img src="assets/logo_new.png" alt="logo-Dilemators" class="logo-image" />
+        <img id="logoRincian" alt="logo" class="logo-image" />
+
+        <div class="title-text" data-i18n="rincianTitle">Rincian Hasil Asesmen Siswa</div>
+
         <div class="content-box">
-            <div class="subtitle" id="rincianNamaSiswa" style="text-align: center; border:none; margin-bottom:5px;">Nama Siswa</div>
-              <p style="margin-bottom: 5px; font-weight: 800; font-size:14px; text-align:center;">NILAI RATA-RATA SISWA</p>
+            <div class="subtitle" id="rincianNamaSiswa" style="text-align: center; border:none; margin-bottom:5px;" data-i18n="rincianNamaPlaceholder">Nama Siswa</div>
+            <div id="rincianAbsensiSiswa" style="text-align:center; font-size:12px; font-weight:bold; color:var(--primary-color); margin-bottom:15px; background-color:var(--bg-light); padding:5px; border-radius:5px;"></div>
+            <p style="margin-bottom: 5px; font-weight: 800; font-size:14px; text-align:center;" data-i18n="rincianLabelRataRata">NILAI RATA-RATA SISWA</p>
             <div id="rincianNilaiAngka" class="nilai-rata-besar">0</div>
-            <p style="font-size: 12px; color: #9E9E9E; text-align: center; margin-top: 15px; font-weight: bold;">(Klik materi di bawah untuk melihat riwayat)</p>
+            <p style="font-size: 12px; color: #9E9E9E; text-align: center; margin-top: 15px; font-weight: bold;" data-i18n="rincianPetunjukKlik">(Klik materi di bawah untuk melihat riwayat)</p>
             <div id="rincianBintangMateri" style="margin-top: 15px;"></div>
         </div>
-        <div class="top-buttons" style="margin-top: 15px;">
-            <button class="btn-warning" onclick="nav('page-evaluasi')">⬅ Kembali</button>
-            <button class="btn-info" onclick="tampilkanPanduan('rincian')">ℹ️ Panduan</button>
-            <button class="btn-danger" id="btnHapusSemuaRiwayat">🗑 Hapus Semua</button>
+        <div class="top-buttons" style="margin-top: 15px; display: none;">
+            <button class="btn-warning" onclick="nav('page-evaluasi')" data-i18n="btnKembali">⬅ Kembali</button>
+            <button class="btn-info" onclick="tampilkanPanduan('rincian')" data-i18n="btnPanduan">ℹ️ Panduan</button>
+            <button class="btn-danger" id="btnHapusSemuaRiwayat" data-i18n="btnHapusSemua">🗑 Hapus Semua</button>
+        </div>
+
+        <button class="btn-warning" style="width: 100%; margin-top: 15px; padding: 12px; font-size: 14px;" onclick="nav('page-evaluasi')" data-i18n="btnKembaliKeEvaluasi">⬅ Kembali ke Hasil dan Laporan</button>
+
+    </div>
+
+    <!-- Tampilan: Panduan Aplikasi -->
+    <div id="page-panduan" class="page">
+        <img id="logoPanduan" alt="logo" class="logo-image" />
+        <div class="title-text" data-i18n="panduan_judul">Panduan Aplikasi</div>
+
+        <div class="content-box" style="text-align: left; margin-bottom: 15px;">
+            <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #555;" data-i18n="panduan_subjudul">Panduan alur penggunaan dan fungsi setiap modul pembelajaran pada aplikasi.</p>
+        </div>
+
+        <!-- 1. Tujuan Pembelajaran -->
+        <div class="content-box" style="text-align: left; margin-bottom: 12px; border-left: 4px solid var(--primary); padding: 12px 15px;">
+            <h4 style="margin: 0 0 6px 0; color: var(--primary); font-size: 14px;" data-i18n="panduan_tujuan_judul">🎯 1. Tujuan Pembelajaran</h4>
+            <p style="margin: 0; font-size: 12px; line-height: 1.5; color: #444;" data-i18n="panduan_tujuan_desc">Memuat Capaian Pembelajaran (CP) dan Tujuan Pembelajaran (TP) PJOK keterampilan gerak manipulatif sebagai acuan kurikulum selama proses pembelajaran.</p>
+        </div>
+
+        <!-- 2. Materi Pembelajaran -->
+        <div class="content-box" style="text-align: left; margin-bottom: 12px; border-left: 4px solid var(--primary); padding: 12px 15px;">
+            <h4 style="margin: 0 0 6px 0; color: var(--primary); font-size: 14px;" data-i18n="panduan_materi_judul">📚 2. Materi Pembelajaran</h4>
+            <p style="margin: 0; font-size: 12px; line-height: 1.5; color: #444;" data-i18n="panduan_materi_desc">Menampilkan modul unit materi dan variasi permainan. Masuk ke halaman detail materi untuk membaca instruksi gerak dan menonton video peragaan interaktif.</p>
+        </div>
+
+        <!-- 3. Lembar Kerja Guru -->
+        <div class="content-box" style="text-align: left; margin-bottom: 12px; border-left: 4px solid var(--primary); padding: 12px 15px;">
+            <h4 style="margin: 0 0 6px 0; color: var(--primary); font-size: 14px;" data-i18n="panduan_lembar_judul">📝 3. Lembar Kerja Guru</h4>
+            <p style="margin: 0; font-size: 12px; line-height: 1.5; color: #444;" data-i18n="panduan_lembar_desc">Fasilitas penampil PDF (preview) untuk modul ajar dan instrumen lembar kerja. Guru dapat membaca, mempelajari, atau mencetak referensi rubrik kegiatan.</p>
+        </div>
+
+        <!-- 4. Manajemen Absensi & Siswa -->
+        <div class="content-box" style="text-align: left; margin-bottom: 12px; border-left: 4px solid var(--primary); padding: 12px 15px;">
+            <h4 style="margin: 0 0 6px 0; color: var(--primary); font-size: 14px;" data-i18n="panduan_absensi_judul">📋 4. Manajemen Absensi & Siswa</h4>
+            <p style="margin: 0; font-size: 12px; line-height: 1.5; color: #444;" data-i18n="panduan_absensi_desc">Pilih kelas untuk mengelola kehadiran siswa pada sesi belajar hari ini (Hadir, Sakit, Izin, Alpa). Anda juga dapat mengelola profil siswa melalui formulir data siswa.</p>
+        </div>
+
+        <!-- 5. Manajemen Asesmen -->
+        <div class="content-box" style="text-align: left; margin-bottom: 12px; border-left: 4px solid var(--primary); padding: 12px 15px;">
+            <h4 style="margin: 0 0 6px 0; color: var(--primary); font-size: 14px;" data-i18n="panduan_asesmen_judul">📈 5. Manajemen Asesmen</h4>
+            <p style="margin: 0; font-size: 12px; line-height: 1.5; color: #444;" data-i18n="panduan_asesmen_desc">Halaman untuk melakukan penilaian observasi gerak secara langsung saat sesi belajar dengan tombol feedback, serta menginput hasil tes akhir siswa.</p>
+        </div>
+
+        <!-- 6. Hasil dan Laporan -->
+        <div class="content-box" style="text-align: left; margin-bottom: 12px; border-left: 4px solid var(--primary); padding: 12px 15px;">
+            <h4 style="margin: 0 0 6px 0; color: var(--primary); font-size: 14px;" data-i18n="panduan_evaluasi_judul">📊 6. Hasil dan Laporan</h4>
+            <p style="margin: 0; font-size: 12px; line-height: 1.5; color: #444;" data-i18n="panduan_evaluasi_desc">Menampilkan rekapitulasi hasil belajar seluruh siswa dalam bentuk tabel dan grafik capaian kelas. Klik nama siswa untuk melihat rincian riwayat nilai dan mengunduh laporan.</p>
+        </div>
+
+        <!-- 7. Pengaturan & Cloud -->
+        <div class="content-box" style="text-align: left; margin-bottom: 12px; border-left: 4px solid var(--primary); padding: 12px 15px;">
+            <h4 style="margin: 0 0 6px 0; color: var(--primary); font-size: 14px;" data-i18n="panduan_pengaturan_judul">⚙️ 7. Pengaturan & Cloud</h4>
+            <p style="margin: 0; font-size: 12px; line-height: 1.5; color: #444;" data-i18n="panduan_pengaturan_desc">Kelola profil guru, ubah kata sandi, beralih bahasa antarmuka (ID / EN), dan manfaatkan fitur Cadangkan & Pulihkan data melalui Cloud MQTT agar data aman saat berganti perangkat.</p>
+        </div>
+
+        <button class="btn-warning" style="width: 100%; margin-top: 15px; padding: 12px; font-size: 14px;" onclick="nav('page-dashboard')" data-i18n="panduan_btn_kembali">⬅ Kembali ke Dasbor</button>
+    </div>
+
+<footer class="footer" id="footerApps" style="width:  100%; text-align: center; font-weight: bold; color: #fff; padding: 3% 2%; margin-top: auto;">
+    &copy; 2026 <span id="footerAppName"></span> - <span id="footerOwnerName"></span>
+</footer>
+
+</div>
+
+
+    <!-- Modal Tes Akhir -->
+    <div id="modalTesAkhir" class="modal-overlay" style="text-align: left;">
+        <div class="modal-content" style="overflow-y: auto; font-size: 1em; text-align: left;">
+            <div class="modal-header" style="text-align: center; color: var(--primary); font-weight: bold; font-size: 1.5em; margin-bottom: 5px;" data-i18n="modal_tes_judul">Masukan Nilai Tes Akhir</div>
+            <h5 id="subJudulModalTesAkhir" style="text-align: center; margin: 15px auto; color: var(--primary); font-size: 1.2em; border: 1px solid var(--primary); border-radius: 15px; white-space: normal; word-break: break-all;"></h5>
+            
+            <input type="hidden" id="hiddenIdSiswaTesAkhir">
+            
+            <div style="margin-bottom: 5px;">
+                <label style="font-weight: bold;" data-i18n="modal_tes_ke">Ujian ke:</label>
+                <input type="text" id="inputTesKe" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; margin-top: 5px;">
+            </div>
+            
+            <div style="margin-bottom: 5px;">
+                <label style="font-weight: bold;" data-i18n="modal_tes_tgl">Tanggal tes:</label>
+                <input type="date" id="inputTanggalTes" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; margin-top: 5px;">
+            </div>
+            
+            <div style="margin-bottom: 5px;">
+                <label style="font-weight: bold;" data-i18n="modal_tes_centang">Jumlah centang di lembar (opsional):</label>
+                <input type="text" id="inputKeteranganTes" placeholder="Contoh: 8 dari 10" data-i18n-placeholder="modal_tes_ph_centang" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; margin-top: 5px;">
+            </div>
+            
+            <div style="margin-bottom: 5px;">
+                <label style="font-weight: bold;" data-i18n="modal_tes_nilai">Nilai (1 - 100):</label>
+                <input type="number" id="inputNilaiTes" oninput="updateFeedbackTesAkhir()" onchange="updateFeedbackTesAkhir()" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; margin-top: 5px;">
+            </div>
+            
+            <div style="margin-bottom: 5px;">
+                <label style="font-weight: bold;" data-i18n="modal_tes_feedback">Feedback:</label>
+                <div style="margin-top: 5px;">
+                    <span id="labelFeedbackAkhir" data-i18n="modal_tes_belum_ada" style="display:  inline-block; text-align:  center; color:  #222;width: 100%; padding: 5px 10px; border-radius: 5px; font-weight: bold; background: #eee; color: #666;">Belum ada nilai</span>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 10px;">
+                <label style="font-weight: bold;" data-i18n="modal_tes_catatan">Catatan / Evaluasi:</label>
+                <textarea id="inputEvaluasiTes" rows="3" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc; margin-top: 5px;"></textarea>
+            </div>
+            
+            <button class="btn-primary" style="width: 100%; padding: 12px; border-radius: 10px; font-size: 14px; margin-bottom: 10px;" onclick="simpanNilaiTesAkhir()" data-i18n="modal_tes_btn_simpan">Simpan Nilai</button>
+            <button class="btn-warning" style="width: 100%; padding: 12px; border-radius: 10px; font-size: 14px;" onclick="closeModal('modalTesAkhir')" data-i18n="modal_tes_btn_batal">Batal</button>
         </div>
     </div>
 
-    <footer class="footer" id="footerApps" style="width: 100%; text-shadow: 0px 0px 3px #000; background: linear-gradient(180deg, #81D4FA 0%, #29B6F6 100%); text-align: center; font-weight: bold; color: #fff; padding: 3% 2%; margin-top: auto;">
-        &copy; 2026 Dilemators - Tania Dewi Lestari, S. Pd
-    </footer>
-    
-</div>
+    <!-- MODAL PREVIEW PDF -->
+    <div id="pdfPreviewModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.8); align-items:center; justify-content:center;">
+        <div class="modal-content" style="width:95%; max-width:900px; height:90vh; background:white; border-radius:10px; display:flex; flex-direction:column; overflow:hidden;">
+            <div style="padding:15px; background:var(--primary-color); color:white; display:flex; justify-content:space-between; align-items:center;">
+                <h3 id="pdfPreviewTitle" style="margin:0; font-size:16px;" data-i18n="pdf_judul">Pratinjau Dokumen</h3>
+                <button onclick="tutupPdfPreview()" style="background:none; border:none; color:white; font-size:24px; cursor:pointer; font-weight:bold; line-height:1;">&times;</button>
+            </div>
+            <div style="flex-grow:1; background:#e0e0e0; width:100%;">
+                <iframe id="pdfPreviewIframe" src="" style="width:100%; height:100%; border:none;"></iframe>
+            </div>
+            <div style="padding:15px; background:white; display:flex; justify-content:flex-end; gap:10px; border-top:1px solid #ccc;">
+                <button class="btn-warning" style="padding:10px 20px; font-weight:bold; border-radius:8px; font-size:14px;" onclick="tutupPdfPreview()" data-i18n="pdf_batal">Batal</button>
+                <button class="btn-primary" style="padding:10px 20px; font-weight:bold; border-radius:8px; font-size:14px;" onclick="konfirmasiUnduhPdf()" data-i18n="pdf_unduh">⬇️ Lanjutkan Unduh</button>
+            </div>
+        </div>
+    </div>
 
-<script src="dataPermainan.js"></script>
-<script src="scripts.js"></script>
+    <!-- OVERLAY ANIMASI LOADING DATA -->
+    <div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.75); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
+        <div style="width: 50px; height: 50px; border: 5px solid rgba(255, 255, 255, 0.3); border-top: 5px solid var(--primary, #4CAF50); border-radius: 50%; animation: spinOverlay 1s linear infinite;"></div>
+        <div id="loadingText" style="color: #fff; font-size: 15px; font-weight: bold; margin-top: 15px; text-align: center; font-family: 'Nunito', sans-serif;">Memproses data...</div>
+    </div>
+
+    <style>
+    @keyframes spinOverlay {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    </style>
+<!-- DYNAMIC CONFIG LOADER -->
+<!-- <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeApp = urlParams.get('app') || 'dilemators';
+    document.write(`<script src="config_${activeApp}.js"><\/script>`);
+</script> -->
+<!-- BILINGUAL & CORE LOGIC -->
+<script src="config_dilemators.js"></script>
+<script src="lang.js"></script>
+<script src="core.js"></script>
+<script src="prevent-back.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
