@@ -3492,3 +3492,109 @@ document.addEventListener('DOMContentLoaded', () => {
         applyLanguage(lang);
     }
 });
+
+// Variabel status PDF
+let docPdf = null;
+let halAktif = 1;
+let pageRendering = false;
+let pageNumPending = null;
+
+// Atur lokasi worker PDF.js (wajib agar PDF dapat diurai dengan lancar)
+if (window.pdfjsLib) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+// 1. Fungsi Merender Halaman ke Canvas
+function tampilkanHalaman(num) {
+    if (!docPdf) return;
+    pageRendering = true;
+
+    docPdf.getPage(num).then(page => {
+        const canvas = document.getElementById('pdfCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+
+        // Menyesuaikan ukuran halaman PDF secara responsif dengan lebar kontainer WebView
+        const container = document.getElementById('pdfCanvasContainer');
+        const containerWidth = container ? (container.clientWidth - 24) : (window.innerWidth - 30);
+        const unscaledViewport = page.getViewport({ scale: 1 });
+        const scale = containerWidth / unscaledViewport.width;
+        const viewport = page.getViewport({ scale: Math.min(scale, 2.0) });
+
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        const renderContext = {
+            canvasContext: ctx,
+            viewport: viewport
+        };
+
+        const renderTask = page.render(renderContext);
+        renderTask.promise.then(() => {
+            pageRendering = false;
+            if (pageNumPending !== null) {
+                tampilkanHalaman(pageNumPending);
+                pageNumPending = null;
+            }
+        });
+
+        // Perbarui label indikator halaman
+        const label = document.getElementById('labelHalamanPdf');
+        if (label) {
+            label.innerText = `Halaman ${num} / ${docPdf.numPages}`;
+        }
+    }).catch(err => {
+        console.error("Gagal merender halaman PDF:", err);
+        pageRendering = false;
+    });
+}
+
+function antreTampilkanHalaman(num) {
+    if (pageRendering) {
+        pageNumPending = num;
+    } else {
+        tampilkanHalaman(num);
+    }
+}
+
+// 2. Fungsi Halaman Sebelumnya (⬅)
+function halamanSebelumnya() {
+    if (!docPdf || halAktif <= 1) return;
+    halAktif--;
+    antreTampilkanHalaman(halAktif);
+}
+
+// 3. Fungsi Halaman Berikutnya (➡)
+function halamanBerikutnya() {
+    if (!docPdf || halAktif >= docPdf.numPages) return;
+    halAktif++;
+    antreTampilkanHalaman(halAktif);
+}
+
+// 4. Fungsi Membuka Modal Pratinjau
+function bukaPdfPreview(anchorElement) {
+    currentPdfDownloadAnchor = anchorElement;
+    const modal = document.getElementById('pdfPreviewModal');
+    const title = document.getElementById('pdfPreviewTitle');
+
+    if (modal) {
+        modal.style.display = 'flex';
+        if (title && anchorElement.download) {
+            title.innerText = "Pratinjau: " + anchorElement.download;
+        }
+
+        // Tampilkan teks loading pada label halaman
+        const label = document.getElementById('labelHalamanPdf');
+        if (label) label.innerText = "Memuat dokumen...";
+
+        // Muat file PDF menggunakan PDF.js
+        pdfjsLib.getDocument(anchorElement.href).promise.then(pdf => {
+            docPdf = pdf;
+            halAktif = 1;
+            tampilkanHalaman(1);
+        }).catch(err => {
+            console.error("Gagal membuka dokumen PDF:", err);
+            if (label) label.innerText = "Gagal memuat pratinjau PDF.";
+        });
+    }
+}
