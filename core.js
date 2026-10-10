@@ -3493,13 +3493,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Variabel status PDF
+// ==========================================
+// PRATINJAU PDF & ZOOM ENGINE (HIGH-DPI COMPATIBLE)
+// ==========================================
+
+// Variabel status PDF & Zoom
 let docPdf = null;
 let halAktif = 1;
 let pageRendering = false;
 let pageNumPending = null;
+let pdfScale = 1.0;          // Nilai 1.0 = 100% (fit container)
+let renderTask = null;       // Penampung task render aktif
 
-// Atur lokasi worker PDF.js (wajib agar PDF dapat diurai dengan lancar)
+// Pastikan worker CDN sinkron dengan versi pdf.js
 if (window.pdfjsLib) {
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 }
@@ -3507,6 +3513,14 @@ if (window.pdfjsLib) {
 // 1. Fungsi Merender Halaman ke Canvas
 function tampilkanHalaman(num) {
     if (!docPdf) return;
+
+    // Batalkan render sebelumnya jika pengguna menekan tombol halaman/zoom dengan cepat
+    if (pageRendering && renderTask) {
+        renderTask.cancel();
+        pageNumPending = num;
+        return;
+    }
+
     pageRendering = true;
 
     docPdf.getPage(num).then(page => {
@@ -3514,37 +3528,70 @@ function tampilkanHalaman(num) {
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
 
-        // Menyesuaikan ukuran halaman PDF secara responsif dengan lebar kontainer WebView
+        // Dapatkan lebar wadah pembungkus
         const container = document.getElementById('pdfCanvasContainer');
-        const containerWidth = container ? (container.clientWidth - 24) : (window.innerWidth - 30);
-        const unscaledViewport = page.getViewport({ scale: 1 });
-        const scale = containerWidth / unscaledViewport.width;
-        const viewport = page.getViewport({ scale: Math.min(scale, 2.0) });
+        const containerWidth = (container && container.clientWidth > 0) 
+            ? (container.clientWidth - 24) 
+            : (window.innerWidth - 30);
 
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
+        // Skala dasar agar dokumen pas dengan lebar kontainer WebView
+        const unscaledViewport = page.getViewport({ scale: 1 });
+        const fitScale = containerWidth / unscaledViewport.width;
+
+        // Skala akhir gabungan fit container + zoom level
+        const currentScale = fitScale * pdfScale;
+        const viewport = page.getViewport({ scale: currentScale });
+
+        // Kompensasi rasio piksel layar WebView (mencegah blur / burik di smartphone)
+        const dpr = window.devicePixelRatio || 1;
+
+        // Atur resolusi internal canvas (bitmap jernih)
+        canvas.width = Math.floor(viewport.width * dpr);
+        canvas.height = Math.floor(viewport.height * dpr);
+
+        // Atur dimensi tampilan di layar (CSS px)
+        canvas.style.width = Math.floor(viewport.width) + "px";
+        canvas.style.height = Math.floor(viewport.height) + "px";
+
+        // Skalakan context drawing sesuai kerapatan piksel layar
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
         const renderContext = {
             canvasContext: ctx,
             viewport: viewport
         };
 
-        const renderTask = page.render(renderContext);
+        renderTask = page.render(renderContext);
         renderTask.promise.then(() => {
             pageRendering = false;
+            renderTask = null;
+
             if (pageNumPending !== null) {
                 tampilkanHalaman(pageNumPending);
                 pageNumPending = null;
             }
+        }).catch(err => {
+            // Error RenderingCancelledException adalah perilaku normal saat dibatalkan
+            if (err.name !== 'RenderingCancelledException') {
+                console.error("Gagal merender halaman PDF:", err);
+            }
+            pageRendering = false;
+            renderTask = null;
         });
 
-        // Perbarui label indikator halaman
-        const label = document.getElementById('labelHalamanPdf');
-        if (label) {
-            label.innerText = `Halaman ${num} / ${docPdf.numPages}`;
+        // Update indikator halaman
+        const labelHal = document.getElementById('labelHalamanPdf');
+        if (labelHal) {
+            labelHal.innerText = `Halaman ${num} / ${docPdf.numPages}`;
+        }
+
+        // Update indikator zoom
+        const labelZoom = document.getElementById('labelZoomPdf');
+        if (labelZoom) {
+            labelZoom.innerText = `${Math.round(pdfScale * 100)}%`;
         }
     }).catch(err => {
-        console.error("Gagal merender halaman PDF:", err);
+        console.error("Gagal memuat halaman PDF:", err);
         pageRendering = false;
     });
 }
@@ -3557,18 +3604,36 @@ function antreTampilkanHalaman(num) {
     }
 }
 
-// 2. Fungsi Halaman Sebelumnya (⬅)
+// 2. Fungsi Navigasi Halaman
 function halamanSebelumnya() {
     if (!docPdf || halAktif <= 1) return;
     halAktif--;
     antreTampilkanHalaman(halAktif);
 }
 
-// 3. Fungsi Halaman Berikutnya (➡)
 function halamanBerikutnya() {
     if (!docPdf || halAktif >= docPdf.numPages) return;
     halAktif++;
     antreTampilkanHalaman(halAktif);
+}
+
+// 3. Fungsi Navigasi Zoom
+function zoomMasuk() {
+    if (!docPdf || pdfScale >= 3.0) return; // Maksimal 300%
+    pdfScale += 0.25;
+    tampilkanHalaman(halAktif);
+}
+
+function zoomKeluar() {
+    if (!docPdf || pdfScale <= 0.5) return; // Minimal 50%
+    pdfScale -= 0.25;
+    tampilkanHalaman(halAktif);
+}
+
+function resetZoom() {
+    if (!docPdf || pdfScale === 1.0) return;
+    pdfScale = 1.0;
+    tampilkanHalaman(halAktif);
 }
 
 // 4. Fungsi Membuka Modal Pratinjau
@@ -3583,18 +3648,34 @@ function bukaPdfPreview(anchorElement) {
             title.innerText = "Pratinjau: " + anchorElement.download;
         }
 
-        // Tampilkan teks loading pada label halaman
-        const label = document.getElementById('labelHalamanPdf');
-        if (label) label.innerText = "Memuat dokumen...";
+        // Reset zoom ke default
+        pdfScale = 1.0;
 
-        // Muat file PDF menggunakan PDF.js
+        // Reset label teks
+        const labelHal = document.getElementById('labelHalamanPdf');
+        if (labelHal) labelHal.innerText = "Memuat dokumen...";
+
+        const labelZoom = document.getElementById('labelZoomPdf');
+        if (labelZoom) labelZoom.innerText = "100%";
+
+        // Kosongkan canvas sisa render sebelumnya
+        const canvas = document.getElementById('pdfCanvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Muat file dokumen menggunakan PDF.js
         pdfjsLib.getDocument(anchorElement.href).promise.then(pdf => {
             docPdf = pdf;
             halAktif = 1;
-            tampilkanHalaman(1);
+            // Beri jeda 100ms agar container modal di WebView selesai menghitung layout flex
+            setTimeout(() => {
+                tampilkanHalaman(1);
+            }, 100);
         }).catch(err => {
             console.error("Gagal membuka dokumen PDF:", err);
-            if (label) label.innerText = "Gagal memuat pratinjau PDF.";
+            if (labelHal) labelHal.innerText = "Gagal memuat pratinjau PDF.";
         });
     }
 }
