@@ -15,6 +15,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <!-- Perubahan -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     
     <link rel="stylesheet" href="styles.css" type="text/css" />
 </head>
@@ -902,7 +904,16 @@
                 <button onclick="tutupPdfPreview()" style="background:none; border:none; color:white; font-size:24px; cursor:pointer; font-weight:bold; line-height:1;">&times;</button>
             </div>
             <div style="flex-grow:1; background:#e0e0e0; width:100%;">
-                <iframe id="pdfPreviewIframe" src="" style="width:100%; height:100%; border:none;"></iframe>
+
+                <!-- Perubahan 2 -->
+                <div id="pdfCanvasContainer" style="flex-grow:1; overflow:auto; text-align:center; background:#525659; padding:10px;">
+                    <canvas id="pdfCanvas" style="max-width:100%; box-shadow:0 2px 8px rgba(0,0,0,0.4); border-radius:4px;"></canvas>
+                </div>
+                <div style="display:flex; justify-content:center; align-items:center; gap:10px; padding:5px; background:#f0f0f0;">
+                    <button onclick="halamanSebelumnya()" class="btn-info" style="padding:4px 10px;">⬅</button>
+                    <span id="labelHalamanPdf" style="font-size:12px; font-weight:bold;">Halaman 1 / 1</span>
+                    <button onclick="halamanBerikutnya()" class="btn-info" style="padding:4px 10px;">➡</button>
+                </div>
             </div>
             <div style="padding:15px; background:white; display:flex; justify-content:flex-end; gap:10px; border-top:1px solid #ccc;">
                 <button class="btn-warning" style="padding:10px 20px; font-weight:bold; border-radius:8px; font-size:14px;" onclick="tutupPdfPreview()" data-i18n="pdf_batal">Batal</button>
