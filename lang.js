@@ -642,6 +642,56 @@ const langPagePanduan = {
     }
 };
 
+// ==========================================
+// MODUL: MODAL REGISTRASI GURU
+// ==========================================
+const langModalRegistrasi = {
+    ID: {
+        reg_judul: "Registrasi Guru",
+        reg_label_nama: "Nama Lengkap",
+        reg_ph_nama: "Nama Lengkap",
+        reg_label_nip: "NIP (Opsional)",
+        reg_ph_nip: "NIP (Opsional)",
+        reg_label_sekolah: "Asal Sekolah",
+        reg_ph_sekolah: "Asal Sekolah",
+        reg_label_email: "Email",
+        reg_ph_email: "Email",
+        reg_label_username: "Username",
+        reg_ph_username: "Username",
+        reg_label_password: "Kata Sandi",
+        reg_ph_password: "Kata Sandi",
+        reg_label_pertanyaan: "Pertanyaan Keamanan",
+        reg_ph_pertanyaan: "Misal: Siapa nama hewan peliharaan Anda?",
+        reg_label_jawaban: "Jawaban Keamanan",
+        reg_ph_jawaban: "Jawaban Keamanan",
+        reg_btn_batal: "Batal",
+        reg_btn_simpan: "Simpan"
+    },
+    EN: {
+        reg_judul: "Teacher Registration",
+        reg_label_nama: "Full Name",
+        reg_ph_nama: "Full Name",
+        reg_label_nip: "NIP / ID (Optional)",
+        reg_ph_nip: "NIP / ID (Optional)",
+        reg_label_sekolah: "School Origin",
+        reg_ph_sekolah: "School Origin",
+        reg_label_email: "Email",
+        reg_ph_email: "Email",
+        reg_label_username: "Username",
+        reg_ph_username: "Username",
+        reg_label_password: "Password",
+        reg_ph_password: "Password",
+        reg_label_pertanyaan: "Security Question",
+        reg_ph_pertanyaan: "E.g., What is your pet's name?",
+        reg_label_jawaban: "Security Answer",
+        reg_ph_jawaban: "Security Answer",
+        reg_btn_batal: "Cancel",
+        reg_btn_simpan: "Save"
+    }
+};
+
+
+
 const translations = {
     "ID": {
         "konfirmasi" : "konfirmasi",
@@ -687,6 +737,7 @@ const translations = {
         ...langModalUbahProfil.ID,
         ...langModalBackup.ID,
         ...langPagePanduan.ID,
+        ...langModalRegistrasi.ID,
 
         
         // page-dashboard
@@ -744,6 +795,7 @@ const translations = {
         ...langModalUbahProfil.EN,
         ...langModalBackup.EN,
         ...langPagePanduan.EN,
+        ...langModalRegistrasi.EN,
 
         
         // page-dashboard
