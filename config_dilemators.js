@@ -13,7 +13,8 @@ const APP_CONFIG = {
         btnShadow: "#0277BD"
     },
     wordartGradient: "linear-gradient(90deg, #4FC3F7, #01579B)",
-    tagline: "Manipulative Motor Skills"
+    tagline: "Manipulative Motor Skills",
+    tagline_id : "Manipulatif",
 };
 
 const dataMateri = [
