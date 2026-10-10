@@ -1,831 +1,1044 @@
-// --- Modal: Reset Sandi ---
-const langResetSandi = {
-    ID: {
-        "reset_judul": "Atur Ulang Sandi",
-        "reset_pertanyaan": "Jawab pertanyaan keamanan berikut :",
-        "reset_jawaban": "Jawaban Anda :",
-        "reset_placeholder_jawaban": "Jawaban",
-        "reset_periksa": "Periksa",
-        "reset_password": "Masukkan kata sandi baru",
-        "reset_placeholder_pass1": "Sandi Baru",
-        "reset_ulangi": "Masukkan ulang kata sandi baru",
-        "reset_placeholder_pass2": "Ulangi Sandi Baru",
-        "reset_batal": "Batal",
-        "reset_simpan": "Simpan"
+const APP_CONFIG = {
+    appName: "Dilemators",
+    ownerName: "Tania Dewi Lestari, S. Pd",
+    storagePrefix: "dile",
+    materiPrefix: "M",
+    assetPath: "./assets/",
+    videoPath: "./video/",
+    colors: {
+        primary: "#01579B",
+        primaryLight: "#0288D1",
+        bgLight: "#E1F5FE",
+        btnGradient: "linear-gradient(180deg, #4FC3F7, #0288D1)",
+        btnShadow: "#0277BD"
     },
-    EN: {
-        "reset_judul": "Reset Password",
-        "reset_pertanyaan": "Answer the following security question :",
-        "reset_jawaban": "Your Answer :",
-        "reset_placeholder_jawaban": "Answer",
-        "reset_periksa": "Verify",
-        "reset_password": "Enter new password",
-        "reset_placeholder_pass1": "New Password",
-        "reset_ulangi": "Re-enter new password",
-        "reset_placeholder_pass2": "Repeat New Password",
-        "reset_batal": "Cancel",
-        "reset_simpan": "Save"
-    }
+    wordartGradient: "linear-gradient(90deg, #4FC3F7, #01579B)",
+    tagline: "Manipulative Motor Skills",
+    tagline_id : "Manipulatif",
 };
 
-// --- Page: Dashboard ---
-const langDashboard = {
-    ID: {
-        "dashboard_judul": "Dasbor Utama",
-        "dashboard_tujuan": "Tujuan Pembelajaran",
-        "dashboard_materi": "Materi Pembelajaran",
-        "dashboard_lembar": "Lembar Kerja Guru",
-        "dashboard_absen": "Manajemen Absensi",
-        "dashboard_asesmen": "Manajemen Asesmen",
-        "dashboard_hasil": "Hasil dan Laporan",
-        "dashboard_pengaturan": "Pengaturan",
-        "dashboard_panduan": "Panduan",
-        "dashboard_sesi": "Mulai Sesi Hari Ini ➔"
-    },
-    EN: {
-        "dashboard_judul": "Main Dashboard",
-        "dashboard_tujuan": "Learning Objectives",
-        "dashboard_materi": "Learning Materials",
-        "dashboard_lembar": "Teacher Worksheets",
-        "dashboard_absen": "Attendance Management",
-        "dashboard_asesmen": "Assessment Management",
-        "dashboard_hasil": "Results and Reports",
-        "dashboard_pengaturan": "Settings",
-        "dashboard_panduan": "Guide",
-        "dashboard_sesi": "Start Today's Session ➔"
-    }
-};
-
-// --- Page: Tujuan Pembelajaran ---
-const langTujuan = {
-    ID: {
-        "tujuan_judul": "Tujuan Pembelajaran",
-        "tujuan_capaian": "Capaian Pembelajaran",
-        "tujuan_capaian_satu": "<b>Terampil Bergerak:</b> menghaluskan keterampilan gerak fundamental dan menerapkannya dalam situasi gerak yang baru; menyesuaikan strategi gerak untuk mendapatkan capaian keterampilan gerak; dan memperagakan berbagai konsep gerak yang dapat diterapkan dalam rangkaian gerak.",
-        "tujuan_capaian_dua": "<b>Belajar melalui Gerak:</b> menerapkan strategi gerak sederhana dan memecahkan masalah gerak; menerapkan peraturan untuk menumbuhkan fair play di dalam berbagai aktivitas jasmani; dan berpartisipasi secara positif dalam kelompok atau tim di dalam berbagai aktivitas jasmani.",
-        "tujuan_tujuan": "Tujuan Pembelajaran",
-        "tujuan_tujuan_awalan": "Murid mampu:",
-        "tujuan_tujuan_satu": "menghaluskan keterampilan gerak fundamental;",
-        "tujuan_tujuan_dua": "menerapkan gerak fundamental dalam situasi gerak yang baru;",
-        "tujuan_tujuan_tiga": "menyesuaikan strategi gerak untuk mendapatkan capaian gerak;",
-        "tujuan_tujuan_empat": "memperagakan berbagai konsep gerak yang dapat diterapkan dalam rangkaian gerak;",
-        "tujuan_tujuan_lima": "menerapkan strategi gerak sederhana dan memecahkan masalah gerak;",
-        "tujuan_tujuan_enam": "menerapkan peraturan untuk menumbuhkan fair play;",
-        "tujuan_tujuan_tujuh": "berpartisipasi secara positif dalam kelompok atau tim.",
-        "tujuan_alur": "Alur Tujuan Pembelajaran",
-        "tujuan_alur_satu": "Setiap unit materi pembelajaran mengikuti pola 3 tahap, pada tahap 1 dan 2 bermanfaat untuk menghaluskan gerak, lalu dilanjutkan dengan penerapan dalam situasi gerak baru pada tahap 3.",
-        "tujuan_alur_dua": "Menerapkan peraturan, fair play, dan berperan positif dalam kelompok, termasuk tutor sebaya.",
-        "tujuan_kriteria": "Kriteria Ketercapaian",
-        "tujuan_kriteria_item": "Tuntas satu unit pembelajaran bila nilai tes akhir unit <b>75 atau lebih</b>",
-        "tujuan_kembali": "⬅ Kembali ke Dasbor"
-    },
-    EN: {
-        "tujuan_judul": "Learning Objectives",
-        "tujuan_capaian": "Learning Outcomes",
-        "tujuan_capaian_satu": "<b>Movement Skills:</b> refining fundamental movement skills and applying them to new movement situations; adapting movement strategies to achieve movement skill outcomes; and demonstrating various movement concepts applicable in movement sequences.",
-        "tujuan_capaian_dua": "<b>Learning through Movement:</b> applying simple movement strategies and solving movement problems; adhering to rules to foster fair play across various physical activities; and participating positively in groups or teams during physical activities.",
-        "tujuan_tujuan": "Learning Objectives",
-        "tujuan_tujuan_awalan": "Students are able to:",
-        "tujuan_tujuan_satu": "refine fundamental movement skills;",
-        "tujuan_tujuan_dua": "apply fundamental movement skills in new movement situations;",
-        "tujuan_tujuan_tiga": "adapt movement strategies to achieve movement performance;",
-        "tujuan_tujuan_empat": "demonstrate various movement concepts applicable in movement sequences;",
-        "tujuan_tujuan_lima": "apply simple movement strategies and solve movement problems;",
-        "tujuan_tujuan_enam": "adhere to rules to foster fair play;",
-        "tujuan_tujuan_tujuh": "participate positively in groups or teams.",
-        "tujuan_alur": "Learning Objective Flow",
-        "tujuan_alur_satu": "Each learning material unit follows a 3-stage pattern; stages 1 and 2 serve to refine movements, followed by application in new movement situations in stage 3.",
-        "tujuan_alur_dua": "Implement rules, fair play, and take a positive role in groups, including peer tutoring.",
-        "tujuan_kriteria": "Completion Criteria",
-        "tujuan_kriteria_item": "A learning unit is completed if the final unit test score is <b>75 or higher</b>",
-        "tujuan_kembali": "⬅ Back to Dashboard"
-    }
-};
-
-// --- Page: Pilih Kelas ---
-const langPilihKelas = {
-    ID: {
-        "pilih_kelas_judul": "Pilih Kelas",
-        "pilih_kelas_awal": "Silakan pilih kelas terlebih dahulu untuk melihat dan mengelola data absensi.",
-        "pilih_kelas_kembali": "⬅ Kembali ke Dasbor"
-    },
-    EN: {
-        "pilih_kelas_judul": "Select Class",
-        "pilih_kelas_awal": "Please select a class first to view and manage attendance data.",
-        "pilih_kelas_kembali": "⬅ Back to Dashboard"
-    }
-};
-
-// --- Page: Manajemen Absensi ---
-const langManajemenAbsensi = {
-    ID: {
-        "absensi_judul": "Manajemen Absensi",
-        "absensi_tab_satu": "Sesi Hari Ini",
-        "absensi_tab_dua": "Riwayat",
-        "absensi_tab_tiga": "Daftar Siswa",
-        "absensi_tab_satu_awalan": "Silakan pilih kelas terlebih dahulu.",
-        "absensi_tab_satu_simpan": "Simpan Kehadiran ✔",
-        "absensi_tab_satu_materi": "Buka Materi Pembelajaran 📖",
-        "absensi_tab_tiga_tambah": "+ Tambah",
-        "absensi_kembali": "⬅ Kembali ke Pilih Kelas",
-        "absensi_tab_dua_nama" : "Nama Siswa",
-        "absensi_tab_dua_sesi" : "Sesi Hari Ini",
-        "absensi_tab_dua_total" : "Total Kehadiran",
-        "absensi_tab_tiga_nama" : "Nama Siswa",
-        "absensi_tab_tiga_gender" : "JK",
-        "absensi_tab_tiga_kelas" : "Kelas",
-        "absensi_tab_tiga_sekolah" : "Sekolah",
-        "absensi_tab_tiga_opsi" : "Opsi",
-    },
-    EN: {
-        "absensi_judul": "Attendance Management",
-        "absensi_tab_satu": "Today's Session",
-        "absensi_tab_dua": "History",
-        "absensi_tab_tiga": "Student List",
-        "absensi_tab_satu_awalan": "Please select a class first.",
-        "absensi_tab_satu_simpan": "Save Attendance ✔",
-        "absensi_tab_satu_materi": "Open Learning Materials 📖",
-        "absensi_tab_tiga_tambah": "+ Add",
-        "absensi_kembali": "⬅ Back to Select Class",
-        "absensi_tab_dua_nama" : "Student\'s Name",
-        "absensi_tab_dua_sesi" : "Today's Session",
-        "absensi_tab_dua_total" : "Total attendance",
-        "absensi_tab_tiga_nama" : "Student's Name",
-        "absensi_tab_tiga_gender" : "Gender",
-        "absensi_tab_tiga_kelas" : "Class",
-        "absensi_tab_tiga_sekolah" : "School",
-        "absensi_tab_tiga_opsi" : "Options",
-    }
-};
-
-// --- Page: Lembar Kerja Guru ---
-const langLembarKerja = {
-    ID: {
-        "lembar_judul": "Lembar Kerja Guru",
-        "lembar_unduh_semua": "📥 Unduh semua unit (13 halaman) [.zip]",
-        "lembar_kembali": "⬅ Kembali ke Dasbor",
-    },
-    EN: {
-        "lembar_judul": "Teacher Worksheets",
-        "lembar_unduh_semua": "📥 Download all units (13 pages) [.zip]",
-        "lembar_kembali": "⬅ Back to Dashboard",
-    }
-};
-
-// --- Modal: Pratinjau PDF ---
-const langPdfPreview = {
-    ID: {
-        "pdf_judul": "Pratinjau Dokumen",
-        "pdf_batal": "Batal",
-        "pdf_unduh": "⬇️ Lanjutkan Unduh",
-    },
-    EN: {
-        "pdf_judul": "Document Preview",
-        "pdf_batal": "Cancel",
-        "pdf_unduh": "⬇️ Proceed to Download",
-    }
-};
-
-// --- Page: Form Tambah/Ubah Siswa ---
-const langFormSiswa = {
-    ID: {
-        "form_siswa_judul": "Data Siswa",
-        "form_siswa_absen": "No Absen:",
-        "form_siswa_nama": "Nama Siswa:",
-        "form_siswa_nisn": "NISN:",
-        "form_siswa_jk": "Jenis Kelamin:",
-        "form_siswa_jk_l": "Laki-laki",
-        "form_siswa_jk_p": "Perempuan",
-        "form_siswa_kelas": "Kelas:",
-        "form_siswa_sekolah": "Sekolah:",
-        "form_siswa_batal": "Batal",
-        "form_siswa_simpan": "Simpan Data",
-    },
-    EN: {
-        "form_siswa_judul": "Student Data",
-        "form_siswa_absen": "Attendance No:",
-        "form_siswa_nama": "Student Name:",
-        "form_siswa_nisn": "Student ID (NISN):",
-        "form_siswa_jk": "Gender:",
-        "form_siswa_jk_l": "Male",
-        "form_siswa_jk_p": "Female",
-        "form_siswa_kelas": "Class:",
-        "form_siswa_sekolah": "School:",
-        "form_siswa_batal": "Cancel",
-        "form_siswa_simpan": "Save Data",
-    }
-};
-
-// --- Modal: Panduan Siswa & Import ---
-const langPanduanSiswa = {
-    ID: {
-        "panduan_siswa_judul": "Panduan Tambah Data Siswa dan Import Data",
-        "panduan_siswa_deskripsi": "Gunakan tombol <b>+ Tambah</b> lalu isi <b>Form Tambahkan Siswa</b> sesuai label. Untuk melakukan import massal, pastikan file Excel (.xlsx) Anda memiliki <b>baris pertama (header)</b> seperti format berikut. <span class=\"text-danger\">Kolom Nama dan Kelas WAJIB ada.</span>",
-        "panduan_siswa_th_absen": "No Abs",
-        "panduan_siswa_th_nama": "Nama Siswa",
-        "panduan_siswa_th_nisn": "NISN",
-        "panduan_siswa_th_jk": "JK",
-        "panduan_siswa_th_kelas": "Kelas",
-        "panduan_siswa_th_sekolah": "Sekolah",
-        "panduan_siswa_btn_template": "⬇ Download Template Dummy",
-        "panduan_siswa_btn_import": "📥 Pilih File & Import",
-        "panduan_siswa_btn_tutup": "Batal / Tutup",
-    },
-    EN: {
-        "panduan_siswa_judul": "Student Data & Import Guide",
-        "panduan_siswa_deskripsi": "Use the <b>+ Add</b> button and fill in the <b>Add Student Form</b> according to the labels. For bulk import, make sure your Excel file (.xlsx) has the <b>first row (header)</b> formatted as shown below. <span class=\"text-danger\">Name and Class columns are REQUIRED.</span>",
-        "panduan_siswa_th_absen": "No",
-        "panduan_siswa_th_nama": "Student Name",
-        "panduan_siswa_th_nisn": "NISN",
-        "panduan_siswa_th_jk": "Gender",
-        "panduan_siswa_th_kelas": "Class",
-        "panduan_siswa_th_sekolah": "School",
-        "panduan_siswa_btn_template": "⬇ Download Dummy Template",
-        "panduan_siswa_btn_import": "📥 Select File & Import",
-        "panduan_siswa_btn_tutup": "Cancel / Close",
-    }
-};
-
-// --- Page: Materi Pembelajaran ---
-const langMateri = {
-    ID: {
-        "materi_judul": "Materi Pembelajaran",
-        "materi_btn_asesmen": "Buka Halaman Asesmen 📝",
-        "materi_btn_kembali": "⬅ Kembali ke Dasbor",
-    },
-    EN: {
-        "materi_judul": "Learning Materials",
-        "materi_btn_asesmen": "Open Assessment Page 📝",
-        "materi_btn_kembali": "⬅ Back to Dashboard",
-    }
-};
-
-// --- Modal: Alasan Absen ---
-const langAbsenModal = {
-    ID: {
-        "absen_modal_judul": "Alasan Absen",
-        "absen_opt_sakit": "Sakit",
-        "absen_opt_izin": "Izin",
-        "absen_opt_alfa": "Alfa",
-        "absen_btn_batal": "Batal",
-        "absen_btn_simpan": "Simpan",
-    },
-    EN: {
-        "absen_modal_judul": "Absence Reason",
-        "absen_opt_sakit": "Sick",
-        "absen_opt_izin": "Excused",
-        "absen_opt_alfa": "Unexcused",
-        "absen_btn_batal": "Cancel",
-        "absen_btn_simpan": "Save",
-    }
-};
-
-// --- Page: Detail Materi Pembelajaran ---
-const langDetailMateri = {
-    ID: {
-        "detail_tab_1": "Tahap 1<br><span style=\"font-size:9px; font-weight:normal;\">(Mudah)</span>",
-        "detail_tab_2": "Tahap 2<br><span style=\"font-size:9px; font-weight:normal;\">(Sedang)</span>",
-        "detail_tab_3": "Tahap 3<br><span style=\"font-size:9px; font-weight:normal;\">(Sulit)</span>",
-        "detail_tab_tes": "Tes Akhir<br><span style=\"font-size:9px; font-weight:normal;\">(Ujian)</span>",
-        "detail_header_langkah": "📝 Langkah-langkah",
-        "detail_header_kriteria": "🎯 Kriteria Lolos",
-        "detail_tes_judul": "📑 Tes Akhir Unit",
-        "detail_tes_deskripsi": "Bagian ini berisikan kriteria penilaian untuk tes akhir unit. Silakan unduh dokumen panduan lembar kerja untuk pedoman pengujian dan instrumen kelulusan siswa.",
-        "detail_btn_unduh": "📥 Unduh Lembar Tes Akhir",
-        "detail_btn_kembali": "⬅ Kembali ke Materi Pembelajaran",
-    },
-    EN: {
-        "detail_tab_1": "Stage 1<br><span style=\"font-size:9px; font-weight:normal;\">(Easy)</span>",
-        "detail_tab_2": "Stage 2<br><span style=\"font-size:9px; font-weight:normal;\">(Medium)</span>",
-        "detail_tab_3": "Stage 3<br><span style=\"font-size:9px; font-weight:normal;\">(Hard)</span>",
-        "detail_tab_tes": "Final Test<br><span style=\"font-size:9px; font-weight:normal;\">(Exam)</span>",
-        "detail_header_langkah": "📝 Instructions / Steps",
-        "detail_header_kriteria": "🎯 Passing Criteria",
-        "detail_tes_judul": "📑 Unit Final Test",
-        "detail_tes_deskripsi": "This section contains the assessment criteria for the final unit test. Please download the worksheet guide document for testing guidelines and student passing instruments.",
-        "detail_btn_unduh": "📥 Download Final Test Sheet",
-        "detail_btn_kembali": "⬅ Back to Learning Materials",
-    }
-};
-
-// --- Page: Manajemen Asesmen ---
-const langAsesmen = {
-    ID: {
-        "asesmen_judul": "Manajemen Asesmen",
-        "asesmen_tab_1": "Naik Tahap",
-        "asesmen_tab_2": "Tes Akhir",
-        "asesmen_tab_3": "Riwayat",
-        "asesmen_header_naik": "Naik Tahap",
-        "asesmen_header_tes": "Tes Akhir",
-        "asesmen_label_kelas": "Pilih Kelas:",
-        "asesmen_label_unit": "Pilih Unit Gerak:",
-        "asesmen_opt_pilih": "Mohon pilih",
-        "asesmen_peringatan": "Mohon pilih kelas dan unit gerak terlebih dahulu",
-        "asesmen_btn_simpan": "Simpan Penilaian",
-        "asesmen_label_filter_kelas": "Filter Kelas:",
-        "asesmen_opt_semua": "Semua Kelas",
-        "asesmen_th_no": "No",
-        "asesmen_th_tanggal": "Tanggal",
-        "asesmen_th_nama": "Nama",
-        "asesmen_th_kelas": "Kelas",
-        "asesmen_th_unit": "Unit",
-        "asesmen_th_jenis": "Jenis",
-        "asesmen_th_hasil": "Hasil",
-        "asesmen_th_keterangan": "Keterangan",
-        "asesmen_th_evaluasi": "Evaluasi",
-        "asesmen_btn_kembali": "⬅ Kembali ke Dasbor",
-    },
-    EN: {
-        "asesmen_judul": "Assessment Management",
-        "asesmen_tab_1": "Stage Progression",
-        "asesmen_tab_2": "Final Test",
-        "asesmen_tab_3": "History",
-        "asesmen_header_naik": "Stage Progression",
-        "asesmen_header_tes": "Final Test",
-        "asesmen_label_kelas": "Select Class:",
-        "asesmen_label_unit": "Select Movement Unit:",
-        "asesmen_opt_pilih": "Please select",
-        "asesmen_peringatan": "Please select a class and movement unit first",
-        "asesmen_btn_simpan": "Save Assessment",
-        "asesmen_label_filter_kelas": "Filter Class:",
-        "asesmen_opt_semua": "All Classes",
-        "asesmen_th_no": "No",
-        "asesmen_th_tanggal": "Date",
-        "asesmen_th_nama": "Name",
-        "asesmen_th_kelas": "Class",
-        "asesmen_th_unit": "Unit",
-        "asesmen_th_jenis": "Type",
-        "asesmen_th_hasil": "Result",
-        "asesmen_th_keterangan": "Description",
-        "asesmen_th_evaluasi": "Evaluation",
-        "asesmen_btn_kembali": "⬅ Back to Dashboard",
-    }
-};
-
-// --- Modal: Penilaian Tes Akhir ---
-const langModalTesAkhir = {
-    ID: {
-        "modal_tes_judul": "Masukan Nilai Tes Akhir",
-        "modal_tes_ke": "Ujian ke:",
-        "modal_tes_tgl": "Tanggal tes:",
-        "modal_tes_centang": "Jumlah centang di lembar (opsional):",
-        "modal_tes_ph_centang": "Contoh: 8 dari 10",
-        "modal_tes_nilai": "Nilai (1 - 100):",
-        "modal_tes_feedback": "Feedback:",
-        "modal_tes_belum_ada": "Belum ada nilai",
-        "modal_tes_catatan": "Catatan / Evaluasi:",
-        "modal_tes_btn_simpan": "Simpan Nilai",
-        "modal_tes_btn_batal": "Batal",
-    },
-    EN: {
-        "modal_tes_judul": "Input Final Test Score",
-        "modal_tes_ke": "Attempt / Test No:",
-        "modal_tes_tgl": "Test Date:",
-        "modal_tes_centang": "Checkmarks count on sheet (optional):",
-        "modal_tes_ph_centang": "Example: 8 out of 10",
-        "modal_tes_nilai": "Score (1 - 100):",
-        "modal_tes_feedback": "Feedback:",
-        "modal_tes_belum_ada": "No score yet",
-        "modal_tes_catatan": "Notes / Evaluation:",
-        "modal_tes_btn_simpan": "Save Score",
-        "modal_tes_btn_batal": "Cancel",
-    }
-};
-
-// --- Page: Hasil dan Laporan (Evaluasi) ---
-const langEvaluasi = {
-    ID: {
-        "evaluasi_judul": "Hasil dan Laporan",
-        "evaluasi_btn_export": "⬇ Export Excel",
-        "evaluasi_filter_label": "Filter Kelas:",
-        "evaluasi_opt_semua": "Semua Kelas",
-        "evaluasi_stat_judul": "Keterangan & Statistik",
-        "evaluasi_legend_bagus": "Bagus / TUNTAS (B)",
-        "evaluasi_legend_cukup": "Cukup (C)",
-        "evaluasi_legend_perbaikan": "Remedial (R)",
-        "evaluasi_btn_kembali": "🔙 Kembali ke Dasbor",
-    },
-    EN: {
-        "evaluasi_judul": "Results and Reports",
-        "evaluasi_btn_export": "⬇ Export Excel",
-        "evaluasi_filter_label": "Filter Class:",
-        "evaluasi_opt_semua": "All Classes",
-        "evaluasi_stat_judul": "Legend & Statistics",
-        "evaluasi_legend_bagus": "Good / COMPLETED (G)",
-        "evaluasi_legend_cukup": "Satisfactory (S)",
-        "evaluasi_legend_perbaikan": "Remedial (R)",
-        "evaluasi_btn_kembali": "🔙 Back to Dashboard",
-    }
-};
-
-// ==========================================
-// MODUL: PAGE RINCIAN EVALUASI
-// ==========================================
-const langPageRincian = {
-    ID: {
-        rincianTitle: "Rincian Hasil Asesmen Siswa",
-        rincianNamaPlaceholder: "Nama Siswa",
-        rincianLabelRataRata: "NILAI RATA-RATA SISWA",
-        rincianPetunjukKlik: "(Klik materi di bawah untuk melihat riwayat)",
-        btnKembaliKeEvaluasi: "⬅ Kembali ke Hasil dan Laporan",
-    },
-    EN: {
-        rincianTitle: "Student Assessment Result Details",
-        rincianNamaPlaceholder: "Student's Name",
-        rincianLabelRataRata: "STUDENT'S AVERAGE SCORE",
-        rincianPetunjukKlik: "(Click material below to view history)",
-        btnKembaliKeEvaluasi: "⬅ Back to Results and Reports",
-    }
-};
-
-// ==========================================
-// MODUL: MODAL RIWAYAT MATERI
-// ==========================================
-const langModalRiwayat = {
-    ID: {
-        riwayatModalJudul: "Riwayat Materi",
-        riwayatThTanggal: "Tanggal",
-        riwayatThUjianKe: "Ujian Ke-",
-        riwayatThNilai: "Nilai",
-        riwayatThCatatan: "Catatan",
-        riwayatThOpsi: "Opsi",
-        btnTutup: "Tutup",
-    },
-    EN: {
-        riwayatModalJudul: "Material History",
-        riwayatThTanggal: "Date",
-        riwayatThUjianKe: "Test #",
-        riwayatThNilai: "Score",
-        riwayatThCatatan: "Notes",
-        riwayatThOpsi: "Action",
-        btnTutup: "Close",
-    }
-};
-
-// ==========================================
-// MODUL: MODAL NILAI
-// ==========================================
-const langModalNilai = {
-    ID: {
-        nilai_modal_judul: "Masukkan Nilai",
-        nilai_modal_feedback: "Umpan Balik:",
-        nilai_modal_ph_angka: "Nilai (1 - 100)",
-        nilai_modal_ph_catatan: "Catatan Tambahan (Opsional)...",
-        nilai_modal_batal: "Batal",
-        nilai_modal_simpan: "Simpan"
-    },
-    EN: {
-        nilai_modal_judul: "Input Score",
-        nilai_modal_feedback: "Feedback:",
-        nilai_modal_ph_angka: "Score (1 - 100)",
-        nilai_modal_ph_catatan: "Additional Notes (Optional)...",
-        nilai_modal_batal: "Cancel",
-        nilai_modal_simpan: "Save"
-    }
-};
-
-// ==========================================
-// MODUL: PAGE PENGATURAN
-// ==========================================
-const langPagePengaturan = {
-    ID: {
-        pengaturan_judul: "Pengaturan",
-        pengaturan_btn_profil: "👨‍🎓 Ubah Profil Guru",
-        pengaturan_label_bahasa: "🌐 Bahasa / Language",
-        pengaturan_sync_judul: "☁️ Sinkronisasi Cloud (MQTT)",
-        pengaturan_topik_label: "Topik Pemulihan (Auto/Manual):",
-        pengaturan_ph_topik: "Contoh: dilemators/backup/GURU123",
-        pengaturan_btn_cadangkan: "☁️ Cadangkan",
-        pengaturan_btn_pulihkan: "📥 Pulihkan",
-        pengaturan_btn_logout: "🚪 Keluar",
-        pengaturan_btn_kembali: "⬅ Kembali ke Dasbor"
-    },
-    EN: {
-        pengaturan_judul: "Settings",
-        pengaturan_btn_profil: "👨‍🎓 Edit Teacher Profile",
-        pengaturan_label_bahasa: "🌐 Bahasa / Language",
-        pengaturan_sync_judul: "☁️ Cloud Synchronization (MQTT)",
-        pengaturan_topik_label: "Recovery Topic (Auto/Manual):",
-        pengaturan_ph_topik: "Example: dilemators/backup/GURU123",
-        pengaturan_btn_cadangkan: "☁️ Backup",
-        pengaturan_btn_pulihkan: "📥 Restore",
-        pengaturan_btn_logout: "🚪 Logout",
-        pengaturan_btn_kembali: "⬅ Back to Dashboard"
-    }
-};
-
-// ==========================================
-// MODUL: MODAL UBAH PROFIL GURU
-// ==========================================
-const langModalUbahProfil = {
-    ID: {
-        ubah_profil_judul: "Ubah Profil Guru",
-        ubah_profil_nama: "Nama Guru:",
-        ubah_profil_nip: "NIP/NIPPPK:",
-        ubah_profil_sekolah: "Asal Sekolah:",
-        ubah_profil_email: "Email:",
-        ubah_profil_username: "Username Login:",
-        ubah_profil_pass: "Kata Sandi (Isi untuk mengubah):",
-        ubah_profil_ph_pass: "Kosongkan jika tidak diubah",
-        ubah_profil_pertanyaan: "Pertanyaan Keamanan:",
-        ubah_profil_jawaban: "Jawaban:",
-        ubah_profil_btn_tutup: "Tutup",
-        ubah_profil_btn_simpan: "Ubah"
-    },
-    EN: {
-        ubah_profil_judul: "Edit Teacher Profile",
-        ubah_profil_nama: "Teacher's Name:",
-        ubah_profil_nip: "NIP/Employee ID:",
-        ubah_profil_sekolah: "School Origin:",
-        ubah_profil_email: "Email:",
-        ubah_profil_username: "Login Username:",
-        ubah_profil_pass: "Password (Fill to change):",
-        ubah_profil_ph_pass: "Leave blank if unchanged",
-        ubah_profil_pertanyaan: "Security Question:",
-        ubah_profil_jawaban: "Answer:",
-        ubah_profil_btn_tutup: "Close",
-        ubah_profil_btn_simpan: "Update"
-    }
-};
-
-// ==========================================
-// MODUL: MODAL CADANGKAN & PULIHKAN DATA
-// ==========================================
-const langModalBackup = {
-    ID: {
-        pengaturan_btn_backup: "☁️ Cadangkan & Pulihkan Data",
-        backup_modal_judul: "☁️ Cadangkan & Pulihkan Data",
-        backup_card_cadang_judul: "📤 Cadangkan Data",
-        backup_card_cadang_desk: "Data diunggah ke Cloud dan file PDF pemulihan otomatis terunduh.",
-        backup_card_pulih_judul: "📥 Pulihkan Data",
-        backup_card_pulih_desk: "Masukkan nama kode dari file PDF kredensial Anda.",
-        backup_label_kode: "Masukan nama kode",
-        backup_label_sandi: "Masukan kata sandi",
-        backup_ph_kode: "Contoh: B_k7X2a",
-        backup_btn_cadang: "☁️ Cadangkan",
-        backup_btn_pulih: "📥 Pulihkan",
-        backup_btn_tutup: "Tutup"
-    },
-    EN: {
-        pengaturan_btn_backup: "☁️ Backup & Restore Data",
-        backup_modal_judul: "☁️ Backup & Restore Data",
-        backup_card_cadang_judul: "📤 Backup Data",
-        backup_card_cadang_desk: "Data uploaded to Cloud and recovery PDF file automatically downloaded.",
-        backup_card_pulih_judul: "📥 Restore Data",
-        backup_card_pulih_desk: "Enter the code name from your credential PDF file.",
-        backup_label_kode: "Enter code name",
-        backup_label_sandi: "Enter password",
-        backup_ph_kode: "Example: B_k7X2a",
-        backup_btn_cadang: "☁️ Backup",
-        backup_btn_pulih: "📥 Restore",
-        backup_btn_tutup: "Close"
-    }
-};
-
-// ==========================================
-// MODUL: PANDUAN APLIKASI (PAGE-PANDUAN)
-// ==========================================
-const langPagePanduan = {
-    ID: {
-        panduan_judul: "Panduan Aplikasi",
-        panduan_subjudul: "Panduan alur penggunaan dan fungsi setiap modul pembelajaran pada aplikasi.",
-        
-        panduan_tujuan_judul: "🎯 1. Tujuan Pembelajaran",
-        panduan_tujuan_desc: "Memuat Capaian Pembelajaran (CP) dan Tujuan Pembelajaran (TP) PJOK keterampilan gerak manipulatif sebagai acuan kurikulum selama proses pembelajaran.",
-
-        panduan_materi_judul: "📚 2. Materi Pembelajaran",
-        panduan_materi_desc: "Menampilkan modul unit materi dan variasi permainan. Masuk ke halaman detail materi untuk membaca instruksi gerak dan menonton video peragaan interaktif.",
-
-        panduan_lembar_judul: "📝 3. Lembar Kerja Guru",
-        panduan_lembar_desc: "Fasilitas penampil PDF (preview) untuk modul ajar dan instrumen lembar kerja. Guru dapat membaca, mempelajari, atau mencetak referensi rubrik kegiatan.",
-
-        panduan_absensi_judul: "📋 4. Manajemen Absensi & Siswa",
-        panduan_absensi_desc: "Pilih kelas untuk mengelola kehadiran siswa pada sesi belajar hari ini (Hadir, Sakit, Izin, Alpa). Anda juga dapat mengelola profil siswa melalui formulir data siswa.",
-
-        panduan_asesmen_judul: "📈 5. Manajemen Asesmen",
-        panduan_asesmen_desc: "Halaman untuk melakukan penilaian observasi gerak secara langsung saat sesi belajar dengan tombol feedback, serta menginput hasil tes akhir siswa.",
-
-        panduan_evaluasi_judul: "📊 6. Hasil dan Laporan",
-        panduan_evaluasi_desc: "Menampilkan rekapitulasi hasil belajar seluruh siswa dalam bentuk tabel dan grafik capaian kelas. Klik nama siswa untuk melihat rincian riwayat nilai dan mengunduh laporan.",
-
-        panduan_pengaturan_judul: "⚙️ 7. Pengaturan & Cloud",
-        panduan_pengaturan_desc: "Kelola profil guru, ubah kata sandi, beralih bahasa antarmuka (ID / EN), dan manfaatkan fitur Cadangkan & Pulihkan data melalui Cloud MQTT agar data aman saat berganti perangkat.",
-
-        panduan_btn_kembali: "⬅ Kembali ke Dasbor"
-    },
-    EN: {
-        panduan_judul: "Application Guide",
-        panduan_subjudul: "Comprehensive guide on workflows and features of each learning module in the application.",
-
-        panduan_tujuan_judul: "🎯 1. Learning Objectives",
-        panduan_tujuan_desc: "Contains Learning Achievements and Objectives for manipulative movement skills as curriculum guidelines during the teaching process.",
-
-        panduan_materi_judul: "📚 2. Learning Materials",
-        panduan_materi_desc: "Displays material units and game variations. Open the detail page to view movement guidelines and watch interactive demonstration videos.",
-
-        panduan_lembar_judul: "📝 3. Teacher Worksheets",
-        panduan_lembar_desc: "Integrated PDF previewer for teaching modules and worksheet instruments. Easily review, study, or print rubric references directly.",
-
-        panduan_absensi_judul: "📋 4. Attendance & Student Management",
-        panduan_absensi_desc: "Select a class to manage daily student attendance (Present, Sick, Permitted, Absent). You can also manage student profiles using the student form.",
-
-        panduan_asesmen_judul: "📈 5. Assessment Management",
-        panduan_asesmen_desc: "Conduct real-time movement observation scoring during active sessions using feedback buttons, and enter final test results for students.",
-
-        panduan_evaluasi_judul: "📊 6. Results and Reports",
-        panduan_evaluasi_desc: "Displays a complete summary of student outcomes with tables and class progress charts. Click a student name to inspect score history and export reports.",
-
-        panduan_pengaturan_judul: "⚙️ 7. Settings & Cloud Sync",
-        panduan_pengaturan_desc: "Manage teacher profile, update credentials, switch language (ID / EN), and backup or restore data via MQTT Cloud to keep records safe across devices.",
-
-        panduan_btn_kembali: "⬅ Back to Dashboard"
-    }
-};
-
-// ==========================================
-// MODUL: MODAL REGISTRASI GURU
-// ==========================================
-const langModalRegistrasi = {
-    ID: {
-        reg_judul: "Registrasi Guru",
-        reg_label_nama: "Nama Lengkap",
-        reg_ph_nama: "Nama Lengkap",
-        reg_label_nip: "NIP (Opsional)",
-        reg_ph_nip: "NIP (Opsional)",
-        reg_label_sekolah: "Asal Sekolah",
-        reg_ph_sekolah: "Asal Sekolah",
-        reg_label_email: "Email",
-        reg_ph_email: "Email",
-        reg_label_username: "Username",
-        reg_ph_username: "Username",
-        reg_label_password: "Kata Sandi",
-        reg_ph_password: "Kata Sandi",
-        reg_label_pertanyaan: "Pertanyaan Keamanan",
-        reg_ph_pertanyaan: "Misal: Siapa nama hewan peliharaan Anda?",
-        reg_label_jawaban: "Jawaban Keamanan",
-        reg_ph_jawaban: "Jawaban Keamanan",
-        reg_btn_batal: "Batal",
-        reg_btn_simpan: "Simpan"
-    },
-    EN: {
-        reg_judul: "Teacher Registration",
-        reg_label_nama: "Full Name",
-        reg_ph_nama: "Full Name",
-        reg_label_nip: "NIP / ID (Optional)",
-        reg_ph_nip: "NIP / ID (Optional)",
-        reg_label_sekolah: "School Origin",
-        reg_ph_sekolah: "School Origin",
-        reg_label_email: "Email",
-        reg_ph_email: "Email",
-        reg_label_username: "Username",
-        reg_ph_username: "Username",
-        reg_label_password: "Password",
-        reg_ph_password: "Password",
-        reg_label_pertanyaan: "Security Question",
-        reg_ph_pertanyaan: "E.g., What is your pet's name?",
-        reg_label_jawaban: "Security Answer",
-        reg_ph_jawaban: "Security Answer",
-        reg_btn_batal: "Cancel",
-        reg_btn_simpan: "Save"
-    }
-};
-
-
-
-const translations = {
-    "ID": {
-        "konfirmasi" : "konfirmasi",
-        "konfirmasi_batal" : "Batal",
-        "global_tutup" : "Tutup",
-
-        // page-home
-        "home_welcome": "Selamat Datang di Aplikasi Dilemators!",
-        "home_desc": "Aplikasi Media Pembelajaran dan Penilaian Keterampilan Gerak Manipulatif",
-        "home_by" : "oleh",
-        "home_btn_enter": "Masuk Aplikasi ➡️",
-        
-        // page-login
-        "login_title": "Masuk Aplikasi",
-        "login_placeholder_user": "Nama Pengguna",
-        "login_placeholder_pass": "Kata Sandi",
-        "login_btn_regis" : "Registrasi",
-        "login_btn_enter": "Masuk",
-        "login_guide": "❓ Panduan Akses / Registrasi",
-        "login_lupa" : "Lupa kata sandi",
-        "login_kembali" : "⬅ Kembali ke awal",
-
-        
-        ...langResetSandi.ID,
-        ...langDashboard.ID,
-        ...langTujuan.ID,
-        ...langPilihKelas.ID,
-        ...langManajemenAbsensi.ID,
-        ...langLembarKerja.ID,
-        ...langPdfPreview.ID,
-        ...langFormSiswa.ID,
-        ...langPanduanSiswa.ID,
-        ...langMateri.ID,
-        ...langAbsenModal.ID,
-        ...langDetailMateri.ID,
-        ...langAsesmen.ID,
-        ...langModalTesAkhir.ID,
-        ...langEvaluasi.ID,
-        ...langPageRincian.ID,
-        ...langModalRiwayat.ID,
-        ...langModalNilai.ID,
-        ...langPagePengaturan.ID,
-        ...langModalUbahProfil.ID,
-        ...langModalBackup.ID,
-        ...langPagePanduan.ID,
-        ...langModalRegistrasi.ID,
-
-        
-        // page-dashboard
-        "dash_menu_tujuan": "Tujuan Pembelajaran",
-        "dash_menu_siswa": "Data Siswa",
-        "dash_menu_absensi": "Manajemen Absensi",
-        "dash_menu_materi": "Materi Pembelajaran",
-        "dash_menu_asesmen": "Manajemen Asesmen",
-        "dash_menu_laporan": "Hasil dan Laporan",
-        "dash_menu_pengaturan": "Pengaturan Akun",
-        "dash_btn_logout": "Keluar"
-    },
-    "EN": {
-        "konfirmasi" : "Confirmation",
-        "konfirmasi_batal" : "Cancel",
-        "global_tutup" : "Close",
-
-        // page-home
-        "home_welcome": "Welcome to Dilemators App!",
-        "home_desc": "Manipulative Movement Skills Learning and Assessment Media Application",
-        "home_by" : "by",
-        "home_btn_enter": "Enter Application ➡️",
-        
-        // page-login
-        "login_title": "Login",
-        "login_placeholder_user": "Username",
-        "login_placeholder_pass": "Password",
-        "login_btn_regis" : "Register",
-        "login_btn_enter": "Login",
-        "login_guide": "❓ Access / Registration Guide",
-        "login_lupa" : "Forgot password",
-        "login_kembali" : "⬅ Back to home",
-
-        
-        ...langResetSandi.EN,
-        ...langDashboard.EN,
-        ...langTujuan.EN,
-        ...langPilihKelas.EN,
-        ...langManajemenAbsensi.EN,
-        ...langLembarKerja.EN,
-        ...langPdfPreview.EN,
-        ...langFormSiswa.EN,
-        ...langPanduanSiswa.EN,
-        ...langPanduanSiswa.EN,
-        ...langMateri.EN,
-        ...langAbsenModal.EN,
-        ...langDetailMateri.EN,
-        ...langAsesmen.EN,
-        ...langModalTesAkhir.EN,
-        ...langEvaluasi.EN,
-        ...langPageRincian.EN,
-        ...langModalRiwayat.EN,
-        ...langModalNilai.EN,
-        ...langPagePengaturan.EN,
-        ...langModalUbahProfil.EN,
-        ...langModalBackup.EN,
-        ...langPagePanduan.EN,
-        ...langModalRegistrasi.EN,
-
-        
-        // page-dashboard
-        "dash_menu_tujuan": "Learning Objectives",
-        "dash_menu_siswa": "Student Data",
-        "dash_menu_absensi": "Attendance Management",
-        "dash_menu_materi": "Learning Materials",
-        "dash_menu_asesmen": "Assessment Management",
-        "dash_menu_laporan": "Results and Reports",
-        "dash_menu_pengaturan": "Account Settings",
-        "dash_btn_logout": "Logout"
-    }
-};
-
-function applyLanguage(langCode) {
-    const dict = translations[langCode] || translations["ID"];
+const dataMateri = [
+  {
+    "id_materi": "M1",
+    "nama_materi": "Memantul",
+    "persiapan": [
+      ["Alat", "Bola karet/bola basket kecil berdiameter ±20–25 cm, dipompa cukup keras."],
+      ["Alat", "Permukaan lantai atau lapangan yang rata dan keras."],
+      ["Area dan pelaksanaan", "Siswa berdiri di satu titik yang ditandai (lingkaran kapur/lakban berdiameter ±1 m)."],
+      ["Aba-aba", "\"Pantulkan bola dengan satu tangan sebanyak empat kali tanpa berpindah tempat, lalu tangkap bolanya.\""],
+      ["Percobaan", "Penilai memberi satu contoh gerak, siswa melakukan 1 kali percobaan latihan (tidak dinilai), lalu 2 kali percobaan yang dinilai (P1 dan P2)."]
+    ],
+    "kriteria_materi": [
+      ["K1", "Menyentuh bola dengan satu tangan kira-kira setinggi pinggang."],
+      ["K2", "Mendorong bola dengan ujung-ujung jari, bukan menepuk dengan telapak tangan."],
+      ["K3", "Menguasai bola minimal 4 pantulan berturut-turut tanpa memindahkan kaki untuk mengejar bola."]
+    ],
+    "tambahan": [
+      ["Penilaian", "Nilai = Skor ÷ 6 × 100 (dibulatkan). Ket.: T = Tuntas (≥ 75) · C = Cukup, ulang tes (70–74) · R = Remedial (< 70)"]
+    ],
+    "permainan": [
+      {
+        "nama_permainan": "Bola Pantul Bumi",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Guru membentuk beberapa barisan dengan jumlah anggota yang sama dengan jarak sekitar 1 meter.",
+          "Guru memberikan instruksi secara lisan tanpa demonstrasi.",
+          "Siswa paling depan memantulkan bola 5 kali, lalu lari di tempat 5 detik.",
+          "Bola dioper ke belakang melalui atas kepala hingga ke anak terakhir.",
+          "Anak terakhir berteriak \"YES!\" lalu semua anggota berlari di tempat."
+        ],
+        "kriteria_lolos" : [
+          "Memantulkan bola ke lantai 5 kali berturut-turut di tempat, bola tetap dekat badan dan tidak lepas.",
+          "Berlari di tempat selama 5 detik setelah memantul, lalu tertib mengikuti urutan tugas.",
+          "Mengoper bola ke teman di belakang melalui atas kepala tanpa bola jatuh.",
+          "Ketiga kriteria terlihat pada minimal 3 dari 5 percobaan.",
+        ],
+        "video": ["memantul_satu_480p_3.mp4"],
+        "level": "Mudah"
+      },
+      {
+        "nama_permainan": "Bola Pantul Zig-Zag",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Guru membentuk barisan dengan jarak antar anak sekitar 2 meter dalam posisi jongkok.",
+          "Guru memberi instruksi tanpa demonstrasi.",
+          "Siswa memantulkan bola sambil berlari zig-zag melewati teman.",
+          "Setelah selesai, siswa bertukar posisi dengan yang jongkok.",
+          "Dilanjutkan secara bergantian."
+        ],
+        "kriteria_lolos": [
+          "Memantulkan bola ke lantai dengan telapak tangan sambil berlari zig-zag melewati semua teman yang berjongkok.",
+          "Bola tetap terkendali (tidak lepas jauh dan tidak menabrak teman) sampai kembali ke garis awal.",
+          "Bertukar posisi dengan teman yang berjongkok dan melanjutkan giliran dengan tertib.",
+          "Ketiga kriteria terlihat pada minimal 3 dari 5 percobaan."
+        ],
+        "video": ["memantul_dua.mp4"],
+        "level": "Sedang"
+      },
+      {
+        "nama_permainan": "Turnamen Bola Pantul",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Guru membagi siswa dalam kelompok kecil.",
+          "Siswa berlatih memantul di tempat, berjalan, dan berpasangan.",
+          "Siswa menyusun strategi menyerang dan bertahan.",
+          "Permainan dimulai dari bola pantul guru di tengah lapangan.",
+          "Siswa memantulkan bola sambil berlari dan mengoper.",
+          "Setiap gol dari bola pantul bernilai 1 poin."
+        ],
+        "kriteria_lolos": [
+          "Memantulkan bola sambil berlari atau berjalan, lalu mengoper ke teman dalam permainan.",
+          "Memasukkan bola ke gawang lawan dengan cara dipantulkan (dari luar garis penalti) atau bertahan sebagai penjaga gawang.",
+          "Bergantian peran penjaga gawang dan penyerang, serta bekerja sama menyusun strategi dengan kelompok.",
+          "Ketiga kriteria terlihat selama pertandingan, minimal pada 3 kali kesempatan bermain."
+        ],
+        "video": ["memantul_tiga.mp4"],
+        "level": "Sulit"
+      }
+    ]
+  },
+  {
+    "id_materi": "M2",
+    "nama_materi": "Menangkap",
+    "persiapan": [
+      ["Alat", "Bola plastik/karet lunak berdiameter ±10 cm."],
+      ["Alat", "Dua garis berjarak ±4,5 m (garis siswa dan garis pelempar)."],
+      ["Area dan pelaksanaan", "Siswa berdiri di belakang garisnya. Penilai atau pelempar melambungkan bola dari bawah (ayunan bawah) ke arah dada siswa."],
+      ["Aba-aba", "\"Tangkap bola dengan kedua tanganmu.\" Lemparan yang meleset jauh dari dada diulang dan tidak dihitung."],
+      ["Percobaan", "Penilai memberi satu contoh gerak, siswa melakukan 1 kali percobaan latihan (tidak dinilai), lalu 2 kali percobaan yang dinilai (P1 dan P2)."]
+    ],
+    "kriteria_materi": [
+      ["K1", "Kedua tangan diposisikan di depan badan dengan siku ditekuk."],
+      ["K2", "Lengan menjulur untuk menyambut bola saat bola datang."],
+      ["K3", "Bola ditangkap dengan tangan saja, tidak dipeluk ke badan."]
+    ],
+    "tambahan": [
+      ["Penilaian", "Nilai = Skor ÷ 6 × 100 (dibulatkan). Ket.: T = Tuntas (≥ 75) · C = Cukup, ulang tes (70–74) · R = Remedial (< 70)"]
+    ],
+    "permainan": [
+      {
+        "nama_permainan": "Menangkap Bola Datar",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Guru membentuk barisan berhadapan dengan jarak 3–5 meter.",
+          "Guru menjelaskan teknik secara lisan tanpa demonstrasi.",
+          "Siswa berlatih menangkap bola datar dari teman.",
+          "Tangan membentuk kantong dan ditarik saat menangkap.",
+          "Siswa yang berhasil membantu temannya.",
+          "Siswa bergantian posisi sebagai pelempar dan penangkap."
+        ],
+        "kriteria_lolos": [
+          "Membentuk tangan seperti \"kantong\" di depan dada saat bola datang.",
+          "Menarik lengan sedikit ke arah badan ketika bola menyentuh telapak tangan untuk meredam laju bola.",
+          "Menangkap bola datar dari teman pada jarak 3–5 meter tanpa bola terpental atau jatuh.",
+          "Ketiga kriteria terlihat pada minimal 3 dari 5 percobaan."
+        ],
+        "video": ["menangkap_satu_720p.mp4"],
+        "level": "Mudah"
+      },
+      {
+        "nama_permainan": "Menangkap Bola Dinamis",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Setiap siswa memegang bola dan menyebar.",
+          "Guru menjelaskan teknik tanpa demonstrasi.",
+          "Siswa melempar bola ke atas dan menangkap sambil berjalan.",
+          "Tingkat kesulitan ditingkatkan bertahap.",
+          "Siswa yang mahir memberi contoh.",
+          "Latihan diulang dan diakhiri evaluasi."
+        ],
+        "kriteria_lolos": [
+          "Melempar bola tenis perlahan ke atas (setinggi dada atau sedikit di atas kepala) dengan satu tangan sambil berjalan maju.",
+          "Menangkap kembali bola dengan dua tangan dan mata mengikuti bola.",
+          "Langkah kaki tetap lancar saat melempar dan menangkap, bola tidak jatuh.",
+          "Ketiga kriteria terlihat pada minimal 3 dari 5 percobaan."
+        ],
+        "video": ["melempar_dua_720p.mp4"],
+        "level": "Sedang"
+      },
+      {
+        "nama_permainan": "Turnamen Lempar Tangkap",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Guru membagi kelompok kecil.",
+          "Siswa berlatih lempar tangkap dan kerja sama tim.",
+          "Siswa melempar bola lambung dalam kelompok.",
+          "Jika gagal menangkap, melakukan loncat.",
+          "Selanjutnya dilakukan turnamen lempar-tangkap.",
+          "Turnamen dilakukan dengan net tali.",
+          "Guru akan memimpin turnamen.",
+          "Poin diberikan jika bola jatuh di area lawan.",
+          "Pemenang ditentukan dari skor terbanyak."
+        ],
+        "kriteria_lolos": [
+          "Menangkap bola lambung dengan sigap, dari teman satu kelompok maupun dari lawan.",
+          "Melambungkan atau melempar bola melewati net tali ke area lawan.",
+          "Mengikuti aturan: memegang bola maksimal 5 detik dan bermain sportif bersama kelompok.",
+          "Ketiga kriteria terlihat selama pertandingan, minimal pada 3 kali kesempatan bermain."
+        ],
+        "video": ["menangkap_tiga.mp4"],
+        "level": "Sulit"
+      }
+    ]
+  },
+  {
+    "id_materi": "M3",
+    "nama_materi": "Menggiring",
     
-    // Translate innerText / innerHTML for elements with data-i18n
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (dict[key]) {
-            el.innerHTML = dict[key];
-        }
-    });
+    "persiapan": [
+      ["Alat", "Bola sepak ukuran kecil (nomor 3–4)."],
+      ["Alat", "5 kerucut, dipasang zig-zag berjarak ±1,5 m."],
+      ["Alat", "Garis start dan garis akhir berjarak ±10 m."],
+      ["Area dan pelaksanaan", "Siswa memulai dari garis start, menggiring bola melewati kerucut secara zig-zag, lalu menghentikan bola di garis akhir dengan telapak kaki."],
+      ["Aba-aba", "Giring bola melewati semua kerucut, lalu hentikan bola di garis akhir dengan telapak kakimu."],
+      ["Percobaan", "Penilai memberi satu contoh gerak, siswa melakukan 1 kali percobaan latihan (tidak dinilai), lalu 2 kali percobaan yang dinilai (P1 dan P2)."]
+    ],
+    "kriteria_materi": [
+      ["K1", "Menyentuh bola dengan kaki bagian dalam atau luar, bukan dengan ujung jari kaki."],
+      ["K2", "Bola tetap dekat dengan kaki (kurang dari satu langkah) selama menggiring."],
+      ["K3", "Pandangan sesekali diangkat ke depan, tidak terus menunduk ke bola."],
+      ["K4", "Mampu berbelok melewati kerucut tanpa kehilangan bola, lalu menghentikan bola dengan telapak kaki."]
+    ],
+    "tambahan": [
+      ["Penilaian", "Nilai = Skor ÷ 8 × 100 (dibulatkan). Ket.: T = Tuntas (≥ 75) · C = Cukup, ulang tes (70–74) · R = Remedial (< 70)"]
+    ],
 
-    // Translate placeholders for elements with data-i18n-placeholder
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-        const key = el.getAttribute('data-i18n-placeholder');
-        if (dict[key]) {
-            el.setAttribute('placeholder', dict[key]);
-        }
-    });
-}
+    "permainan": [
+      {
+        "nama_permainan": "Menggiring Kaki Luar",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Guru membagi kelompok dan membuat dua barisan berhadapan.",
+          "Guru menjelaskan tujuan dan memberi kesempatan demonstrasi siswa.",
+          "Siswa menggiring bola dengan kaki luar ke barisan depan.",
+          "Memberi bola ke teman dan berpindah barisan.",
+          "Dilakukan bergantian.",
+          "Guru memimpin refleksi."
+        ],
+        "kriteria_lolos": [
+          "Menggiring bola dengan kaki bagian luar sambil berjalan atau berlari kecil.",
+          "Bola tetap dekat kaki di setiap langkah (tidak menjauh dari tubuh).",
+          "Sampai di depan teman seberang dan memberikan bola dengan kontrol pelan, lalu berpindah ke barisan belakang.",
+          "Ketiga kriteria terlihat pada minimal 3 dari 5 percobaan."
+        ],
+        "video": ["menggiring_satu_480p.mp4"],
+        "level": "Mudah"
+      },
+      {
+        "nama_permainan": "Menggiring Zig-Zag",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Guru menyiapkan rintangan zig-zag.",
+          "Guru menjelaskan tujuan latihan.",
+          "Siswa menggiring bola melewati rintangan.",
+          "Menggunakan kombinasi kaki luar dan dalam.",
+          "Memberi bola ke teman dan kembali ke barisan.",
+          "Guru memimpin refleksi."
+        ],
+        "kriteria_lolos": [
+          "Menggiring bola melewati semua rintangan berliku (jarak 1–2 meter) tanpa menjatuhkan atau menyentuh rintangan.",
+          "Memakai kaki bagian luar dan dalam sehingga bola tetap terkontrol saat berbelok.",
+          "Di ujung lintasan, memberikan operan terkontrol ke teman berikutnya, lalu berpindah ke barisan belakang.",
+          "Ketiga kriteria terlihat pada minimal 3 dari 5 percobaan."
+        ],
+        "video": ["menggiring_dua.mp4"],
+        "level": "Sedang"
+      },
+      {
+        "nama_permainan": "Menggiring Melewati Lawan",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Guru membagi siswa dalam kelompok dengan peran penggiring dan lawan.",
+          "Guru menjelaskan tujuan latihan.",
+          "Siswa menggiring bola menuju lawan.",
+          "Melakukan gerak tipu untuk melewati lawan.",
+          "Memberi bola ke teman dan bertukar peran.",
+          "Guru memimpin refleksi."
+        ],
+        "kriteria_lolos": [
+          "Mendekati lawan, lalu melakukan gerak tipu atau mengubah arah giringan dengan cepat.",
+          "Melewati lawan tanpa kehilangan kontrol bola (bola tidak terebut atau terlepas jauh).",
+          "Memberikan bola ke teman seberang dengan kontrol pelan dan bergantian peran sebagai penggiring dan lawan.",
+          "Ketiga kriteria terlihat selama pertandingan, minimal pada 3 kali kesempatan bermain."
+        ],
+        "video": ["menggiring_tiga.mp4"],
+        "level": "Sulit"
+      }
+    ]
+  },
+  {
+    "id_materi": "M4",
+    "nama_materi": "Menendang",
+    "persiapan": [
+      ["Alat", "Bola sepak ukuran kecil (nomor 3–4) atau bola plastik berdiameter ±20–25 cm."],
+      ["Alat", "Penanda posisi bola, garis awalan ±3 m di belakang bola, dan dinding/sasaran ±6 m di depan bola."],
+      ["Area dan pelaksanaan", "Bola diletakkan diam di tanah. Siswa berdiri di garis awalan, lalu berlari dan menendang bola sekeras mungkin ke arah dinding/sasaran."],
+      ["Aba-aba", "\"Larilah ke arah bola dan tendang bola sekeras mungkin ke arah dinding.\""],
+      ["Percobaan", "Penilai memberi satu contoh gerak, siswa melakukan 1 kali percobaan latihan (tidak dinilai), lalu 2 kali percobaan yang dinilai (P1 dan P2)."]
+    ],
+    "kriteria_materi": [
+      ["K1", "Melakukan awalan lari yang cepat dan tidak terputus menuju bola."],
+      ["K2", "Melakukan langkah panjang atau loncatan kecil tepat sebelum menyentuh bola."],
+      ["K3", "Kaki tumpu diletakkan dekat dengan bola."],
+      ["K4", "Menendang bola dengan punggung kaki atau kaki bagian dalam, bukan dengan ujung jari kaki."]
+    ],
+    "tambahan": [
+      ["Penilaian", "Nilai = Skor ÷ 8 × 100 (dibulatkan). Ket.: T = Tuntas (≥ 75) · C = Cukup, ulang tes (70–74) · R = Remedial (< 70)"]
+    ],
+    "permainan": [
+      {
+        "nama_permainan": "Menendang Bola Dalam",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Guru membentuk barisan berhadapan.",
+          "Guru menjelaskan teknik tanpa demonstrasi.",
+          "Siswa menendang bola ke teman.",
+          "Penerima mengontrol dan mengembalikan bola.",
+          "Siswa saling membantu."
+        ],
+        "kriteria_lolos": [
+          "Menendang bola dengan kaki bagian dalam dari posisi berdiri tanpa awalan.",
+          "Bola mengarah ke teman yang berada tepat di depan (jarak sekitar 4 meter).",
+          "Menghentikan atau mengontrol bola yang diterima dengan kaki bagian dalam sebelum menendangnya kembali.",
+          "Ketiga kriteria terlihat pada minimal 3 dari 5 percobaan."
+        ],
+        "video": ["menendang_satu_720p.mp4"],
+        "level": "Mudah"
+      },
+      {
+        "nama_permainan": "Menendang Segitiga Bermuda",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Guru membentuk formasi segitiga.",
+          "Guru menjelaskan teknik tanpa demonstrasi.",
+          "Siswa mengoper bola pola segitiga.",
+          "Siswa depan menendang ke target.",
+          "Siswa berpindah kelompok.",
+          "Yang gagal membantu merapikan target."
+        ],
+        "kriteria_lolos": [
+          "Menendang bola dengan kaki bagian dalam dengan awalan langkah.",
+          "Mengoper bola mengikuti pola segitiga antar kelompok sebelum menembak ke target.",
+          "Mengarahkan tendangan ke target cone (jarak sekitar 4 meter), tendangan mengenai atau merobohkan target.",
+          "Ketiga kriteria terlihat pada minimal 3 dari 5 percobaan."
+        ],
+        "video": ["menendang_dua_720p.mp4"],
+        "level": "Sedang"
+      },
+      {
+        "nama_permainan": "Turnamen Lempar Tendang",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Guru membagi kelompok kecil.",
+          "Siswa berlatih lempar dan tendang.",
+          "Kompetisi antar kelompok dimulai.",
+          "Jika bola jatuh di area, berpindah ke lawan.",
+          "Jika keluar area, lawan mencoba mengenai penendang.",
+          "Poin diberikan jika penendang selamat.",
+          "Pemenang ditentukan dari poin."
+        ],
+        "kriteria_lolos": [
+          "Melempar bola sendiri, lalu menendangnya (lempar-tendang) keluar dari area throw kick.",
+          "Sebagai penendang: sampai ke patok sasaran tanpa terkena bola lawan. Sebagai penjaga: menangkap bola lalu menendang ke arah kaki penendang.",
+          "Mengikuti aturan permainan dan bergantian tendangan dengan anggota kelompok.",
+          "Ketiga kriteria terlihat selama pertandingan, minimal pada 3 kali kesempatan bermain."
+        ],
+        "video": ["menendang_tiga_2.mp4"],
+        "level": "Sulit"
+      }
+    ]
+  },
+  {
+    "id_materi": "M5",
+    "nama_materi": "Memukul",
+    
+    "persiapan": [
+      ["Alat", "Pemukul plastik ringan (atau pemukul kasti)."],
+      ["Alat", "Bola plastik/karet berdiameter ±10 cm."],
+      ["Alat", "Tiang penyangga bola (tee/kerucut tinggi) setinggi pinggang siswa."],
+      ["Area dan pelaksanaan", "Bola diletakkan di atas tiang setinggi pinggang siswa. Siswa berdiri menyamping di samping tiang dan memukul bola sekeras mungkin lurus ke depan."],
+      ["Aba-aba", "\"Pukul bola sekeras mungkin lurus ke depan.\""],
+      ["Percobaan", "Penilai memberi satu contoh gerak, siswa melakukan 1 kali percobaan latihan (tidak dinilai), lalu 2 kali percobaan yang dinilai (P1 dan P2)."]
+    ],
+    "kriteria_materi": [
+      ["K1", "Tangan yang dominan memegang pemukul di atas tangan yang tidak dominan."],
+      ["K2", "Sisi pinggul dan bahu yang tidak dominan menghadap arah pukulan, kedua kaki sejajar."],
+      ["K3", "Pinggul dan bahu berputar saat mengayunkan pemukul."],
+      ["K4", "Melangkah dengan kaki yang tidak dominan ke arah pukulan."],
+      ["K5", "Bola terpukul lurus ke depan."]
+    ],
+    "tambahan": [
+      ["Penilaian", "Nilai = Skor ÷ 10 × 100 (dibulatkan). Ket.: T = Tuntas (≥ 75) · C = Cukup, ulang tes (70–74) · R = Remedial (< 70)"]
+    ],
+    "permainan": [
+      {
+        "nama_permainan": "Memukul Bola Statis Bawah",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Membuat barisan berhadapan.",
+          "Guru menjelaskan gerakan.",
+          "Siswa memukul bola statis di bawah dengan dua tangan.",
+          "Dilakukan bergantian.",
+          "Siswa kembali ke belakang barisan."
+        ],
+        "kriteria_lolos": [
+          "Memegang pemukul dengan dua tangan dan memukul bola yang diam di lantai.",
+          "Pemukul mengenai bola sehingga bola bergerak ke depan.",
+          "Setelah memukul, berlari ke belakang barisan dan bergantian dengan teman secara tertib.",
+          "Ketiga kriteria terlihat pada minimal 3 dari 5 percobaan."
+        ],
+        "video": ["memukul_satu_720p.mp4"],
+        "level": "Mudah"
+      },
+      {
+        "nama_permainan": "Memukul Bola Pantul",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Membuat barisan berhadapan.",
+          "Guru menjelaskan gerakan.",
+          "Siswa memantulkan bola lalu memukul saat naik.",
+          "Berjalan maju sambil mengulang.",
+          "Setelah selesai kembali ke barisan."
+        ],
+        "kriteria_lolos": [
+          "Memegang bola di satu tangan dan pemukul di tangan lain.",
+          "Memantulkan bola ke lantai, lalu memukulnya saat bola memantul naik.",
+          "Mengulangi gerakan sambil berjalan maju sampai ujung lintasan, lalu kembali dan menyerahkan peralatan ke teman berikutnya.",
+          "Ketiga kriteria terlihat pada minimal 3 dari 5 percobaan."
+        ],
+        "video": ["memukul_dua_480p.mp4"],
+        "level": "Sedang"
+      },
+      {
+        "nama_permainan": "Memukul Bola Melambung",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Guru membagi kelompok atau pasangan.",
+          "Guru menjelaskan tujuan.",
+          "Pelempar melempar bola melambung.",
+          "Pemukul memukul bola.",
+          "Siswa berganti peran."
+        ],
+        "kriteria_lolos": [
+          "Sebagai pelempar: memberikan bola dengan ayunan bawah sehingga melambung dengan kecepatan sedang ke area pukul teman.",
+          "Sebagai pemukul: memukul bola melambung dengan tongkat hingga bola melambung jauh ke depan.",
+          "Bergantian peran (pelempar, pemukul, pengambil bola) dengan tertib.",
+          "Ketiga kriteria terlihat selama pertandingan, minimal pada 3 kali kesempatan bermain."
+        ],
+        "video": ["memukul_tiga.mp4"],
+        "level": "Sulit"
+      }
+    ]
+  },
+  {
+    "id_materi": "M6",
+    "nama_materi": "Melempar",
+    "persiapan": [
+      ["Alat", "Bola tenis atau bola karet kecil berdiameter ±6–7 cm."],
+      ["Alat", "Garis lempar berjarak ±6 m dari dinding."],
+      ["Area dan pelaksanaan", "Siswa berdiri di belakang garis lempar menghadap dinding, lalu melempar bola sekeras mungkin dengan ayunan dari atas."],
+      ["Aba-aba", "\"Lempar bola sekeras mungkin ke arah dinding dengan ayunan tangan dari atas.\""],
+      ["Percobaan", "Penilai memberi satu contoh gerak, siswa melakukan 1 kali percobaan latihan (tidak dinilai), lalu 2 kali percobaan yang dinilai (P1 dan P2)."]
+    ],
+    "kriteria_materi": [
+      ["K1", "Ayunan dimulai dengan gerakan tangan dan lengan ke arah bawah."],
+      ["K2", "Pinggul dan bahu berputar sampai sisi tubuh yang tidak melempar menghadap dinding."],
+      ["K3", "Melangkah dengan kaki yang berlawanan dengan tangan pelempar ke arah dinding."],
+      ["K4", "Tangan pelempar melanjutkan gerakan setelah bola lepas, menyilang badan ke arah pinggul sisi yang tidak melempar."]
+    ],
+    "tambahan": [
+      ["Penilaian", "Nilai = Skor ÷ 8 × 100 (dibulatkan). Ket.: T = Tuntas (≥ 75) · C = Cukup, ulang tes (70–74) · R = Remedial (< 70)"]
+    ],
+
+    "permainan": [
+      {
+        "nama_permainan": "Melempar Bola Statis",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Setiap siswa memegang 3 bola.",
+          "Guru membagi kelompok pelempar dan penangkap.",
+          "Guru menjelaskan tanpa demonstrasi.",
+          "Siswa melempar dengan variasi teknik.",
+          "Dilakukan dalam posisi statis.",
+          "Setelah selesai membantu mengambil bola."
+        ],
+        "kriteria_lolos": [
+          "Melempar dalam posisi statis (berdiri tegak di tempat tanpa melangkah), kekuatan dari bahu dan lengan.",
+          "Mencoba teknik lemparan yang berbeda pada tiap bola (atas kepala, samping, bawah) dari 3 bola.",
+          "Bola mengarah ke area sasaran; setelah itu membantu mengambil bola lewat jalur samping dan kembali ke barisan belakang.",
+          "Ketiga kriteria terlihat pada minimal 3 dari 5 percobaan."
+        ],
+        "video": ["melempar_satu_480p.mp4"],
+        "level": "Mudah"
+      },
+      {
+        "nama_permainan": "Melempar Bola Lambung",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Guru membentuk kelompok.",
+          "Guru menjelaskan tanpa demonstrasi.",
+          "Siswa melempar bola melambung.",
+          "Dilakukan dari posisi statis.",
+          "Siswa kembali ke barisan."
+        ],
+        "kriteria_lolos": [
+          "Melempar bola dengan lintasan melambung berbentuk parabola ke arah atas.",
+          "Melempar dari posisi tanpa langkah atau kuda-kuda yang stabil, kekuatan dari bahu dan lengan.",
+          "Setelah melempar, kembali ke barisan lewat jalur samping dan bergantian dengan teman secara tertib.",
+          "Ketiga kriteria terlihat pada minimal 3 dari 5 percobaan."
+        ],
+        "video": ["melempar_dua.mp4"],
+        "level": "Sedang"
+      },
+      {
+        "nama_permainan": "Lempar Poin",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Guru membentuk kelompok kecil.",
+          "Guru menjelaskan tujuan.",
+          "Siswa berlatih lempar datar melewati tali.",
+          "Poin diberikan jika berhasil.",
+          "Kompetisi antar kelompok dilakukan.",
+          "Kelompok dengan poin terbanyak menang."
+        ],
+        "kriteria_lolos": [
+          "Melempar bola secara datar (tidak melambung) ke sasaran.",
+          "Bola melewati ruang tengah di antara dua bentangan tali, dan tidak tertangkap lawan sehingga menghasilkan poin.",
+          "Mengikuti aturan \"pindah bola\" saat bola tertangkap dan bermain sportif bersama kelompok.",
+          "Ketiga kriteria terlihat selama pertandingan, minimal pada 3 kali kesempatan bermain."
+        ],
+        "video": ["melempar_tiga.mp4"],
+        "level": "Sulit"
+      }
+    ]
+  }
+];
+
+const dataMateri_EN = [
+  {
+    "id_materi": "M1",
+    "nama_materi": "Bouncing",
+    "persiapan": [
+      ["Equipment", "Rubber ball/small basketball with a diameter of ±20–25 cm, pumped quite hard."],
+      ["Equipment", "Flat and hard floor or court surface."],
+      ["Area and execution", "Students stand on a marked spot (chalk/duct tape circle with a diameter of ±1 m)."],
+      ["Command", "\"Bounce the ball with one hand four times without moving from your spot, then catch the ball.\""],
+      ["Trials", "The assessor gives one movement example, the student performs 1 practice trial (not graded), then 2 graded trials (T1 and T2)."]
+    ],
+    "kriteria_materi": [
+      ["K1", "Touching the ball with one hand at about waist height."],
+      ["K2", "Pushing the ball with fingertips, not slapping it with the palm."],
+      ["K3", "Controlling the ball for at least 4 consecutive bounces without moving the feet to chase the ball."]
+    ],
+    "tambahan": [
+      ["Assessment", "Score = Points ÷ 6 × 100 (rounded). Note: P = Passed (≥ 75) · S = Sufficient, retake test (70–74) · R = Remedial (< 70)"]
+    ],
+    "permainan": [
+      {
+        "nama_permainan": "Earth Bounce Ball",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "The teacher forms several lines with the same number of members at a distance of about 1 meter.",
+          "The teacher gives verbal instructions without demonstration.",
+          "The first student bounces the ball 5 times, then runs in place for 5 seconds.",
+          "The ball is passed backward over the head to the last child.",
+          "The last child shouts \"YES!\" then all members run in place."
+        ],
+        "kriteria_lolos" : [
+          "Bouncing the ball to the floor 5 times consecutively in place, the ball remains close to the body and does not slip away.",
+          "Running in place for 5 seconds after bouncing, then following the task order in an orderly manner.",
+          "Passing the ball to the friend behind over the head without dropping it.",
+          "All three criteria are seen in at least 3 out of 5 trials."
+        ],
+        "video": ["memantul_satu_480p_3.mp4"],
+        "level": "Easy"
+      },
+      {
+        "nama_permainan": "Zig-Zag Bounce Ball",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "The teacher forms a line with a distance between children of about 2 meters in a squatting position.",
+          "The teacher gives instructions without demonstration.",
+          "Students bounce the ball while running zig-zag past their friends.",
+          "After finishing, students swap positions with those squatting.",
+          "Continued alternately."
+        ],
+        "kriteria_lolos": [
+          "Bouncing the ball to the floor with the palm while running zig-zag past all squatting friends.",
+          "The ball remains under control (does not bounce far away and does not hit friends) until returning to the starting line.",
+          "Swapping positions with the squatting friend and continuing the turn in an orderly manner.",
+          "All three criteria are seen in at least 3 out of 5 trials."
+        ],
+        "video": ["memantul_dua.mp4"],
+        "level": "Medium"
+      },
+      {
+        "nama_permainan": "Bounce Ball Tournament",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "The teacher divides students into small groups.",
+          "Students practice bouncing in place, walking, and in pairs.",
+          "Students arrange attacking and defending strategies.",
+          "The game starts with a ball bounce from the teacher in the middle of the court.",
+          "Students bounce the ball while running and passing.",
+          "Every goal from a bounced ball is worth 1 point."
+        ],
+        "kriteria_lolos": [
+          "Bouncing the ball while running or walking, then passing it to a friend in the game.",
+          "Putting the ball into the opponent's goal by bouncing it (from outside the penalty area) or defending as a goalkeeper.",
+          "Alternating roles between goalkeeper and attacker, and cooperating to arrange strategies with the group.",
+          "All three criteria are seen during the match, on at least 3 playing opportunities."
+        ],
+        "video": ["memantul_tiga.mp4"],
+        "level": "Hard"
+      }
+    ]
+  },
+  {
+    "id_materi": "M2",
+    "nama_materi": "Catching",
+    "persiapan": [
+      ["Equipment", "Plastic/soft rubber ball with a diameter of ±10 cm."],
+      ["Equipment", "Two lines at a distance of ±4.5 m (student line and thrower line)."],
+      ["Area and execution", "The student stands behind their line. The assessor or thrower tosses the ball from below (underhand swing) towards the student's chest."],
+      ["Command", "\"Catch the ball with both hands.\" Throws that miss far from the chest are repeated and not counted."],
+      ["Trials", "The assessor gives one movement example, the student performs 1 practice trial (not graded), then 2 graded trials (T1 and T2)."]
+    ],
+    "kriteria_materi": [
+      ["K1", "Both hands are positioned in front of the body with elbows bent."],
+      ["K2", "Arms extend to greet the ball as it approaches."],
+      ["K3", "The ball is caught with hands only, not hugged to the body."]
+    ],
+    "tambahan": [
+      ["Assessment", "Score = Points ÷ 6 × 100 (rounded). Note: P = Passed (≥ 75) · S = Sufficient, retake test (70–74) · R = Remedial (< 70)"]
+    ],
+    "permainan": [
+      {
+        "nama_permainan": "Flat Ball Catch",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "The teacher forms lines facing each other at a distance of 3–5 meters.",
+          "The teacher explains the technique verbally without demonstration.",
+          "Students practice catching flat balls from a friend.",
+          "Hands form a pocket and are pulled back when catching.",
+          "Successful students help their friends.",
+          "Students alternate positions as thrower and catcher."
+        ],
+        "kriteria_lolos": [
+          "Forming hands like a \"pocket\" in front of the chest when the ball approaches.",
+          "Pulling the arms slightly towards the body when the ball touches the palms to absorb the ball's pace.",
+          "Catching a flat ball from a friend at a distance of 3–5 meters without the ball bouncing off or dropping.",
+          "All three criteria are seen in at least 3 out of 5 trials."
+        ],
+        "video": ["menangkap_satu_720p.mp4"],
+        "level": "Easy"
+      },
+      {
+        "nama_permainan": "Dynamic Ball Catch",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Each student holds a ball and spreads out.",
+          "The teacher explains the technique without demonstration.",
+          "Students throw the ball up and catch it while walking.",
+          "The difficulty level is gradually increased.",
+          "Proficient students give examples.",
+          "The exercise is repeated and ends with an evaluation."
+        ],
+        "kriteria_lolos": [
+          "Throwing a tennis ball slowly upwards (chest-high or slightly above the head) with one hand while walking forward.",
+          "Catching the ball back with two hands, with eyes following the ball.",
+          "Footsteps remain smooth while throwing and catching, the ball does not drop.",
+          "All three criteria are seen in at least 3 out of 5 trials."
+        ],
+        "video": ["melempar_dua_720p.mp4"],
+        "level": "Medium"
+      },
+      {
+        "nama_permainan": "Throw and Catch Tournament",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "The teacher divides students into small groups.",
+          "Students practice throwing, catching, and teamwork.",
+          "Students throw lob balls within the group.",
+          "If they fail to catch, they perform a jump.",
+          "Next, a throw-and-catch tournament is held.",
+          "The tournament is played with a rope net.",
+          "The teacher leads the tournament.",
+          "A point is awarded if the ball drops in the opponent's area.",
+          "The winner is determined by the highest score."
+        ],
+        "kriteria_lolos": [
+          "Catching lob balls alertly, both from group mates and opponents.",
+          "Tossing or throwing the ball over the rope net into the opponent's area.",
+          "Following rules: holding the ball for a maximum of 5 seconds and playing sportively with the group.",
+          "All three criteria are seen during the match, on at least 3 playing opportunities."
+        ],
+        "video": ["menangkap_tiga.mp4"],
+        "level": "Hard"
+      }
+    ]
+  },
+  {
+    "id_materi": "M3",
+    "nama_materi": "Dribbling",
+    "persiapan": [
+      ["Equipment", "Small sized soccer ball (size 3–4)."],
+      ["Equipment", "5 cones, placed zig-zag with a distance of ±1.5 m."],
+      ["Equipment", "Start and finish lines at a distance of ±10 m."],
+      ["Area and execution", "The student starts from the starting line, dribbles the ball past the cones in a zig-zag manner, then stops the ball at the finish line with the sole of the foot."],
+      ["Command", "\"Dribble the ball past all the cones, then stop the ball at the finish line with the sole of your foot.\""],
+      ["Trials", "The assessor gives one movement example, the student performs 1 practice trial (not graded), then 2 graded trials (T1 and T2)."]
+    ],
+    "kriteria_materi": [
+      ["K1", "Touching the ball with the inside or outside of the foot, not with the toe."],
+      ["K2", "The ball remains close to the feet (less than one step) while dribbling."],
+      ["K3", "Looking forward occasionally, not constantly looking down at the ball."],
+      ["K4", "Able to turn past the cones without losing the ball, then stopping the ball with the sole of the foot."]
+    ],
+    "tambahan": [
+      ["Assessment", "Score = Points ÷ 8 × 100 (rounded). Note: P = Passed (≥ 75) · S = Sufficient, retake test (70–74) · R = Remedial (< 70)"]
+    ],
+    "permainan": [
+      {
+        "nama_permainan": "Outside Foot Dribbling",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "The teacher divides groups and makes two facing lines.",
+          "The teacher explains the objective and gives a chance for student demonstration.",
+          "Students dribble the ball with the outside of the foot to the front line.",
+          "Pass the ball to a friend and switch lines.",
+          "Done alternately.",
+          "The teacher leads reflection."
+        ],
+        "kriteria_lolos": [
+          "Dribbling the ball with the outside of the foot while walking or lightly running.",
+          "The ball stays close to the feet at every step (does not move far from the body).",
+          "Arriving in front of the friend opposite and passing the ball with a soft touch, then moving to the back line.",
+          "All three criteria are seen in at least 3 out of 5 trials."
+        ],
+        "video": ["menggiring_satu_480p.mp4"],
+        "level": "Easy"
+      },
+      {
+        "nama_permainan": "Zig-Zag Dribbling",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "The teacher prepares zig-zag obstacles.",
+          "The teacher explains the training objective.",
+          "Students dribble the ball past the obstacles.",
+          "Using a combination of outside and inside foot.",
+          "Pass the ball to a friend and return to the line.",
+          "The teacher leads reflection."
+        ],
+        "kriteria_lolos": [
+          "Dribbling the ball past all winding obstacles (1-2 meters apart) without knocking down or touching them.",
+          "Using the outside and inside of the foot so the ball remains controlled when turning.",
+          "At the end of the track, giving a controlled pass to the next friend, then moving to the back line.",
+          "All three criteria are seen in at least 3 out of 5 trials."
+        ],
+        "video": ["menggiring_dua.mp4"],
+        "level": "Medium"
+      },
+      {
+        "nama_permainan": "Dribbling Past Opponents",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "The teacher divides students into groups with roles as dribblers and opponents.",
+          "The teacher explains the training objective.",
+          "Students dribble the ball towards the opponent.",
+          "Perform a feint to get past the opponent.",
+          "Pass the ball to a friend and swap roles.",
+          "The teacher leads reflection."
+        ],
+        "kriteria_lolos": [
+          "Approaching the opponent, then performing a feint or changing dribbling direction quickly.",
+          "Getting past the opponent without losing ball control (ball is not stolen or kicked far away).",
+          "Passing the ball to the opposite friend with a soft touch and alternating roles as dribbler and opponent.",
+          "All three criteria are seen during the match, on at least 3 playing opportunities."
+        ],
+        "video": ["menggiring_tiga.mp4"],
+        "level": "Hard"
+      }
+    ]
+  },
+  {
+    "id_materi": "M4",
+    "nama_materi": "Kicking",
+    "persiapan": [
+      ["Equipment", "Small sized soccer ball (size 3–4) or plastic ball with a diameter of ±20–25 cm."],
+      ["Equipment", "Ball position marker, start line ±3 m behind the ball, and wall/target ±6 m in front of the ball."],
+      ["Area and execution", "The ball is placed still on the ground. The student stands at the start line, then runs and kicks the ball as hard as possible towards the wall/target."],
+      ["Command", "\"Run towards the ball and kick the ball as hard as possible towards the wall.\""],
+      ["Trials", "The assessor gives one movement example, the student performs 1 practice trial (not graded), then 2 graded trials (T1 and T2)."]
+    ],
+    "kriteria_materi": [
+      ["K1", "Performing a fast and uninterrupted run-up towards the ball."],
+      ["K2", "Taking a long step or short hop right before touching the ball."],
+      ["K3", "The plant foot is placed close to the ball."],
+      ["K4", "Kicking the ball with the instep or inside of the foot, not with the toe."]
+    ],
+    "tambahan": [
+      ["Assessment", "Score = Points ÷ 8 × 100 (rounded). Note: P = Passed (≥ 75) · S = Sufficient, retake test (70–74) · R = Remedial (< 70)"]
+    ],
+    "permainan": [
+      {
+        "nama_permainan": "Inside Foot Kick",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "The teacher forms facing lines.",
+          "The teacher explains the technique without demonstration.",
+          "Students kick the ball to a friend.",
+          "The receiver controls and returns the ball.",
+          "Students help each other."
+        ],
+        "kriteria_lolos": [
+          "Kicking the ball with the inside of the foot from a standing position without a run-up.",
+          "The ball is directed to a friend directly in front (distance of about 4 meters).",
+          "Stopping or controlling the received ball with the inside of the foot before kicking it back.",
+          "All three criteria are seen in at least 3 out of 5 trials."
+        ],
+        "video": ["menendang_satu_720p.mp4"],
+        "level": "Easy"
+      },
+      {
+        "nama_permainan": "Bermuda Triangle Kick",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "The teacher forms a triangle formation.",
+          "The teacher explains the technique without demonstration.",
+          "Students pass the ball in a triangle pattern.",
+          "The front student kicks to the target.",
+          "Students change groups.",
+          "Those who fail help tidy up the targets."
+        ],
+        "kriteria_lolos": [
+          "Kicking the ball with the inside of the foot with a run-up.",
+          "Passing the ball following the triangle pattern between groups before shooting at the target.",
+          "Directing the kick to the target cone (distance of about 4 meters), the kick hits or knocks down the target.",
+          "All three criteria are seen in at least 3 out of 5 trials."
+        ],
+        "video": ["menendang_dua_720p.mp4"],
+        "level": "Medium"
+      },
+      {
+        "nama_permainan": "Throw and Kick Tournament",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "The teacher divides students into small groups.",
+          "Students practice throwing and kicking.",
+          "Competition between groups begins.",
+          "If the ball drops in the area, possession moves to the opponent.",
+          "If it goes out of bounds, the opponent tries to hit the kicker.",
+          "Points are given if the kicker is safe.",
+          "The winner is determined by points."
+        ],
+        "kriteria_lolos": [
+          "Throwing the ball to oneself, then kicking it (throw-kick) out of the throw kick area.",
+          "As a kicker: reaching the target pole without getting hit by the opponent's ball. As a guard: catching the ball and kicking it towards the kicker's legs.",
+          "Following the rules of the game and alternating kicks with group members.",
+          "All three criteria are seen during the match, on at least 3 playing opportunities."
+        ],
+        "video": ["menendang_tiga_2.mp4"],
+        "level": "Hard"
+      }
+    ]
+  },
+  {
+    "id_materi": "M5",
+    "nama_materi": "Striking",
+    "persiapan": [
+      ["Equipment", "Light plastic bat (or baseball/rounders bat)."],
+      ["Equipment", "Plastic/rubber ball with a diameter of ±10 cm."],
+      ["Equipment", "Ball batting tee (high cone) at the student's waist height."],
+      ["Area and execution", "The ball is placed on a tee at the student's waist height. The student stands sideways next to the tee and hits the ball as hard as possible straight forward."],
+      ["Command", "\"Hit the ball as hard as possible straight forward.\""],
+      ["Trials", "The assessor gives one movement example, the student performs 1 practice trial (not graded), then 2 graded trials (T1 and T2)."]
+    ],
+    "kriteria_materi": [
+      ["K1", "The dominant hand holds the bat above the non-dominant hand."],
+      ["K2", "The non-dominant side of the hip and shoulder faces the hitting direction, both feet are parallel."],
+      ["K3", "The hips and shoulders rotate while swinging the bat."],
+      ["K4", "Stepping with the non-dominant foot towards the hitting direction."],
+      ["K5", "The ball is hit straight forward."]
+    ],
+    "tambahan": [
+      ["Assessment", "Score = Points ÷ 10 × 100 (rounded). Note: P = Passed (≥ 75) · S = Sufficient, retake test (70–74) · R = Remedial (< 70)"]
+    ],
+    "permainan": [
+      {
+        "nama_permainan": "Low Static Ball Hitting",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Create facing lines.",
+          "The teacher explains the movement.",
+          "Students hit a static ball below with two hands.",
+          "Done alternately.",
+          "Students return to the back of the line."
+        ],
+        "kriteria_lolos": [
+          "Holding the bat with two hands and hitting a ball resting on the floor.",
+          "The bat hits the ball so it moves forward.",
+          "After hitting, running to the back of the line and alternating with friends in an orderly manner.",
+          "All three criteria are seen in at least 3 out of 5 trials."
+        ],
+        "video": ["memukul_satu_720p.mp4"],
+        "level": "Easy"
+      },
+      {
+        "nama_permainan": "Bouncing Ball Hitting",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Create facing lines.",
+          "The teacher explains the movement.",
+          "Students bounce the ball then hit it as it rises.",
+          "Walk forward while repeating.",
+          "After finishing, return to the line."
+        ],
+        "kriteria_lolos": [
+          "Holding the ball in one hand and the bat in the other.",
+          "Bouncing the ball to the floor, then hitting it as the ball bounces up.",
+          "Repeating the movement while walking forward to the end of the track, then returning and handing the equipment to the next friend.",
+          "All three criteria are seen in at least 3 out of 5 trials."
+        ],
+        "video": ["memukul_dua_480p.mp4"],
+        "level": "Medium"
+      },
+      {
+        "nama_permainan": "Lob Ball Hitting",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "The teacher divides students into groups or pairs.",
+          "The teacher explains the objective.",
+          "The thrower throws a lob ball.",
+          "The hitter hits the ball.",
+          "Students swap roles."
+        ],
+        "kriteria_lolos": [
+          "As a thrower: delivering the ball with an underhand swing so it lobs at a medium speed into the friend's hitting area.",
+          "As a hitter: hitting the lobbed ball with a bat so it flies far forward.",
+          "Alternating roles (thrower, hitter, ball retriever) in an orderly manner.",
+          "All three criteria are seen during the match, on at least 3 playing opportunities."
+        ],
+        "video": ["memukul_tiga.mp4"],
+        "level": "Hard"
+      }
+    ]
+  },
+  {
+    "id_materi": "M6",
+    "nama_materi": "Throwing",
+    "persiapan": [
+      ["Equipment", "Tennis ball or small rubber ball with a diameter of ±6–7 cm."],
+      ["Equipment", "Throwing line at a distance of ±6 m from the wall."],
+      ["Area and execution", "The student stands behind the throwing line facing the wall, then throws the ball as hard as possible with an overhand swing."],
+      ["Command", "\"Throw the ball as hard as possible towards the wall with an overhand swing.\""],
+      ["Trials", "The assessor gives one movement example, the student performs 1 practice trial (not graded), then 2 graded trials (T1 and T2)."]
+    ],
+    "kriteria_materi": [
+      ["K1", "The swing starts with a downward movement of the hand and arm."],
+      ["K2", "Hips and shoulders rotate until the non-throwing side of the body faces the wall."],
+      ["K3", "Stepping with the foot opposite to the throwing hand towards the wall."],
+      ["K4", "The throwing hand continues the motion after ball release, crossing the body towards the hip of the non-throwing side."]
+    ],
+    "tambahan": [
+      ["Assessment", "Score = Points ÷ 8 × 100 (rounded). Note: P = Passed (≥ 75) · S = Sufficient, retake test (70–74) · R = Remedial (< 70)"]
+    ],
+    "permainan": [
+      {
+        "nama_permainan": "Static Ball Throwing",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "Each student holds 3 balls.",
+          "The teacher divides groups into throwers and catchers.",
+          "The teacher explains without demonstration.",
+          "Students throw with technical variations.",
+          "Done in a static position.",
+          "After finishing, help retrieve the balls."
+        ],
+        "kriteria_lolos": [
+          "Throwing in a static position (standing upright in place without stepping), power from shoulders and arms.",
+          "Trying different throwing techniques (overhand, sidearm, underhand) with the 3 balls.",
+          "The ball is directed to the target area; afterwards, help retrieve the ball via the side path and return to the back line.",
+          "All three criteria are seen in at least 3 out of 5 trials."
+        ],
+        "video": ["melempar_satu_480p.mp4"],
+        "level": "Easy"
+      },
+      {
+        "nama_permainan": "Lob Ball Throwing",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "The teacher forms groups.",
+          "The teacher explains without demonstration.",
+          "Students throw a lob ball.",
+          "Done from a static position.",
+          "Students return to the line."
+        ],
+        "kriteria_lolos": [
+          "Throwing the ball with a lob trajectory forming an upward parabola.",
+          "Throwing from a position without a step or stable stance, power from shoulders and arms.",
+          "After throwing, returning to the line via the side path and alternating with friends in an orderly manner.",
+          "All three criteria are seen in at least 3 out of 5 trials."
+        ],
+        "video": ["melempar_dua.mp4"],
+        "level": "Medium"
+      },
+      {
+        "nama_permainan": "Point Throw",
+        "instruksi": [],
+        "tujuan": "",
+        "langkah": [
+          "The teacher forms small groups.",
+          "The teacher explains the objective.",
+          "Students practice throwing flat over the rope.",
+          "Points are given if successful.",
+          "Competition between groups is held.",
+          "The group with the most points wins."
+        ],
+        "kriteria_lolos": [
+          "Throwing the ball flat (not lobbed) to the target.",
+          "The ball passes through the middle space between two stretched ropes, and is not caught by the opponent, resulting in a point.",
+          "Following the \"turnover\" rule when the ball is caught and playing sportively with the group.",
+          "All three criteria are seen during the match, on at least 3 playing opportunities."
+        ],
+        "video": ["melempar_tiga.mp4"],
+        "level": "Hard"
+      }
+    ]
+  }
+];
