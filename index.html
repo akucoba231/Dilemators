@@ -903,6 +903,7 @@
                 <h3 id="pdfPreviewTitle" style="margin:0; font-size:16px;" data-i18n="pdf_judul">Pratinjau Dokumen</h3>
                 <button onclick="tutupPdfPreview()" style="background:none; border:none; color:white; font-size:24px; cursor:pointer; font-weight:bold; line-height:1;">&times;</button>
             </div>
+            
 
                 <!-- Perubahan 2 -->
                 <div id="pdfCanvasContainer" style="flex-grow:1; overflow:auto; text-align:center; background:#525659; padding:10px;">
@@ -912,6 +913,12 @@
                     <button onclick="halamanSebelumnya()" class="btn-info" style="padding:4px 10px;">⬅</button>
                     <span id="labelHalamanPdf" style="font-size:12px; font-weight:bold;">Halaman 1 / 1</span>
                     <button onclick="halamanBerikutnya()" class="btn-info" style="padding:4px 10px;">➡</button>
+                        
+                    <!-- Tambahan -->
+                    <button class="btn-info" onclick="zoomKeluar()" style="font-weight:bold; padding:4px 10px;">🔍 -</button>
+                    <span id="labelZoomPdf" style="font-size:12px; font-weight:bold;">100%</span>
+                    <button class="btn-info" onclick="zoomMasuk()" style="font-weight:bold; padding:4px 10px;">🔍 +</button>
+
                 </div>
             
             <div style="padding:15px; background:white; display:flex; justify-content:flex-end; gap:10px; border-top:1px solid #ccc;">
