@@ -193,6 +193,36 @@ function tampilkanPanduan(halaman) {
     }
 }
 
+// ==========================================
+// _SOLUSI_EXPORT_FILE
+// Penanganan Export File (Excel & PDF) Aman untuk WebView Android Kotlin & Browser
+// ==========================================
+function downloadExcelSafe(wb, fileName) {
+    if (window.Android && typeof window.Android.saveExcelBase64 === 'function') {
+        // Hasilkan Base64 murni dari SheetJS
+        const base64Data = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' });
+        // Kirim Base64 ke Kotlin WebView
+        window.Android.saveExcelBase64(base64Data, fileName);
+    } else {
+        // Fallback untuk browser PC / Laptop biasa
+        XLSX.writeFile(wb, fileName);
+    }
+}
+
+function downloadPdfSafe(doc, fileName) {
+    if (window.Android && typeof window.Android.saveExcelBase64 === 'function') {
+        // Hasilkan Base64 murni dari jsPDF (buang prefix data URI jika ada)
+        const dataUri = doc.output('datauristring');
+        const rawBase64 = dataUri.split(',')[1];
+        // Kirim Base64 ke Kotlin WebView
+        window.Android.saveExcelBase64(rawBase64, fileName);
+    } else {
+        // Fallback untuk browser PC / Laptop biasa
+        doc.save(fileName);
+    }
+}
+
+// Export - 1: Unduh Template Import Siswa (Excel)
 function downloadTemplateSiswa() {
     const ws_data = [
         ["No Abs", "Nama Siswa", "NISN", "JK", "Kelas", "Sekolah"],
@@ -203,7 +233,8 @@ function downloadTemplateSiswa() {
     ws['!cols'] = [{wpx: 40}, {wpx: 150}, {wpx: 100}, {wpx: 50}, {wpx: 60}, {wpx: 150}];
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Template Siswa");
-    XLSX.writeFile(wb, `Template_Import_Siswa_${APP_CONFIG.appName}.xlsx`);
+    // Menggunakan solusi export aman WebView Kotlin & Browser
+    downloadExcelSafe(wb, `Template_Import_Siswa_${APP_CONFIG.appName}.xlsx`);
 }
 
 function hashString(str) {
@@ -1576,7 +1607,7 @@ function unduhSemuaLembarKerja() {
     
     const link = document.createElement("a");
     link.href = zipUrl;
-    link.download = (globalLang === "ID" ? "Lembar_Kerja_Lengkap_" : "All_Worksheets_" ) + lang + ".zip";
+    link.download = "Lembar_Kerja_Lengkap_" + lang + ".zip";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -1681,7 +1712,8 @@ function buatPDFBackup(topic) {
     doc.setFontSize(10);
     doc.text("Simpan file ini baik-baik. Masukkan Topik di atas pada menu Pulihkan Data.", 20, 85);
     
-    doc.save("Kredensial_Pemulihan.pdf");
+    // Menggunakan solusi export aman WebView Kotlin & Browser
+    downloadPdfSafe(doc, "Kredensial_Pemulihan.pdf");
     showModal("Sukses", "Backup berhasil dikirim ke Cloud dan File Kredensial PDF telah diunduh.");
 }
 
@@ -1909,6 +1941,7 @@ function prosesBackupMQTT() {
     });
 }
 
+// Export - 2: Unduh Dokumen Kredensial Pemulihan Cloud (PDF)
 function buatPDFBackup(kode, sandi, topic) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
@@ -1973,7 +2006,8 @@ function buatPDFBackup(kode, sandi, topic) {
         ? `Kredensial_Pemulihan_${APP_CONFIG.appName}_${kode}.pdf` 
         : `Recovery_Credentials_${APP_CONFIG.appName}_${kode}.pdf`;
         
-    doc.save(namaFile);
+    // Menggunakan solusi export aman WebView Kotlin & Browser
+    downloadPdfSafe(doc, namaFile);
     
     // Modal Sukses
     if (isID) {
@@ -2944,6 +2978,7 @@ function sudahLogin(){
 }
 
 // ================= OVERRIDE EXPORT EXCEL 2 SHEETS =================
+// Export - 3: Unduh Laporan Nilai Lengkap 2 Sheet (Excel)
 function exportExcel() {
     let tesAkhirData = getDataTesAkhir();
     if(tesAkhirData.length === 0) { 
@@ -3103,12 +3138,13 @@ function exportExcel() {
     XLSX.utils.book_append_sheet(wb, ws2, `${globalLang === "ID" ? "Riwayat Asesmen" : "Assessment History"}`);
     
     // ======== EXPORT FILE ========
+    // Menggunakan solusi export aman WebView Kotlin & Browser
     const ts = new Date().toISOString().replace(/[:\-\T\.]/g, '').slice(0,14);
     if(globalLang === "ID"){
-        XLSX.writeFile(wb, `Laporan_Nilai_${APP_CONFIG.appName}_${ts}.xlsx`);
+        downloadExcelSafe(wb, `Laporan_Nilai_${APP_CONFIG.appName}_${ts}.xlsx`);
     }
     else {
-        XLSX.writeFile(wb, `Result_Report_${APP_CONFIG.appName}_${ts}.xlsx`);   
+        downloadExcelSafe(wb, `Result_Report_${APP_CONFIG.appName}_${ts}.xlsx`);   
     }
 }
 
@@ -3492,6 +3528,8 @@ document.addEventListener('DOMContentLoaded', () => {
         applyLanguage(lang);
     }
 });
+
+
 
 // ==========================================
 // PRATINJAU PDF & ZOOM ENGINE (HIGH-DPI COMPATIBLE)
