@@ -52,35 +52,36 @@
     <!-- Registrasi Modal -->
     <div id="registrasiModal" class="modal-overlay" style="z-index: 999;">
         <div class="modal-content" style="max-width: 400px; max-height: 80vh; overflow-y: auto;">
-            <h3 class="text-primary" style="margin-top:0;">Registrasi Guru</h3>
+            <h3 class="text-primary" style="margin-top:0;" data-i18n="reg_judul">Registrasi Guru</h3>
             <div class="content-box" style="box-shadow:none; padding:0; border:none; text-align: left; background: transparent;">
-                <label style="font-size:12px; font-weight:bold; color:var(--primary);">Nama Lengkap</label>
-                <input type="text" id="regNama" placeholder="Nama Lengkap" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
                 
-                <label style="font-size:12px; font-weight:bold; color:var(--primary);">NIP (Opsional)</label>
-                <input type="text" id="regNIP" placeholder="NIP (Opsional)" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
+                <label style="font-size:12px; font-weight:bold; color:var(--primary);" data-i18n="reg_label_nama">Nama Lengkap</label>
+                <input type="text" id="regNama" placeholder="Nama Lengkap" data-i18n-placeholder="reg_ph_nama" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
                 
-                <label style="font-size:12px; font-weight:bold; color:var(--primary);">Asal Sekolah</label>
-                <input type="text" id="regSekolah" placeholder="Asal Sekolah" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
+                <label style="font-size:12px; font-weight:bold; color:var(--primary);" data-i18n="reg_label_nip">NIP (Opsional)</label>
+                <input type="text" id="regNIP" placeholder="NIP (Opsional)" data-i18n-placeholder="reg_ph_nip" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
                 
-                <label style="font-size:12px; font-weight:bold; color:var(--primary);">Email</label>
-                <input type="email" id="regEmail" placeholder="Email" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
+                <label style="font-size:12px; font-weight:bold; color:var(--primary);" data-i18n="reg_label_sekolah">Asal Sekolah</label>
+                <input type="text" id="regSekolah" placeholder="Asal Sekolah" data-i18n-placeholder="reg_ph_sekolah" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
                 
-                <label style="font-size:12px; font-weight:bold; color:var(--primary);">Username</label>
-                <input type="text" id="regUsername" placeholder="Username" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
+                <label style="font-size:12px; font-weight:bold; color:var(--primary);" data-i18n="reg_label_email">Email</label>
+                <input type="email" id="regEmail" placeholder="Email" data-i18n-placeholder="reg_ph_email" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
                 
-                <label style="font-size:12px; font-weight:bold; color:var(--primary);">Kata Sandi</label>
-                <input type="password" id="regPassword" placeholder="Kata Sandi" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
+                <label style="font-size:12px; font-weight:bold; color:var(--primary);" data-i18n="reg_label_username">Username</label>
+                <input type="text" id="regUsername" placeholder="Username" data-i18n-placeholder="reg_ph_username" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
                 
-                <label style="font-size:12px; font-weight:bold; color:var(--primary);">Pertanyaan Keamanan</label>
-                <input type="text" id="regPertanyaan" placeholder="Misal: Siapa nama hewan peliharaan Anda?" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
+                <label style="font-size:12px; font-weight:bold; color:var(--primary);" data-i18n="reg_label_password">Kata Sandi</label>
+                <input type="password" id="regPassword" placeholder="Kata Sandi" data-i18n-placeholder="reg_ph_password" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
                 
-                <label style="font-size:12px; font-weight:bold; color:var(--primary);">Jawaban Keamanan</label>
-                <input type="text" id="regJawaban" placeholder="Jawaban Keamanan" style="width: 100%; margin-bottom: 15px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
+                <label style="font-size:12px; font-weight:bold; color:var(--primary);" data-i18n="reg_label_pertanyaan">Pertanyaan Keamanan</label>
+                <input type="text" id="regPertanyaan" placeholder="Misal: Siapa nama hewan peliharaan Anda?" data-i18n-placeholder="reg_ph_pertanyaan" style="width: 100%; margin-bottom: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
+                
+                <label style="font-size:12px; font-weight:bold; color:var(--primary);" data-i18n="reg_label_jawaban">Jawaban Keamanan</label>
+                <input type="text" id="regJawaban" placeholder="Jawaban Keamanan" data-i18n-placeholder="reg_ph_jawaban" style="width: 100%; margin-bottom: 15px; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-family: 'Nunito', sans-serif;">
             </div>
             <div style="display:flex; gap:10px;">
-                <button class="btn-warning" style="flex:1; padding:10px;" onclick="closeModal('registrasiModal')">Batal</button>
-                <button class="btn-primary" style="flex:1; padding:10px;" onclick="simpanRegistrasi()">Simpan</button>
+                <button class="btn-warning" style="flex:1; padding:10px;" onclick="closeModal('registrasiModal')" data-i18n="reg_btn_batal">Batal</button>
+                <button class="btn-primary" style="flex:1; padding:10px;" onclick="simpanRegistrasi()" data-i18n="reg_btn_simpan">Simpan</button>
             </div>
         </div>
     </div>
