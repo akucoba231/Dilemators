@@ -338,14 +338,14 @@ function prosesLogin() {
     }
 
     // 3. Cek apakah ada akun terdaftar
-    /*if (!dataGuru) {
+    if (!dataGuru) {
         if (globalLang === "ID") {
             showModal("Gagal!", "Belum ada akun terdaftar. Silakan registrasi terlebih dahulu.");
         } else {
             showModal("Error!", "No account registered yet. Please register first.");
         }
         //return;
-    }*/
+    }
 
     // 4. Verifikasi kredensial
     if (username === dataGuru.username && hashString(password) === dataGuru.password) {
@@ -363,7 +363,7 @@ function prosesLogin() {
         // Bagian ini hanya untuk uji coba
         if(username === "coba" && hashString(password) === hashString('123')){
             // Simpan sesi login ke sessionStorage
-            sessionStorage.setItem('isLoggedIn' + APP_CONFIG.appName, JSON.stringify(dataGuru));
+            //sessionStorage.setItem('isLoggedIn' + APP_CONFIG.appName, JSON.stringify(dataGuru));
         
             // Bersihkan form
             document.getElementById('inputUsernameLogin').value = '';
