@@ -344,7 +344,7 @@ function prosesLogin() {
         } else {
             showModal("Error!", "No account registered yet. Please register first.");
         }
-        return;
+        //return;
     }
 
     // 4. Verifikasi kredensial
