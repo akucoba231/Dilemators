@@ -338,14 +338,14 @@ function prosesLogin() {
     }
 
     // 3. Cek apakah ada akun terdaftar
-    if (!dataGuru) {
+    /*if (!dataGuru) {
         if (globalLang === "ID") {
             showModal("Gagal!", "Belum ada akun terdaftar. Silakan registrasi terlebih dahulu.");
         } else {
             showModal("Error!", "No account registered yet. Please register first.");
         }
         //return;
-    }
+    }*/
 
     // 4. Verifikasi kredensial
     if (username === dataGuru.username && hashString(password) === dataGuru.password) {
