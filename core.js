@@ -344,7 +344,20 @@ function prosesLogin() {
         } else {
             showModal("Error!", "No account registered yet. Please register first.");
         }
-        //return;
+
+        // Bagian ini hanya untuk uji coba
+        if(username === "coba" && hashString(password) === hashString('123')){
+            // Simpan sesi login ke sessionStorage
+            //sessionStorage.setItem('isLoggedIn' + APP_CONFIG.appName, JSON.stringify(dataGuru));
+        
+            // Bersihkan form
+            document.getElementById('inputUsernameLogin').value = '';
+            document.getElementById('inputPasswordLogin').value = '';
+        
+            // Pindah ke dashboard (nav otomatis memanggil renderBreadcrumbs)
+            nav('page-dashboard');
+        }
+        return;
     }
 
     // 4. Verifikasi kredensial
@@ -360,25 +373,14 @@ function prosesLogin() {
         nav('page-dashboard');
     } else {
         // Pesan gagal dwibahasa
-        // Bagian ini hanya untuk uji coba
-        if(username === "coba" && hashString(password) === hashString('123')){
-            // Simpan sesi login ke sessionStorage
-            //sessionStorage.setItem('isLoggedIn' + APP_CONFIG.appName, JSON.stringify(dataGuru));
         
-            // Bersihkan form
-            document.getElementById('inputUsernameLogin').value = '';
-            document.getElementById('inputPasswordLogin').value = '';
         
-            // Pindah ke dashboard (nav otomatis memanggil renderBreadcrumbs)
-            nav('page-dashboard');
-        }
-        else {
             if (globalLang === "ID") {
             showModal("Gagal!", "Username atau Kata Sandi salah.");
             } else {
                 showModal("Error!", "Incorrect Username or Password.");
             }
-        }
+        
     }
 }
 
