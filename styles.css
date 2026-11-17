@@ -281,4 +281,15 @@ tr:last-child td { border-bottom: none; }
     color: #721c24 !important;
     font-weight: bold;
 }
+.logo-pendidikan {
+    position: absolute;
+    height: 32px;
+    top: 15px;
+    right: 15px;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1px;
+}
 
