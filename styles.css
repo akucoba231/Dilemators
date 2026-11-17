@@ -155,7 +155,7 @@ tr:last-child td { border-bottom: none; }
 /* Ilustrasi & Opsi Permainan */
 .illustration-area { max-width: 380px; overflow: hidden; display: flex; justify-content: center; align-items: flex-end; gap: 10px; margin: 20px auto;}
 .illustration-area img { object-fit: contain; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.05)); height:100%; }
-.logo-image { width: 90%; margin: 0px auto 15px auto; }
+.logo-image { width: 90%; margin: 20px auto 15px auto; }
 .spacer { height: 80px; }
 .login-icon { max-height: 240px; }
 .kembali { margin-top: 20px; font-weight: 700; font-size: 14px; cursor:pointer; color: #4A4A4A; text-shadow: 2px 2px #fff; }
