@@ -292,4 +292,6 @@ tr:last-child td { border-bottom: none; }
     align-items: center;
     gap: 1px;
 }
+.logo-pendidikan img {
+    height: 100%;
 
