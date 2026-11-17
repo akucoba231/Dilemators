@@ -283,15 +283,25 @@ tr:last-child td { border-bottom: none; }
 }
 .logo-pendidikan {
     position: absolute;
-    height: 32px;
-    top: 15px;
-    right: 15px;
-    z-index: 10;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1px;
+  height: 32px;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1px;
+  border-radius: 12px;
+  border: 2px solid goldenrod;
+  overflow: hidden;
+  padding: 1px 2px;
+  background: #fff;
 }
 .logo-pendidikan img {
     height: 100%;
+}
 
+.logo-pendidikan img:nth-child(2){
+    border-left : 0.5px solid #888;
+    border-right : 0.5px  solid #888;
+}
