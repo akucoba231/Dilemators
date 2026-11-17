@@ -291,7 +291,7 @@ tr:last-child td { border-bottom: none; }
   justify-content: center;
   align-items: center;
   gap: 1px;
-  border-radius: 12px;
+  border-radius: 25px;
   border: 2px solid goldenrod;
   overflow: hidden;
   padding: 1px 5px;
