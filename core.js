@@ -1645,7 +1645,8 @@ function konfirmasiLogout() {
 
     bukaKonfirmasi(teks, konfir, function() {
         sessionStorage.removeItem('isLoggedIn' + APP_CONFIG.appName);
-        window.location.reload();
+        //window.location.reload();
+        nav('page-home')
     });
 
 }
@@ -2142,7 +2143,7 @@ function prosesRestoreMQTT() {
                 ? "Data berhasil dipulihkan dari Cloud! Aplikasi akan dimuat ulang." 
                 : "Data successfully restored from Cloud! Reloading application...");
             
-            setTimeout(() => { window.location.reload(); }, 2500);
+            setTimeout(() => { /*window.location.reload();*/ nav('page-home'); }, 2500);
             
         } catch(e) {
             logMQTTDebug(`[PULIHKAN] ERROR saat dekripsi/parse: ${e.message}`);
